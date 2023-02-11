@@ -26,12 +26,11 @@ class DatabaseSeeder extends Seeder
         $this->call(DaySeeder::class);
         
         Table::factory(3)
-        ->has(Game::factory())
+        ->for(Game::factory())
+        ->for(Day::factory())
+        ->has(User::factory()->count(rand(1,4)))
         ->create([
             'organizer_id' => User::inRandomOrder()->first()->id,
-            'day_id' => Day::inRandomOrder()->first()->id
-        ])->each(function($table){
-            $table->users()->attach(User::first());
-        });
+        ]);
     }
 }

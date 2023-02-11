@@ -24,7 +24,6 @@ class TableFactory extends Factory
     public function definition()
     {
         return [
-            'game_id' => Game::inRandomOrder()->first()->id,
             'players_number' => $this->faker->numberBetween(1, 10),
             'start_hour' => $this->faker->time,
         ];
