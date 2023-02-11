@@ -1,0 +1,23 @@
+created:
+    - app/Http/Controllers/DayController.php
+    - database/factories/DayFactory.php
+    - database/factories/TableFactory.php
+    - database/factories/GameFactory.php
+    - database/migrations/2023_02_04_204047_create_days_table.php
+    - database/migrations/2023_02_04_204048_create_tables_table.php
+    - database/migrations/2023_02_04_204049_create_games_table.php
+    - database/migrations/2023_02_04_204050_create_table_user_table.php
+    - database/migrations/2023_02_04_204051_create_game_table_table.php
+    - app/Models/Day.php
+    - app/Models/Table.php
+    - app/Models/Game.php
+    - tests/Feature/Http/Controllers/DayControllerTest.php
+    - resources/views/post/index.blade.php
+    - resources/views/day/create.blade.php
+updated:
+    - routes/web.php
+models:
+    User: { name: string, email: string, email_verified_at: 'datetime nullable', password: string, remember_token: 'string:100 nullable' }
+    Day: { date: date, relationships: { hasMany: Table } }
+    Table: { game_id: integer, relationships: { belongsToMany: 'User,Game' } }
+    Game: { name: string, players_number: integer, relationships: { belongsToMany: Table } }

@@ -1,0 +1,27 @@
+models:
+  Day:
+    date: date
+    relationships:
+      hasMany: Table
+
+  Table:
+    game_id: integer
+    relationships:
+      belongsToMany: User,Game
+
+  Game:
+    name: string
+    players_number: integer
+    relationships:
+      belongsToMany: Table
+
+controllers:
+  Day:
+    index:
+      query: all
+      render: post.index with:posts
+    create:
+      render: day.create
+    store:
+      save: day
+      redirect: day.index
