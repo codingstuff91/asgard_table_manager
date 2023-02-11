@@ -28,7 +28,17 @@
                         <h3 class="mt-4 text-lg font-bold">Joueurs inscrits</h3>
                         <ul class="mt-4">
                             @foreach ($table->users as $user)
-                                <li>{{ $user->name }}</li>
+                                <li>
+                                    @can('unsubscribe_user', $table)
+                                        <button>
+                                            <a href="{{ route('table.unsubscribe', [$table->id, $user->id]) }}">
+                                                <i class="fa-solid fa-user-slash text-red-500 font-bold"></i>
+                                            </a>
+                                        </button>
+                                    @endcan
+
+                                    {{ $user->name }}
+                                </li>
                             @endforeach
                         </ul>
                     </div>
