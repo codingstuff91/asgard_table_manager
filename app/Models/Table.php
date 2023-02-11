@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Day;
+use App\Models\Game;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -29,5 +30,10 @@ class Table extends Model
     public function organizer()
     {
         return $this->belongsTo(User::class, 'organizer_id');
+    }
+
+    public function games()
+    {
+        return $this->belongsToMany(Game::class);    
     }
 }

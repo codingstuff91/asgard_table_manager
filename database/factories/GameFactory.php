@@ -25,7 +25,7 @@ class GameFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'category_id' => Category::factory()->create(),
+            'category_id' => Category::inRandomOrder()->first()->id,
         ];
     }
 }
