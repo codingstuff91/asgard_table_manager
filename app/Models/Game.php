@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Game extends Model
 {
@@ -17,6 +18,7 @@ class Game extends Model
     protected $fillable = [
         'name',
         'players_number',
+        'category_id',
     ];
 
     /**
@@ -26,10 +28,17 @@ class Game extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'players_number' => 'integer',
+        'category_id' => 'integer',
     ];
 
     public function tables()
     {
         return $this->belongsToMany(Table::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

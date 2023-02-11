@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Game;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GameFactory extends Factory
 {
@@ -24,6 +25,7 @@ class GameFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
+            'category_id' => Category::factory()->create(),
         ];
     }
 }
