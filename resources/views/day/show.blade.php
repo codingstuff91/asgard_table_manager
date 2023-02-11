@@ -12,7 +12,7 @@
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-1 rounded-lg mt-4 mx-auto">
             @foreach ($tables as $table)
                 <div class="flex flex-col bg-white rounded-lg text-center shadow-lg lg:my-0 xs:my-4 xs:mx-2">
-                    <h2 class="text-xl font-semibold w-full bg-blue-200 p-2 rounded-lg">{{ $table->game_name }}</h2>
+                    <h2 class="text-xl font-semibold w-full bg-blue-200 p-2 rounded-lg">{{ $table->game->name }}</h2>
                     <h3>Début : {{ $table->start_hour }}</h3>
                     <h3>Maitre jeu : {{ $table->organizer->name }}</h3>
                     <hr>

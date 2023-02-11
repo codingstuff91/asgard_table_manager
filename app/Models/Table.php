@@ -32,8 +32,8 @@ class Table extends Model
         return $this->belongsTo(User::class, 'organizer_id');
     }
 
-    public function games()
+    public function game()
     {
-        return $this->belongsToMany(Game::class);    
+        return $this->belongsTo(Game::class);    
     }
 }

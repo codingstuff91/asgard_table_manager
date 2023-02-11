@@ -34,7 +34,7 @@ class Game extends Model
 
     public function tables()
     {
-        return $this->belongsToMany(Table::class);
+        return $this->hasMany(Table::class);
     }
 
     public function category()

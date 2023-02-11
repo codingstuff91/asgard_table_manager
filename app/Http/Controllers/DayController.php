@@ -30,7 +30,7 @@ class DayController extends Controller
 
     public function show(Day $day)
     {
-        $tables = Table::with('users')
+        $tables = Table::with(['users', 'game'])
                         ->where('day_id', $day->id)
                         ->get();
 

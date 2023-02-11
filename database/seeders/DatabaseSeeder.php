@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Day;
+use App\Models\Game;
 use App\Models\User;
 use App\Models\Table;
 use Illuminate\Database\Seeder;
@@ -24,7 +25,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call(DaySeeder::class);
         
-        Table::factory(3)->create([
+        Table::factory(3)
+        ->has(Game::factory())
+        ->create([
             'organizer_id' => User::inRandomOrder()->first()->id,
             'day_id' => Day::inRandomOrder()->first()->id
         ])->each(function($table){
