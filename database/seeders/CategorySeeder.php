@@ -9,17 +9,21 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategorySeeder extends Seeder
 {
-    private $colors = ['bg-red-500', 'bg-green-500', 'bg-teal-500'];
-
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        Category::factory(3)->create([
-            'color' => Arr::random($this->colors, 1)[0],
+        Category::create([
+            'name'  => 'Jeux de plateau',
+            'color' => 'bg-green-500' 
+        ]);
+
+        Category::create([
+            'name'  => 'Jeux de cartes',
+            'color' => 'bg-red-500' 
+        ]);
+
+        Category::create([
+            'name'  => 'Jeux de rôles',
+            'color' => 'bg-blue-500' 
         ]);
     }
 }
