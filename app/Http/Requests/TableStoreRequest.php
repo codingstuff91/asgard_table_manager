@@ -24,9 +24,10 @@ class TableStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'game_name' => 'required',
+            'game_id'        => 'required',
             'players_number' => 'required|integer',
-            'start_hour' => 'required'
+            'total_points'  => 'required|integer',
+            'start_hour'     => 'required',
         ];
     }
 }

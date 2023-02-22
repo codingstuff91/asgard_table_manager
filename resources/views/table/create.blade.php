@@ -12,10 +12,10 @@
                     @csrf
                     <x-input-label>Nom du jeu</x-input-label>
                     <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                        name="game_name">
+                        name="game_id">
                         <option value="">x-- Choisir un jeu --x</option>
                         @foreach ($games as $game)
-                            <option>{{ $game->name }}</option>
+                            <option value="{{ $game->id }}">{{ $game->name }}</option>
                         @endforeach
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('game_name')" />
@@ -33,6 +33,16 @@
                         value="{{ old('players_number') }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('players_number')" />
+
+                    <x-input-label class="mt-2">Nombre points</x-input-label>
+                    <x-text-input 
+                        type="number" 
+                        class="w-full" 
+                        name="total_points" 
+                        placeholder="Nombre de points" 
+                        value="{{ old('total_points') }}">
+                    </x-text-input>
+                    <x-input-error class="mt-2" :messages="$errors->get('total_points')" />
 
 
                     <x-input-label class="mt-2">Heure de début</x-input-label>
