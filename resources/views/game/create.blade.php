@@ -10,7 +10,18 @@
             <div class="bg-white w-full rounded-lg p-4">
                 <form action="{{ route('games.store') }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
-                    <x-input-label>Nom du jeu</x-input-label>
+
+                    <x-input-label>Catégorie de jeu</x-input-label>
+                    <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                        name="category_id">
+                        <option value="">x-- Choisir une categorie --x</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
+
+                    <x-input-label class="mt-4">Nom du jeu</x-input-label>
                     <x-text-input 
                         type="text" 
                         class="w-full" 

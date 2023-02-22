@@ -3,21 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\GameStoreRequest;
 
 class GameController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -25,7 +16,9 @@ class GameController extends Controller
      */
     public function create()
     {
-        return view('game.create');
+        $categories = Category::all();
+        
+        return view('game.create', compact('categories'));
     }
 
     /**
@@ -37,7 +30,8 @@ class GameController extends Controller
     public function store(GameStoreRequest $request)
     {
         Game::create([
-            'name' => $request->name
+            'name'        => $request->name,
+            'category_id' => $request->category_id,
         ]);
 
         return redirect(session()->get('create_table_url'));
