@@ -7,6 +7,9 @@
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <x-primary-button class="mb-4">
+                <a href="{{ route('days.create') }}">Créer nouvelle session</a>
+            </x-primary-button>
             @foreach ($days as $day)
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-2">
                     <div class="p-6 text-gray-900 dark:text-gray-100 text-2xl font-extrabold flex justify-between">

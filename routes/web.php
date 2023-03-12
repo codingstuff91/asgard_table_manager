@@ -33,11 +33,10 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 /** Days route */
-Route::resource('days', App\Http\Controllers\DayController::class)->only('index', 'create', 'store', 'show');
+Route::resource('days', App\Http\Controllers\DayController::class);
 
 /** Games routes */
 Route::resource('games', GameController::class)->except('show', 'destroy');
-
 
 /** Tables routes */
 Route::get('table/{day}/create', [TableController::class, 'create'])->name('table.create');

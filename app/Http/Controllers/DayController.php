@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Day;
 use App\Models\Table;
 use Illuminate\Http\Request;
+use App\Http\Requests\storeDayRequest;
 
 class DayController extends Controller
 {
@@ -41,10 +42,10 @@ class DayController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(storeDayRequest $request)
+    {      
         $day = Day::create($request->all());
 
-        return redirect()->route('day.index');
+        return redirect()->route('days.index');
     }
 }
