@@ -9,6 +9,13 @@ use App\Http\Requests\GameStoreRequest;
 
 class GameController extends Controller
 {
+    public function index()
+    {
+        $games = Game::with('category')->get();
+
+        return view('game.index')->with(['games' => $games]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -51,24 +58,34 @@ class GameController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Game $game)
     {
-        //
+        $categories = Category::all();
+
+        return view('game.edit', [
+            'game' => $game, 
+            'categories' => $categories
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Game  $game
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Game $game)
     {
-        //
+        $game->update([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+        ]);
+
+        return to_route('games.index');
     }
 
     /**
