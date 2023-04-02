@@ -11,9 +11,11 @@ class DiscordController extends Controller
     public function test()
     {
         $client = new Client();
+        $bot_token = config('discord.bot_token');
+
         $response = $client->post('https://discord.com/api/v9/channels/800385339737899018/messages', [
             'headers' => [
-                'Authorization' => 'Bot MTA5MjA5MDIxOTY1MTY2MTg2NA.GTKuCZ.qBrwlJHbF5HZED-qbydZ07phwhSxyuHyoz8QG0',
+                'Authorization' => $bot_token,
                 'Content-Type' => 'application/json'
             ],
             'json' => [
