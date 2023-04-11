@@ -41,7 +41,10 @@ class GameController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect(session()->get('create_table_url'));
+        
+        $redirectUrl = session()->get('create_table_url') ?? route('games.index');
+        
+        return redirect($redirectUrl);
     }
 
     /**
