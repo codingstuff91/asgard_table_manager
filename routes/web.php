@@ -29,20 +29,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        /** Days route */
+    Route::resource('days', App\Http\Controllers\DayController::class);
+
+    /** Games routes */
+    Route::resource('games', GameController::class)->except('show', 'destroy');
+    Route::get('games/search', [GameController::class, 'searchByCategory']);
+
+    /** Tables routes */
+    Route::get('table/{day}/create', [TableController::class, 'create'])->name('table.create');
+    Route::post('table/{day}/create', [TableController::class, 'store'])->name('table.store');
+    Route::get('table/{table}/subscribe/{user}', [TableController::class, 'subscribe'])->name('table.subscribe');
+    Route::get('table/{table}/unsubscribe/{user}', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
+
+    Route::get('discord_test', [DiscordController::class, 'test']);
 });
 
 require __DIR__.'/auth.php';
 
-/** Days route */
-Route::resource('days', App\Http\Controllers\DayController::class);
-
-/** Games routes */
-Route::resource('games', GameController::class)->except('show', 'destroy');
-
-/** Tables routes */
-Route::get('table/{day}/create', [TableController::class, 'create'])->name('table.create');
-Route::post('table/{day}/create', [TableController::class, 'store'])->name('table.store');
-Route::get('table/{table}/subscribe/{user}', [TableController::class, 'subscribe'])->name('table.subscribe');
-Route::get('table/{table}/unsubscribe/{user}', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
-
-Route::get('discord_test', [DiscordController::class, 'test']);

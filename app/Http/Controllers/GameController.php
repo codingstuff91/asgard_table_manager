@@ -41,18 +41,10 @@ class GameController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect(session()->get('create_table_url'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        
+        $redirectUrl = session()->get('create_table_url') ?? route('games.index');
+        
+        return redirect($redirectUrl);
     }
 
     /**
@@ -97,5 +89,10 @@ class GameController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function searchByCategory(Request $request)
+    {
+        return Game::where('category_id', $request->category)->get();
     }
 }

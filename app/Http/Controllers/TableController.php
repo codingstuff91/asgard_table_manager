@@ -6,6 +6,7 @@ use App\Models\Day;
 use App\Models\Game;
 use App\Models\User;
 use App\Models\Table;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TableStoreRequest;
@@ -14,10 +15,11 @@ class TableController extends Controller
 {
     public function create(Day $day)
     {
-        $games = Game::all();
+        $categories = Category::all();
+        
         $current_url = session()->put('create_table_url', url()->current());
 
-        return view('table.create', compact('day', 'games'));
+        return view('table.create', compact('day', 'categories'));
     }
 
     public function store(Day $day, TableStoreRequest $request)
