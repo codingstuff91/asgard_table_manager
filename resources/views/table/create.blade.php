@@ -17,10 +17,14 @@
                         id="gameCategory">
                         <option value="">x-- Choisir une catégorie --x</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option 
+                                value="{{ $category->id }}"
+                            >
+                                {{ $category->name }}
+                            </option>
                         @endforeach
                     </select>
-                    <x-input-error class="mt-2" :messages="$errors->get('game_name')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
 
                     <x-input-label class="mt-2">Nom du jeu</x-input-label>
                     <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
@@ -28,7 +32,7 @@
                         id="gameName">
                         <option value="">x-- Choisir un jeu --x</option>
                     </select>
-                    <x-input-error class="mt-2" :messages="$errors->get('game_name')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('game_id')" />
                     
                     <x-secondary-button class="my-2">
                         <a href="{{ route('games.create') }}">Ajouter un jeu</a>
