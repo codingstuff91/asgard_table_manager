@@ -48,17 +48,6 @@ class GameController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  Game  $game
@@ -100,5 +89,10 @@ class GameController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function searchByCategory(Request $request)
+    {
+        return Game::where('category_id', $request->category)->get();
     }
 }

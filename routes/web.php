@@ -37,6 +37,7 @@ Route::resource('days', App\Http\Controllers\DayController::class);
 
 /** Games routes */
 Route::resource('games', GameController::class)->except('show', 'destroy');
+Route::get('games/search', [GameController::class, 'searchByCategory']);
 
 /** Tables routes */
 Route::get('table/{day}/create', [TableController::class, 'create'])->name('table.create');
