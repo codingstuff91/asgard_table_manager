@@ -21,7 +21,7 @@ class TableCreatedDiscordNotification
     }
 
     /**
-     * Handle the event.
+     * Send a discord notification according to day of week
      *
      * @param  \App\Events\TableCreated  $event
      * @return void
