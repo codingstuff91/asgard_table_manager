@@ -16,6 +16,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
+        "defstudio/pest-plugin-laravel-expectations": "^1.12",
         "fakerphp/faker": "^1.9.1",
         "laravel-shift/blueprint": "^2.4",
         "laravel/pint": "^1.0",
