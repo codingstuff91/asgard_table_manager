@@ -9,6 +9,7 @@ use App\Models\Table;
 use App\Models\Category;
 use App\Events\TableCreated;
 use Illuminate\Http\Request;
+use App\Events\UserTableSubscribed;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TableStoreRequest;
 use App\Providers\SendDiscordTableCreatedNotification;
@@ -43,6 +44,8 @@ class TableController extends Controller
     public function subscribe(Table $table, User $user)
     {
         $table->users()->attach($user);
+
+        event(new UserTableSubscribed($user, $table));
 
         return redirect()->back();
     }
