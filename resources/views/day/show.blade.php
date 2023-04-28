@@ -43,15 +43,23 @@
                         </ul>
                     </div>
 
-                    <div>
+                    <div class="flex justify-center bg-gray-200">
                         @if (collect($table->users)->pluck('name')->doesntContain(Auth::user()->name))
-                            <button class="relative bottom-0 px-4 py-2 bg-lime-300 w-full text-lg font-bold">
-                                <a href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}">S'incrire</a>
+                            <button class="relative bottom-0 px-4 py-2">
+                                <a 
+                                    href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}"
+                                >
+                                    <img src="{{ asset('img/add-user.png')}}" class="w-8 h-8">
+                                </a>
                             </button>
                         @endif
                         @if (collect($table->users)->pluck('name')->contains(Auth::user()->name))
-                            <button class="relative bottom-0 px-4 py-2 bg-lime-300 w-full text-lg font-bold">
-                                <a href="{{ route('table.unsubscribe', [$table->id, Auth::user()->id]) }}">Se désincrire</a>
+                            <button class="relative bottom-0 px-4 py-2">
+                                <a 
+                                    href="{{ route('table.unsubscribe', [$table->id, Auth::user()->id]) }}"
+                                >
+                                    <img src="{{ asset('img/delete-user.png') }}" class="w-8 h-8">
+                                </a>
                             </button>
                         @endif
                             @can('delete_table', $table)
@@ -60,10 +68,10 @@
                                     @method('DELETE')
                                     <button
                                         type="submit"
-                                        class="relative bottom-0 px-4 py-2 bg-red-500 w-full text-lg font-bold text-white"
+                                        class="relative bottom-0 px-4 py-2"
                                         onclick="return confirm('Etes-vous certain de supprimer cette table ?')"
                                     >
-                                        Supprimer
+                                        <img src="{{ asset('img/delete.png')}}" class="h-8 w-8">
                                     </button>
                                 </form>
                             @endcan
