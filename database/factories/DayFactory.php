@@ -23,7 +23,7 @@ class DayFactory extends Factory
     public function definition()
     {
         return [
-            'date' => $this->faker->date(),
+            'date' => now(),
         ];
     }
 }

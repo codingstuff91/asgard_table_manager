@@ -15,6 +15,6 @@ class DaySeeder extends Seeder
      */
     public function run()
     {
-        $days = Day::factory(3)->create();
+        $days = Day::factory()->create();
     }
 }
