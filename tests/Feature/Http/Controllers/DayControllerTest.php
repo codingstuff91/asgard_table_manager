@@ -1,54 +1,67 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+test('The index page is rendered correctly', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
 
-use App\Models\Day;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+    $response = $this->get(route('days.index'));
 
-/**
- * @see \App\Http\Controllers\DayController
- */
-class DayControllerTest extends TestCase
-{
-    use RefreshDatabase;
+    expect($response)->toBeOk();
+});
 
-    /**
-     * @test
-     */
-    public function index_displays_view()
-    {
-        $days = Day::factory()->count(3)->create();
+test('The create page is rendered correctly', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
 
-        $response = $this->get(route('day.index'));
+    $response = $this->get(route('days.create'));
 
-        $response->assertOk();
-        $response->assertViewIs('post.index');
-        $response->assertViewHas('posts');
-    }
+    expect($response)->toBeOk();
+});
 
+test('The show page is rendered correctly', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
 
-    /**
-     * @test
-     */
-    public function create_displays_view()
-    {
-        $response = $this->get(route('day.create'));
+    $response = $this->get(route('days.show', \App\Models\Day::first()->id));
 
-        $response->assertOk();
-        $response->assertViewIs('day.create');
-    }
+    expect($response)->toBeOk();
+});
 
+test('A day can not be created twice', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
 
-    /**
-     * @test
-     */
-    public function store_saves_and_redirects()
-    {
-        $response = $this->post(route('day.store'));
+    $response = $this->post(route('days.store'), [
+        'date' => now(),
+    ]);
 
-        $response->assertRedirect(route('day.index'));
+    expect($response)->toHaveInvalid(['date']);
+});
 
-        $this->assertDatabaseHas(days, [ /* ... */ ]);
-    }
-}
+test('A day can not be created without choosing a date', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
+
+    $response = $this->post(route('days.store'), [
+        'date' => '',
+    ]);
+
+    expect($response)->toHaveInvalid(['date']);
+});
+
+test('A day is created successfully', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
+
+    $date = now()->add('day', 1);
+
+    $response = $this->post(route('days.store'), [
+        'date' => $date,
+    ]);
+
+    expect($response)->toHaveValid(['date'])
+        ->and($response)->toBeRedirect(route('days.index'))
+        ->and([
+            'date' => $date
+        ])->toBeInDatabase(table: 'days');
+});
