@@ -30,5 +30,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('unsubscribe_user', function (User $user, Table $table) {
             return $user->id === $table->organizer_id;
         });
+
+        Gate::define('delete_table', function (User $user, Table $table) {
+            return $user->id === $table->organizer_id || $user->admin ;
+        });
     }
 }

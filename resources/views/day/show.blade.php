@@ -13,10 +13,10 @@
             @foreach ($tables as $table)
                 <div class="flex flex-col bg-white rounded-lg text-center shadow-lg xs:my-4 xs:mx-2">
                     <h2 class="text-xl font-semibold w-full p-2 rounded-lg text-white {{ $table->game->category->color }}">{{ $table->game->name }}</h2>
-                    
+
                     <h3 class="mt-2 font-bold text-lg">Début</h3>
                     <p>{{ $table->start_hour }}</p>
-                    
+
                     <h3 class="mt-2 font-bold text-lg">
                         Maitre jeu
                     </h3>
@@ -43,7 +43,7 @@
                         </ul>
                     </div>
 
-                    <div>                          
+                    <div>
                         @if (collect($table->users)->pluck('name')->doesntContain(Auth::user()->name))
                             <button class="relative bottom-0 px-4 py-2 bg-lime-300 w-full text-lg font-bold">
                                 <a href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}">S'incrire</a>
@@ -54,6 +54,19 @@
                                 <a href="{{ route('table.unsubscribe', [$table->id, Auth::user()->id]) }}">Se désincrire</a>
                             </button>
                         @endif
+                            @can('delete_table', $table)
+                                <form action="{{ route('table.delete', $table->id) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="submit"
+                                        class="relative bottom-0 px-4 py-2 bg-red-500 w-full text-lg font-bold text-white"
+                                        onclick="return confirm('Etes-vous certain de supprimer cette table ?')"
+                                    >
+                                        Supprimer
+                                    </button>
+                                </form>
+                            @endcan
                     </div>
                 </div>
             @endforeach

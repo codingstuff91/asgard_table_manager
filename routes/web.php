@@ -42,8 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::post('table/{day}/create', [TableController::class, 'store'])->name('table.store');
     Route::get('table/{table}/subscribe/{user}', [TableController::class, 'subscribe'])->name('table.subscribe');
     Route::get('table/{table}/unsubscribe/{user}', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
-
-    Route::get('discord_test', [DiscordController::class, 'test']);
+    Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
 });
 
 require __DIR__.'/auth.php';

@@ -18,7 +18,7 @@ class TableController extends Controller
     public function create(Day $day)
     {
         $categories = Category::all();
-        
+
         $current_url = session()->put('create_table_url', url()->current());
 
         return view('table.create', compact('day', 'categories'));
@@ -43,14 +43,23 @@ class TableController extends Controller
     public function subscribe(Table $table, User $user)
     {
         $table->users()->attach($user);
-        
+
         return redirect()->back();
     }
 
     public function unSubscribe(Table $table, User $user)
     {
         $table->users()->detach($user);
-        
+
+        return redirect()->back();
+    }
+
+    public function destroy(Table $table)
+    {
+        $table->users()->detach();
+
+        $table->delete();
+
         return redirect()->back();
     }
 }
