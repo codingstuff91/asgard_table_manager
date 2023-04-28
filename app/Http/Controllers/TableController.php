@@ -40,6 +40,14 @@ class TableController extends Controller
         return redirect()->route('days.show', $day);
     }
 
+    public function edit(Table $table)
+    {
+        $categories = Category::all();
+        $day = $table->day;
+
+        return view('table.edit', compact('table', 'day', 'categories'));
+    }
+
     public function subscribe(Table $table, User $user)
     {
         $table->users()->attach($user);

@@ -75,6 +75,13 @@
                                     </button>
                                 </form>
                             @endcan
+                            <button class="relative bottom-0 px-4 py-2">
+                                <a 
+                                    href="{{ route('table.edit', $table->id) }}"
+                                >
+                                    Editer
+                                </a>
+                            </button>
                     </div>
                 </div>
             @endforeach
