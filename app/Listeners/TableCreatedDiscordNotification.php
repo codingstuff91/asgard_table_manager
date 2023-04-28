@@ -44,16 +44,40 @@ class TableCreatedDiscordNotification
             6 => "1069338674753437850",
         ];
 
-        $message = "Une table de **". $game->name ."** a été crée par ". $event->user->name ."\n __**Date:**__ ". $event->day->date->format('d/m/Y') ." __**Heure:**__ ". $event->table->start_hour."\n Pour vous inscrire rendez vous sur ce lien : http://table-manager.jeuf5892.odns.fr/days/".$event->day->id;
+        $description = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
+
+        $embedMessage = [
+            "content" => "Une table est disponible sur ASGARD-TABLE-MANAGER",
+            "embeds"=> [
+                [
+                    'title' => 'Table de : ' . $game->name,
+                    'description' => $description,
+                    "author" => [
+                        "name" => "Créateur : " . $event->user->name,
+                    ],
+                    'color' => '16711680',
+                    'fields' => [
+                        [
+                            'name' => 'Date',
+                            'value' => $event->day->date->format('d/m/Y'),
+                            'inline' => true,
+                        ],
+                        [
+                            'name' => 'Heure',
+                            'value' => $event->table->start_hour,
+                            'inline' => true,
+                        ]
+                    ],
+                ]
+            ]
+        ];
 
         $response = $client->post("https://discord.com/api/v9/channels/". $channels[$dayOfWeek] ."/messages", [
             'headers' => [
                 'Authorization' => $bot_token,
                 'Content-Type' => 'application/json'
             ],
-            'json' => [
-                'content' => $message
-            ]
+            'json' => $embedMessage,
         ]);
     }
 }
