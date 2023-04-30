@@ -98,6 +98,8 @@ test('a table can not be created without defining the total points', function ()
 });
 
 test('a user is subscribed to a table', function () {
+    Event::fake();
+
     $this->seed();
 
     $user = \App\Models\User::factory()->create();
@@ -110,6 +112,8 @@ test('a user is subscribed to a table', function () {
     $this->get(route('table.subscribe',[$table, $user]));
 
     expect($table->users()->count())->toBe(2);
+
+    Event::assertDispatched(App\Events\UserTableSubscribed::class);
 });
 
 test('a user is unsubscribed of a table', function () {
@@ -140,7 +144,7 @@ test('a user can not delete a table he didnt created', function () {
     $response = $this->get(route('days.show', \App\Models\Day::first()->id));
     $response->assertOk();
 
-    $response->assertDontSee("Supprimer");
+    $response->assertDontSee("img/delete.png");
 });
 
 test('an admin user can delete a table he didnt created', function () {
@@ -151,7 +155,7 @@ test('an admin user can delete a table he didnt created', function () {
     $response = $this->get(route('days.show', \App\Models\Day::first()->id));
     $response->assertOk();
 
-    $response->assertSee("Supprimer");
+    $response->assertSee("img/delete.png");
 });
 
 test('a user can delete a table', function () {
