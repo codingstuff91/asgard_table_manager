@@ -33,7 +33,8 @@ class TableController extends Controller
             'game_id'        => $request->game_id,
             'players_number' => $request->players_number,
             'total_points'   => $request->total_points,
-            'start_hour'     => $request->start_hour
+            'start_hour'     => $request->start_hour,
+            'description'    => $request->description,
         ]);
 
         event(new TableCreated($table, $request->user(), $day, (int)$request->game_id));

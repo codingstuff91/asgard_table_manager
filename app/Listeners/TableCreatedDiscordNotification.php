@@ -44,18 +44,18 @@ class TableCreatedDiscordNotification
             6 => "1069338674753437850",
         ];
 
-        $description = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
+        $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
 
         $embedMessage = [
             "content" => "Une table est disponible sur ASGARD-TABLE-MANAGER",
             "embeds"=> [
                 [
                     'title' => 'Table de : ' . $game->name,
-                    'description' => $description,
+                    'description' => $tableLinkText,
                     "author" => [
                         "name" => "Créateur : " . $event->user->name,
                     ],
-                    'color' => '16711680',
+                    'color' => '65280',
                     'fields' => [
                         [
                             'name' => 'Date',
@@ -67,6 +67,9 @@ class TableCreatedDiscordNotification
                             'value' => $event->table->start_hour,
                             'inline' => true,
                         ]
+                    ],
+                    'footer' => [
+                        'text' => $event->table->description,
                     ],
                 ]
             ]
