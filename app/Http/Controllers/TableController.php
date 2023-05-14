@@ -52,6 +52,19 @@ class TableController extends Controller
         return view('table.edit', compact('table', 'day', 'categories', 'games', 'tableGame', 'tableGameCategory'));
     }
 
+    public function update(Table $table, Request $request)
+    {
+        $day = $table->day;
+
+        $table->update([
+            'players_number' => $request->players_number,
+            'total_points' => $request->total_points,
+            'start_hour' => substr($request->start_hour, 0, 5),
+        ]);
+
+        return redirect()->route('days.show', $day);
+    }
+
     public function subscribe(Table $table, User $user)
     {
         $table->users()->attach($user);

@@ -8,8 +8,9 @@
     <div class="py-4">
         <div class="sm:max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white w-full rounded-lg p-4">
-                <form action="{{ route('table.store', $day->id) }}" method="POST" class="flex flex-col justify-center items-center">
+                <form action="{{ route('table.update', $day->id) }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
+                    @method('PATCH')
                     
                     <x-input-label>Catégorie de jeu</x-input-label>
                     <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
@@ -72,12 +73,12 @@
                         type="time" 
                         class="w-full" 
                         name="start_hour"
-                        value="{{ old('start_hour') }}">
+                        value="{{ $table->start_hour }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('start_hour')" />
                     
                     <x-primary-button class="mt-4">
-                        Créer la table
+                        Mettre à jour
                     </x-primary-button>
                 </form>
             </div>
