@@ -43,9 +43,13 @@ class TableController extends Controller
     public function edit(Table $table)
     {
         $categories = Category::all();
-        $day = $table->day;
+        $games = Game::all();
 
-        return view('table.edit', compact('table', 'day', 'categories'));
+        $day = $table->day;
+        $tableGame = $table->game;
+        $tableGameCategory = $table->game->category;
+
+        return view('table.edit', compact('table', 'day', 'categories', 'games', 'tableGame', 'tableGameCategory'));
     }
 
     public function subscribe(Table $table, User $user)

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Création d'une table pour la session du {{ $day->date->format('d/m/Y') }}
+            Mise à jour de table du {{ $day->date->format('d/m/Y') }}
         </h2>
     </x-slot>
 
@@ -19,6 +19,7 @@
                         @foreach ($categories as $category)
                             <option 
                                 value="{{ $category->id }}"
+                                {{ $category->id === $tableGameCategory->id ? 'selected' : '' }}
                             >
                                 {{ $category->name }}
                             </option>
@@ -31,6 +32,13 @@
                         name="game_id"
                         id="gameName">
                         <option value="">x-- Choisir un jeu --x</option>
+                        @foreach ($games as $game)
+                            <option 
+                                value="{{ $game->id }}"
+                                {{ $game->id == $tableGame->id ? 'selected' : '' }}>
+                                    {{ $game->name }}
+                            </option> 
+                        @endforeach
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('game_id')" />
                     
@@ -44,7 +52,7 @@
                         class="w-full" 
                         name="players_number" 
                         placeholder="Nombre de joueurs" 
-                        value="{{ $table }}">
+                        value="{{ $table->players_number }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('players_number')" />
 
@@ -54,7 +62,7 @@
                         class="w-full" 
                         name="total_points" 
                         placeholder="Nombre de points" 
-                        value="{{ old('total_points') }}">
+                        value="{{ $table->total_points }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('total_points')" />
 
