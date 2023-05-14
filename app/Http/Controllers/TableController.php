@@ -60,8 +60,9 @@ class TableController extends Controller
 
         $table->update([
             'players_number' => $request->players_number,
-            'total_points' => $request->total_points,
-            'start_hour' => substr($request->start_hour, 0, 5),
+            'total_points'   => $request->total_points,
+            'start_hour'     => substr($request->start_hour, 0, 5),
+            'description'    => $request->description,
         ]);
 
         return redirect()->route('days.show', $day);

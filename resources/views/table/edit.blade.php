@@ -76,6 +76,14 @@
                         value="{{ $table->start_hour }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('start_hour')" />
+
+                    <x-input-label class="mt-2">Description complémentaire</x-input-label>
+                    <textarea 
+                        name="description"
+                        class="w-full
+                        rounded-lg border border-gray-300" 
+                        placeholder="Ajoutez ici des informations complémentaires concernant votre table" rows="4">{{ $table->description }}</textarea>
+                    <x-input-error class="mt-2" :messages="$errors->get('description')" />
                     
                     <x-primary-button class="mt-4">
                         Mettre à jour
