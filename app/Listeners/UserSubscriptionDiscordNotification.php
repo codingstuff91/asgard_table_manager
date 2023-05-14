@@ -2,13 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Models\Game;
 use GuzzleHttp\Client;
-use App\Events\TableCreated;
+use App\Events\UserTableSubscribed;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TableCreatedDiscordNotification
+class UserSubscriptionDiscordNotification
 {
     /**
      * Create the event listener.
@@ -21,22 +20,23 @@ class TableCreatedDiscordNotification
     }
 
     /**
-     * Send a discord notification according to day of week
+     * Handle the event.
      *
      * @param  \App\Events\TableCreated  $event
      * @return void
      */
-    public function handle(TableCreated $event)
-    {
-        $game = Game::find($event->game);
-        
+    public function handle(UserTableSubscribed $event)
+    {        
         $client = new Client();
         $bot_token = config('discord.bot_token');
+
+        $day = $event->table->day;
+        $game = $event->table->game;
 
         // Vendredi => 5
         // Samedi => 6
         // Dimanche => 0
-        $dayOfWeek = $event->day->date->dayOfWeek;
+        $dayOfWeek = $day->date->dayOfWeek;
 
         $channels = [
             0 => "1069338721633194025",
@@ -44,22 +44,19 @@ class TableCreatedDiscordNotification
             6 => "1069338674753437850",
         ];
 
-        $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
+        $description = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $day->id;
 
         $embedMessage = [
-            "content" => "Une table est disponible sur ASGARD-TABLE-MANAGER",
+            "content" => "Inscription",
             "embeds"=> [
                 [
-                    'title' => 'Table de : ' . $game->name,
-                    'description' => $tableLinkText,
-                    "author" => [
-                        "name" => "Créateur : " . $event->user->name,
-                    ],
-                    'color' => '65280',
+                    'title' => $event->user->name . ' s\'est inscrit à la table de ' . $game->name,
+                    'description' => $description,
+                    'color' => '16711680',
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $event->day->date->format('d/m/Y'),
+                            'value' => $day->date->format('d/m/Y'),
                             'inline' => true,
                         ],
                         [
@@ -67,9 +64,6 @@ class TableCreatedDiscordNotification
                             'value' => $event->table->start_hour,
                             'inline' => true,
                         ]
-                    ],
-                    'footer' => [
-                        'text' => $event->table->description,
                     ],
                 ]
             ]
