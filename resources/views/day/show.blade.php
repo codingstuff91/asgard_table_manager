@@ -79,7 +79,7 @@
                                 <a 
                                     href="{{ route('table.edit', $table->id) }}"
                                 >
-                                    Editer
+                                    <img src="{{ asset('img/edit.png')}}" class="h-8 w-8">
                                 </a>
                             </button>
                     </div>
