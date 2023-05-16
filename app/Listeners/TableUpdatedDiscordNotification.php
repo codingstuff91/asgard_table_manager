@@ -18,8 +18,6 @@ class TableUpdatedDiscordNotification
      */
     public function handle(TableUpdated $event)
     {
-        dd('update table received');
-
         $game = Game::find($event->game);
         
         $client = new Client();
@@ -39,10 +37,10 @@ class TableUpdatedDiscordNotification
         $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
 
         $embedMessage = [
-            "content" => "La table de " . $game->name . " a été mise à jour",
+            "content" => "Mise à jour de table",
             "embeds"=> [
                 [
-                    'title' => 'Table de : ' . $game->name,
+                    'title' => 'Jeu : ' . $game->name,
                     'description' => $tableLinkText,
                     "author" => [
                         "name" => "Créateur : " . $event->user->name,
