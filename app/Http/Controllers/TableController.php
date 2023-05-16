@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Table;
 use App\Models\Category;
 use App\Events\TableCreated;
+use App\Events\TableUpdated;
 use Illuminate\Http\Request;
 use App\Events\UserTableSubscribed;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,8 @@ class TableController extends Controller
             'start_hour'     => substr($request->start_hour, 0, 5),
             'description'    => $request->description,
         ]);
+
+        event(new TableUpdated($table, $request->user(), $day, (int)$request->game_id));
 
         return redirect()->route('days.show', $day);
     }
