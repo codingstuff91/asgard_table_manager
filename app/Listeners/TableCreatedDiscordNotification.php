@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Models\Game;
 use GuzzleHttp\Client;
 use App\Events\TableCreated;
+use App\Services\DiscordService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

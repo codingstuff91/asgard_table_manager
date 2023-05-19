@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use GuzzleHttp\Client;
+use App\Services\DiscordService;
 use App\Events\UserTableSubscribed;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,7 +24,7 @@ class UserSubscriptionDiscordNotification
         $day = $event->table->day;
         $game = $event->table->game;
 
-        $discordChannelId = resolve(DiscordService::class)->getChannelByDate($event->day->date);
+        $discordChannelId = resolve(DiscordService::class)->getChannelByDate($day->date);
 
         $description = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $day->id;
 
