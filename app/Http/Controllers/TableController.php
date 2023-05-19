@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Table;
 use App\Models\Category;
 use App\Events\TableCreated;
+use App\Events\TableUpdated;
 use Illuminate\Http\Request;
 use App\Events\UserTableSubscribed;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,34 @@ class TableController extends Controller
         ]);
 
         event(new TableCreated($table, $request->user(), $day, (int)$request->game_id));
+
+        return redirect()->route('days.show', $day);
+    }
+
+    public function edit(Table $table)
+    {
+        $categories = Category::all();
+        $games = Game::all();
+
+        $day = $table->day;
+        $tableGame = $table->game;
+        $tableGameCategory = $table->game->category;
+
+        return view('table.edit', compact('table', 'day', 'categories', 'games', 'tableGame', 'tableGameCategory'));
+    }
+
+    public function update(Table $table, Request $request)
+    {
+        $day = $table->day;
+
+        $table->update([
+            'players_number' => $request->players_number,
+            'total_points'   => $request->total_points,
+            'start_hour'     => substr($request->start_hour, 0, 5),
+            'description'    => $request->description,
+        ]);
+
+        event(new TableUpdated($table, $request->user(), $day, (int)$request->game_id));
 
         return redirect()->route('days.show', $day);
     }

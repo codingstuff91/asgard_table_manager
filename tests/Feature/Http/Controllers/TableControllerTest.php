@@ -38,6 +38,25 @@ test('a table is created successfully', function () {
     Event::assertDispatched(App\Events\TableCreated::class);
 });
 
+test('a table is updated successfully', function () {
+    Event::fake();
+
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
+
+    $response = $this->patch(route('table.update', \App\Models\Table::first()->id), [
+        'day_id'         => \App\Models\Day::first()->id,
+        'game_id'        => \App\Models\Game::first()->id,
+        'players_number' => 5,
+        'total_points'   => 1000,
+        'start_hour'     => "21:00",
+    ]);
+
+    expect($response)->toBeRedirect(route('days.show', \App\Models\Day::first()->id));
+
+    Event::assertDispatched(App\Events\TableUpdated::class);
+});
+
 test('a table can not be created without defining a number of players', function () {
     $this->seed();
     $this->actingAs(\App\Models\User::first());

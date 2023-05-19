@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     /** Tables routes */
     Route::get('table/{day}/create', [TableController::class, 'create'])->name('table.create');
     Route::post('table/{day}/create', [TableController::class, 'store'])->name('table.store');
+    Route::get('table/{table}/edit', [TableController::class, 'edit'])->name('table.edit');
+    Route::patch('table/{table}', [TableController::class, 'update'])->name('table.update');
     Route::get('table/{table}/subscribe/{user}', [TableController::class, 'subscribe'])->name('table.subscribe');
     Route::get('table/{table}/unsubscribe/{user}', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');

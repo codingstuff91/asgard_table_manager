@@ -75,6 +75,15 @@
                                     </button>
                                 </form>
                             @endcan
+                            @can('edit_table', $table)
+                                <button class="relative bottom-0 px-4 py-2">
+                                    <a 
+                                        href="{{ route('table.edit', $table->id) }}"
+                                    >
+                                        <img src="{{ asset('img/edit.png')}}" class="h-8 w-8">
+                                    </a>
+                                </button>
+                            @endcan
                     </div>
                 </div>
             @endforeach
