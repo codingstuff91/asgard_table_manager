@@ -178,6 +178,8 @@ test('an admin user can delete a table he didnt created', function () {
 });
 
 test('a user can delete a table', function () {
+    Event::fake();
+
     $this->seed();
 
     $this->actingAs(\App\Models\User::first());
@@ -185,6 +187,8 @@ test('a user can delete a table', function () {
     expect(\App\Models\Table::all()->count())->toBe(1);
 
     $this->delete(route('table.delete', \App\Models\Table::first()));
+
+    Event::assertDispatched(App\Events\TableDeleted::class);
 
     expect(\App\Models\Table::all()->count())->toBe(0);
 });
