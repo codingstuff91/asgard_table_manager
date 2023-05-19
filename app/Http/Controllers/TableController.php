@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Table;
 use App\Models\Category;
 use App\Events\TableCreated;
+use App\Events\TableDeleted;
 use App\Events\TableUpdated;
 use Illuminate\Http\Request;
 use App\Events\UserTableSubscribed;
@@ -89,9 +90,15 @@ class TableController extends Controller
 
     public function destroy(Table $table)
     {
+        $game = $table->game;
+        $day = $table->day;
+        $user = $table->organizer;
+
         $table->users()->detach();
 
         $table->delete();
+
+        event(new TableDeleted($table, $day, $game, $user));
 
         return redirect()->back();
     }
