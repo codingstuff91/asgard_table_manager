@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Models\Game;
 use GuzzleHttp\Client;
 use App\Events\TableCreated;
+use App\Services\DiscordService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -33,16 +34,7 @@ class TableCreatedDiscordNotification
         $client = new Client();
         $bot_token = config('discord.bot_token');
 
-        // Vendredi => 5
-        // Samedi => 6
-        // Dimanche => 0
-        $dayOfWeek = $event->day->date->dayOfWeek;
-
-        $channels = [
-            0 => "1069338721633194025",
-            5 => "1069338626237931541",
-            6 => "1069338674753437850",
-        ];
+        $discordChannelId = resolve(DiscordService::class)->getChannelByDate($event->day->date);
 
         $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
 
@@ -75,7 +67,7 @@ class TableCreatedDiscordNotification
             ]
         ];
 
-        $response = $client->post("https://discord.com/api/v9/channels/". $channels[$dayOfWeek] ."/messages", [
+        $response = $client->post("https://discord.com/api/v9/channels/". $discordChannelId ."/messages", [
             'headers' => [
                 'Authorization' => $bot_token,
                 'Content-Type' => 'application/json'

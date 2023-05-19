@@ -3,22 +3,13 @@
 namespace App\Listeners;
 
 use GuzzleHttp\Client;
+use App\Services\DiscordService;
 use App\Events\UserTableSubscribed;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UserSubscriptionDiscordNotification
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      *
@@ -33,16 +24,7 @@ class UserSubscriptionDiscordNotification
         $day = $event->table->day;
         $game = $event->table->game;
 
-        // Vendredi => 5
-        // Samedi => 6
-        // Dimanche => 0
-        $dayOfWeek = $day->date->dayOfWeek;
-
-        $channels = [
-            0 => "1069338721633194025",
-            5 => "1069338626237931541",
-            6 => "1069338674753437850",
-        ];
+        $discordChannelId = resolve(DiscordService::class)->getChannelByDate($day->date);
 
         $description = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $day->id;
 
@@ -69,7 +51,7 @@ class UserSubscriptionDiscordNotification
             ]
         ];
 
-        $response = $client->post("https://discord.com/api/v9/channels/". $channels[$dayOfWeek] ."/messages", [
+        $response = $client->post("https://discord.com/api/v9/channels/". $discordChannelId ."/messages", [
             'headers' => [
                 'Authorization' => $bot_token,
                 'Content-Type' => 'application/json'
