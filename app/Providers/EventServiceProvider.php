@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Events\TableCreated;
+use App\Events\TableDeleted;
 use App\Events\TableUpdated;
 use App\Events\UserTableSubscribed;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\TableCreatedDiscordNotification;
+use App\Listeners\TableDeletedDiscordNotification;
 use App\Listeners\TableUpdatedDiscordNotification;
 use App\Listeners\UserSubscriptionDiscordNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         TableUpdated::class => [
             TableUpdatedDiscordNotification::class,
+        ],
+        TableDeleted::class => [
+            TableDeletedDiscordNotification::class,
         ],
         UserTableSubscribed::class => [
             UserSubscriptionDiscordNotification::class,
