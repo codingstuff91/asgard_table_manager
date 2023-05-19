@@ -8,7 +8,7 @@
     <div class="py-4">
         <div class="sm:max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white w-full rounded-lg p-4">
-                <form action="{{ route('table.update', $day->id) }}" method="POST" class="flex flex-col justify-center items-center">
+                <form action="{{ route('table.update', $table->id) }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
                     @method('PATCH')
                     
