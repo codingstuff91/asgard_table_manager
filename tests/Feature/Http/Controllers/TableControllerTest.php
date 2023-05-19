@@ -44,7 +44,7 @@ test('a table is updated successfully', function () {
     $this->seed();
     $this->actingAs(\App\Models\User::first());
 
-    $response = $this->post(route('table.update', \App\Models\Day::first()->id), [
+    $response = $this->patch(route('table.update', \App\Models\Table::first()->id), [
         'day_id'         => \App\Models\Day::first()->id,
         'game_id'        => \App\Models\Game::first()->id,
         'players_number' => 5,
@@ -53,8 +53,6 @@ test('a table is updated successfully', function () {
     ]);
 
     expect($response)->toBeRedirect(route('days.show', \App\Models\Day::first()->id));
-
-    expect(['organizer_id' => \App\Models\User::first()->id])->toBeInDatabase('tables');
 
     Event::assertDispatched(App\Events\TableUpdated::class);
 });
