@@ -12,16 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class TableCreatedDiscordNotification
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Send a discord notification according to day of week
      *
      * @param  \App\Events\TableCreated  $event
