@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Day;
+
 test('The index page is rendered correctly', function () {
     $this->seed();
     $this->actingAs(\App\Models\User::first());
@@ -64,4 +66,19 @@ test('A day is created successfully', function () {
         ->and([
             'date' => $date
         ])->toBeInDatabase(table: 'days');
+});
+
+test('The past days are hidden from index page', function () {
+    $this->seed();
+    $this->actingAs(\App\Models\User::first());
+
+    $pastDay = Day::factory()->create([
+        'date' => now()->sub('day', 1),
+    ]);
+
+    $response = $this->get(route('days.index'));
+
+    expect($response)
+    ->toBeOk()
+    ->not->toContainText($pastDay->date->format('d/m/Y'));
 });
