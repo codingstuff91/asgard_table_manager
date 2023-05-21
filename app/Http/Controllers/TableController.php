@@ -13,6 +13,7 @@ use App\Events\TableUpdated;
 use Illuminate\Http\Request;
 use App\Events\UserTableSubscribed;
 use Illuminate\Support\Facades\Auth;
+use App\Events\UserTableUnsubscribed;
 use App\Http\Requests\TableStoreRequest;
 use App\Providers\SendDiscordTableCreatedNotification;
 
@@ -84,6 +85,8 @@ class TableController extends Controller
     public function unSubscribe(Table $table, User $user)
     {
         $table->users()->detach($user);
+
+        event(new UserTableUnsubscribed($user, $table));
 
         return redirect()->back();
     }
