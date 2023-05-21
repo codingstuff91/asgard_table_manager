@@ -136,6 +136,8 @@ test('a user is subscribed to a table', function () {
 });
 
 test('a user is unsubscribed of a table', function () {
+    Event::fake();
+
     $this->seed();
 
     $user = \App\Models\User::factory()->create();
@@ -150,6 +152,9 @@ test('a user is unsubscribed of a table', function () {
     expect($table->users()->count())->toBe(2);
 
     $this->get(route('table.unsubscribe',[$table, $user]));
+
+    Event::assertDispatched(App\Events\UserTableUnsubscribed::class);
+    Event::assertListening(App\Events\UserTableUnsubscribed::class, App\Listeners\UserUnsubscriptionDiscordNotification::class);
 
     expect($table->users()->count())->toBe(1);
 });
