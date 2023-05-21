@@ -16,7 +16,11 @@ class DayController extends Controller
      */
     public function index(Request $request)
     {
-        $days = Day::query()->withCount('tables')->orderBy('date', 'desc')->get();
+        $days = Day::query()
+                ->withCount('tables')
+                ->where('date', '>=', now()->format('Y-m-d'))
+                ->orderBy('date', 'desc')
+                ->get();
 
         return view('day.index', compact('days'));
     }
