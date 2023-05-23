@@ -18,7 +18,7 @@
                     <p>{{ $table->start_hour }}</p>
 
                     <h3 class="mt-2 font-bold text-lg">
-                        Maitre jeu
+                        Organisateur
                     </h3>
                     <p class="mb-2">{{ $table->organizer->name }}</p>
 
