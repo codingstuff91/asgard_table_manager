@@ -31,6 +31,7 @@
 
                     <div class="bg-gray-200 pb-4">
                         <h3 class="mt-4 text-lg font-bold">Joueurs inscrits</h3>
+                        <h4 class="mt-1 text-lg font-bold">{{ $table->users->count() }} / {{ $table->players_number }}</h4>
                         <ul class="mt-4">
                             @foreach ($table->users as $user)
                                 <li>
