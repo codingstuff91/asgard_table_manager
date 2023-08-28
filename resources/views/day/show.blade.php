@@ -9,6 +9,11 @@
     </x-slot>
 
     <div class="w-full mt-2 mx-auto lg:max-w-7xl">
+        @if(session('error'))
+            <div class="text-center text-xl text-white font-semibold bg-red-500 w-full p-2 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="grid grid-cols-2 gap-1 rounded-lg mt-4 mx-auto lg:grid-cols-5 lg:gap-2">
             @foreach ($tables as $table)
                 <div class="flex flex-col bg-white rounded-lg text-center shadow-lg xs:my-4 xs:mx-2">
@@ -26,6 +31,7 @@
 
                     <div class="bg-gray-200 pb-4">
                         <h3 class="mt-4 text-lg font-bold">Joueurs inscrits</h3>
+                        <h4 class="mt-1 text-lg font-bold">{{ $table->users->count() }} / {{ $table->players_number }}</h4>
                         <ul class="mt-4">
                             @foreach ($table->users as $user)
                                 <li>

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Day;
+use App\Models\User;
+use App\Models\Table;
 use Illuminate\Support\Facades\Event;
 
 test('The create table form displays all categories', function () {
@@ -196,4 +199,27 @@ test('a user can delete a table', function () {
     Event::assertDispatched(App\Events\TableDeleted::class);
 
     expect(\App\Models\Table::all()->count())->toBe(0);
+});
+
+test('a user could not subscribe to a table if the max number of players is reached', function(){
+    Event::fake();
+
+    $this->seed();
+
+    $user = User::first();
+    $anotherUser = User::factory()->create();
+
+    $this->actingAs($user);
+
+    $table = Table::first();
+    $day = Day::first();
+
+    $response = $this->get(route('table.subscribe',[$table, $user]));
+    expect($table->users()->count())->toBe(2);
+
+    // The user can not subscribe to a table and is redirected to the correct day table with an error message
+    $this->actingAs($anotherUser);
+    $response = $this->get(route('table.subscribe', [$table, $anotherUser]));
+
+    expect($response)->toBeRedirect(route('days.show', [$day]));
 });
