@@ -75,6 +75,12 @@ class TableController extends Controller
 
     public function subscribe(Table $table, User $user)
     {
+        $numerOfPlayers = $table->users()->count();
+
+        if ($numerOfPlayers === $table->players_number) {
+            return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
+        }
+        
         $table->users()->attach($user);
 
         event(new UserTableSubscribed($user, $table));
