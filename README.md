@@ -27,7 +27,7 @@ Les outils d'analyse suivants ont été utilisés :
 
 Pour utiliser le projet en local il faut réaliser les taches suivantes :
 
-- Créer un fichier .env à la racine du projet en se basant sur le fichier .env.example
+- Créer un fichier .env dans votre projet en se basant sur le fichier .env.example
 - Executer la commande artisan : ``php artisan migrate:fresh --seed``
 - Exécuter la commande : `npm run dev`
 - Exécuter la commande : `php artisan serve`
