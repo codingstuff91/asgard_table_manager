@@ -30,7 +30,9 @@
                     <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                         name="game_id"
                         id="gameName">
-                        <option value="">x-- Choisir un jeu --x</option>
+                        <option value="">
+                            x-- Choisir un jeu --x
+                        </option>
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('game_id')" />
 
@@ -85,9 +87,7 @@
         </div>
     </div>
     <script>
-        var category = document.getElementById("gameCategory");
-
-        category.addEventListener("change", function() {
+        function getGames() {
             var gameList = document.getElementById("gameName");
             gameList.innerHTML = '';
 
@@ -110,6 +110,20 @@
                     gameList.appendChild(option);
                 });
             });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var category_id = {{ old('category_id') }};
+
+            if (category_id) {
+                getGames();
+            }
+        });
+
+        var category = document.getElementById("gameCategory");
+
+        category.addEventListener("change", function() {
+            getGames();
         });
 
     </script>
