@@ -37,7 +37,9 @@
                                 <li>
                                     @can('unsubscribe_user', $table)
                                         <button>
-                                            <a href="{{ route('table.unsubscribe', [$table->id, $user->id]) }}">
+                                            <a
+                                                href="{{ route('table.unsubscribe', [$table->id, $user->id]) }}"
+                                            >
                                                 <i class="fa-solid fa-user-slash text-red-500 font-bold"></i>
                                             </a>
                                         </button>
@@ -52,8 +54,9 @@
                     <div class="flex justify-center bg-gray-200">
                         @if (collect($table->users)->pluck('name')->doesntContain(Auth::user()->name))
                             <button class="relative bottom-0 px-4 py-2">
-                                <a 
+                                <a
                                     href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}"
+                                    onclick="return confirm('Etes vous sur de vouloir vous inscrire ?')"
                                 >
                                     <img src="{{ asset('img/add-user.png')}}" class="w-8 h-8">
                                 </a>
@@ -61,8 +64,9 @@
                         @endif
                         @if (collect($table->users)->pluck('name')->contains(Auth::user()->name))
                             <button class="relative bottom-0 px-4 py-2">
-                                <a 
+                                <a
                                     href="{{ route('table.unsubscribe', [$table->id, Auth::user()->id]) }}"
+                                    onclick="return confirm('Etes vous certain de vouloir vous desinscrire ?')"
                                 >
                                     <img src="{{ asset('img/delete-user.png') }}" class="w-8 h-8">
                                 </a>
@@ -75,7 +79,7 @@
                                     <button
                                         type="submit"
                                         class="relative bottom-0 px-4 py-2"
-                                        onclick="return confirm('Etes-vous certain de supprimer cette table ?')"
+                                        onclick="return confirm('Etes-vous certain de vouloir la supprimer ?')"
                                     >
                                         <img src="{{ asset('img/delete.png')}}" class="h-8 w-8">
                                     </button>
@@ -83,8 +87,9 @@
                             @endcan
                             @can('edit_table', $table)
                                 <button class="relative bottom-0 px-4 py-2">
-                                    <a 
+                                    <a
                                         href="{{ route('table.edit', $table->id) }}"
+                                        onclick="return confirm('Etes-vous certain de vouloir la mettre à jour ?')"
                                     >
                                         <img src="{{ asset('img/edit.png')}}" class="h-8 w-8">
                                     </a>
