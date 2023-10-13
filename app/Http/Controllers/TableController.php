@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UserSubscriptionAction;
 use App\DataObjects\TableData;
 use App\Logic\TableLogic;
 use App\Models\Day;
@@ -40,6 +41,9 @@ class TableController extends Controller
         }
 
         $table = Table::create($tableAttributes->toArray());
+        $user = $request->user();
+
+        app(UserSubscriptionAction::class)->execute($table, $user);
 
         event(new TableCreated($table, $request->user(), $day, $request->game_id));
 
