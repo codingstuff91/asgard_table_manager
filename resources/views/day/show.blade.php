@@ -14,7 +14,11 @@
                 {{ session('error') }}
             </div>
         @endif
+            <x-game-card>
+
+            </x-game-card>
         <div class="grid grid-cols-2 gap-1 rounded-lg mt-4 mx-auto lg:grid-cols-5 lg:gap-2">
+
             @foreach ($tables as $table)
                 <div class="flex flex-col bg-white rounded-lg text-center shadow-lg xs:my-4 xs:mx-2">
                     <h2 class="text-xl font-semibold w-full p-2 rounded-lg text-white {{ $table->game->category->color }}">{{ $table->game->name }}</h2>
