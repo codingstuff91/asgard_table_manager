@@ -38,6 +38,8 @@ test('a table is created successfully', function () {
 
     expect(['organizer_id' => \App\Models\User::first()->id])->toBeInDatabase('tables');
 
+    expect(['user_id' => User::first()->id])->toBeInDatabase('table_user');
+
     Event::assertDispatched(App\Events\TableCreated::class);
 });
 
