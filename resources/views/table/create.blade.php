@@ -87,7 +87,9 @@
         </div>
     </div>
     <script>
-        function getGames() {
+        var category = document.getElementById("gameCategory");
+
+        category.addEventListener("change", function() {
             var gameList = document.getElementById("gameName");
             gameList.innerHTML = '';
 
@@ -110,20 +112,6 @@
                     gameList.appendChild(option);
                 });
             });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var category_id = {{ old('category_id') }};
-
-            if (category_id) {
-                getGames();
-            }
-        });
-
-        var category = document.getElementById("gameCategory");
-
-        category.addEventListener("change", function() {
-            getGames();
         });
 
     </script>
