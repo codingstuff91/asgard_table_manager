@@ -4,11 +4,11 @@ Cette application web a été crée pour faciliter la gestion des tables de jeux
 
 ## Fonctionnalités
 
-Sur cette application les utilisateurs peuvent réaliser les actions suivantes :
+Cette application permet aux utilisateurs de réaliser les actions suivantes :
 
 - Afficher la liste des sessions de jeux proposées par l'association.
-- Création, mise à jour et suppression de table de jeu et envoi de notification à un serveur discord.
-- Inscription et désinscription à une table de jeu et envoi de notification à un serveur discord
+- Création, mise à jour et suppression de table de jeu avec envoi de notification à un serveur discord.
+- Inscription et désinscription à une table de jeu avec envoi de notification à un serveur discord
 - Gestion de la liste de jeux proposée par l'association
 
 ## Technologies
@@ -27,7 +27,7 @@ Les outils d'analyse suivants ont été utilisés :
 
 Pour utiliser le projet en local il faut réaliser les taches suivantes :
 
-- Créer un fichier .env dans votre projet en se basant sur le fichier .env.example
+- Créer un fichier .env dans votre projet en prenant comme exemple le fichier .env.example
 - Executer la commande artisan : ``php artisan migrate:fresh --seed``
 - Exécuter la commande : `npm run dev`
 - Exécuter la commande : `php artisan serve`
