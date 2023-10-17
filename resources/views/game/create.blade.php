@@ -12,25 +12,28 @@
                     @csrf
 
                     <x-input-label>Catégorie de jeu</x-input-label>
-                    <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    <select
+                        class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                         name="category_id">
                         <option value="">x-- Choisir une categorie --x</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}" {{ old('category_id') ==$category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
                         @endforeach
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
 
                     <x-input-label class="mt-4">Nom du jeu</x-input-label>
-                    <x-text-input 
-                        type="text" 
-                        class="w-full" 
-                        name="name" 
-                        placeholder="Nom du jeu" 
-                        value="{{ old('players_number') }}">
+                    <x-text-input
+                        type="text"
+                        class="w-full"
+                        name="name"
+                        placeholder="Nom du jeu"
+                        value="{{ old('name') }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
-                    
+
                     <x-primary-button class="mt-4">
                         Confirmer
                     </x-primary-button>

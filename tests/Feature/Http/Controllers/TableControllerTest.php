@@ -38,7 +38,44 @@ test('a table is created successfully', function () {
 
     expect(['organizer_id' => \App\Models\User::first()->id])->toBeInDatabase('tables');
 
+    expect(['user_id' => User::first()->id])->toBeInDatabase('table_user');
+
     Event::assertDispatched(App\Events\TableCreated::class);
+});
+
+test('a table must not be created twice or more', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $day = Day::first();
+
+    // Try to create a new table once
+    $response = $this->post(route('table.store', $day), [
+        'organizer_id'   => \App\Models\User::first()->id,
+        'day_id'         => \App\Models\Day::first()->id,
+        'game_id'        => \App\Models\Game::first()->id,
+        'players_number' => 5,
+        'total_points'   => 1000,
+        'start_hour'     => "21:00",
+    ]);
+
+    expect(Table::count())->toBe(2);
+
+    // Try to create the same table twice
+    $response = $this->post(route('table.store', $day), [
+        'organizer_id'   => \App\Models\User::first()->id,
+        'day_id'         => \App\Models\Day::first()->id,
+        'game_id'        => \App\Models\Game::first()->id,
+        'players_number' => 5,
+        'total_points'   => 1000,
+        'start_hour'     => "21:00",
+    ]);
+
+    expect(Table::count())->toBe(2);
+
+    expect($response)
+        ->toBeRedirect(route('days.show', Day::first()->id))
+        ->toHaveSession('error');
 });
 
 test('a table is updated successfully', function () {

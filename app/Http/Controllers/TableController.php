@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UserSubscriptionAction;
+use App\DataObjects\TableData;
+use App\Logic\TableLogic;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\User;
@@ -12,10 +15,8 @@ use App\Events\TableDeleted;
 use App\Events\TableUpdated;
 use Illuminate\Http\Request;
 use App\Events\UserTableSubscribed;
-use Illuminate\Support\Facades\Auth;
 use App\Events\UserTableUnsubscribed;
 use App\Http\Requests\TableStoreRequest;
-use App\Providers\SendDiscordTableCreatedNotification;
 
 class TableController extends Controller
 {
@@ -30,17 +31,21 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
-        $table = Table::create([
-            'organizer_id'   => Auth::user()->id,
-            'day_id'         => $day->id,
-            'game_id'        => $request->game_id,
-            'players_number' => $request->players_number,
-            'total_points'   => $request->total_points,
-            'start_hour'     => $request->start_hour,
-            'description'    => $request->description,
-        ]);
+        $tableAttributes = new TableData(
+            $day->id,
+            $request->user()->id,
+            ...$request->validated());
 
-        event(new TableCreated($table, $request->user(), $day, (int)$request->game_id));
+        if (TableLogic::isAlreadyExists($tableAttributes)) {
+            return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
+        }
+
+        $table = Table::create($tableAttributes->toArray());
+        $user = $request->user();
+
+        app(UserSubscriptionAction::class)->execute($table, $user);
+
+        event(new TableCreated($table, $request->user(), $day, $request->game_id));
 
         return redirect()->route('days.show', $day);
     }
@@ -80,7 +85,7 @@ class TableController extends Controller
         if ($numerOfPlayers === $table->players_number) {
             return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
         }
-        
+
         $table->users()->attach($user);
 
         event(new UserTableSubscribed($user, $table));
