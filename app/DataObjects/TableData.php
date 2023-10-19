@@ -2,8 +2,9 @@
 
 namespace App\DataObjects;
 
+use App\Models\Day;
+use Illuminate\Support\Facades\Request;
 use App\Http\Requests\TableStoreRequest;
-use Illuminate\Support\Facades\Auth;
 
 class TableData
 {
@@ -16,6 +17,19 @@ class TableData
         public string $start_hour,
         public ?string $description = null,
     ){
+    }
+
+    public static function make(Day $day, TableStoreRequest $request)
+    {
+        return new self(
+            $day->id,
+            $request->user()->id,
+            $request->game_id,
+            $request->players_number,
+            $request->total_points,
+            $request->start_hour,
+            $request->description ?? null,
+        );
     }
 
     public function toArray(): array

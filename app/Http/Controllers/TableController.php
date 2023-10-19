@@ -31,10 +31,7 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
-        $tableAttributes = new TableData(
-            $day->id,
-            $request->user()->id,
-            ...$request->validated());
+        $tableAttributes = TableData::make($day, $request);
 
         if (TableLogic::isAlreadyExists($tableAttributes)) {
             return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
