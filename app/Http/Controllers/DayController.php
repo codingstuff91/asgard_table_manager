@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Http\Requests\storeDayRequest;
 use App\Models\Day;
 use App\Models\Table;
 use Illuminate\Http\Request;
-use App\Http\Requests\storeDayRequest;
 
 class DayController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $days = Day::query()
-                ->withCount('tables')
-                ->where('date', '>=', now()->format('Y-m-d'))
-                ->orderBy('date', 'desc')
-                ->get();
+            ->withCount('tables')
+            ->where('date', '>=', now()->format('Y-m-d'))
+            ->orderBy('date', 'desc')
+            ->get();
 
         return view('day.index', compact('days'));
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
@@ -37,18 +34,18 @@ class DayController extends Controller
     public function show(Day $day)
     {
         $tables = Table::with(['users', 'game'])
-                        ->where('day_id', $day->id)
-                        ->get();
+            ->where('day_id', $day->id)
+            ->get();
 
         return view('day.show', compact('tables', 'day'));
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(storeDayRequest $request)
-    {      
+    {
         $day = Day::create($request->all());
 
         return redirect()->route('days.index');

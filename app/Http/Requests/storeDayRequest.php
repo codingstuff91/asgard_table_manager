@@ -24,16 +24,16 @@ class storeDayRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required|date|unique:days,date'
+            'date' => 'required|date|unique:days,date',
         ];
     }
 
     public function messages()
     {
         return [
-            'date.unique'   => 'Une session existe déjà pour cette date !',
+            'date.unique' => 'Une session existe déjà pour cette date !',
             'date.required' => 'Veuillez fournir une date de session',
-            'date.date'     => 'Veuillez fournir une date valide',
+            'date.date' => 'Veuillez fournir une date valide',
         ];
     }
 }

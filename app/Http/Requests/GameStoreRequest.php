@@ -24,8 +24,8 @@ class GameStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required',
-            'category_id' => 'required'
+            'name' => 'required|unique:games,name',
+            'category_id' => 'required',
         ];
     }
 
@@ -34,6 +34,7 @@ class GameStoreRequest extends FormRequest
         return [
             'name.required' => 'Veuillez saisir un nom',
             'category_id.required' => 'Veuillez choisir une catégorie',
+            'name.unique' => 'Ce jeu est existe déjà',
         ];
     }
 }
