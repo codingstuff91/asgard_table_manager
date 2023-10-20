@@ -31,6 +31,8 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
+        $game = Game::findOrFail($request->game_id);
+
         $tableAttributes = TableData::make($day, $request);
 
         if (TableLogic::isAlreadyExists($tableAttributes)) {
@@ -42,7 +44,7 @@ class TableController extends Controller
 
         app(UserSubscriptionAction::class)->execute($table, $user);
 
-        event(new TableCreated($table, $request->user(), $day, $request->game_id));
+        event(new TableCreated($table, $day, $game));
 
         return redirect()->route('days.show', $day);
     }
