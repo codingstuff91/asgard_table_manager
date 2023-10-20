@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Game;
 use App\Models\Table;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TableFactory extends Factory
