@@ -15,6 +15,7 @@
         "app/Http/Kernel.php",
         "bootstrap/app.php",
         "app/Exceptions/Handler.php",
-        "app/Console/Kernel.php"
+        "app/Console/Kernel.php",
+        "app/Providers"
     ]
 }
