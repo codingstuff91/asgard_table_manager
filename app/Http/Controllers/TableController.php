@@ -30,17 +30,19 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
+        $game = Game::findOrFail($request->game_id);
+
         $table = Table::create([
             'organizer_id'   => Auth::user()->id,
             'day_id'         => $day->id,
-            'game_id'        => $request->game_id,
+            'game_id'        => $game->id,
             'players_number' => $request->players_number,
             'total_points'   => $request->total_points,
             'start_hour'     => $request->start_hour,
             'description'    => $request->description,
         ]);
 
-        event(new TableCreated($table, $request->user(), $day, (int)$request->game_id));
+        event(new TableCreated($table, $day, $game));
 
         return redirect()->route('days.show', $day);
     }

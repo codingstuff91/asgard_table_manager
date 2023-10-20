@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\User;
 use App\Models\Table;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -23,10 +24,10 @@ class TableCreated
      *
      * @return void
      */
-    public function __construct(Table $table, User $user, Day $day, int $game)
+    public function __construct(Table $table, Day $day, Game $game)
     {
         $this->table = $table;
-        $this->user = $user;
+        $this->user = Auth::user()->id;
         $this->day = $day;
         $this->game = $game;
     }

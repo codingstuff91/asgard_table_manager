@@ -17,9 +17,7 @@ class TableCreatedDiscordNotification
      * @return void
      */
     public function handle(TableCreated $event)
-    {
-        $game = Game::find($event->game);
-        
+    {    
         $discordChannelId = resolve(DiscordService::class)->getChannelByDate($event->day->date);
 
         $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
@@ -28,7 +26,7 @@ class TableCreatedDiscordNotification
             "content" => "Une table est disponible sur ASGARD-TABLE-MANAGER",
             "embeds"=> [
                 [
-                    'title' => 'Table de : ' . $game->name,
+                    'title' => 'Table de : ' . $event->game->name,
                     'description' => $tableLinkText,
                     "author" => [
                         "name" => "Créateur : " . $event->user->name,
