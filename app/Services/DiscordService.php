@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\Day;
+use GuzzleHttp\Client;
 
 class DiscordService
 {
@@ -22,5 +23,18 @@ class DiscordService
         };
 
         return $channelId;
+    }
+
+    public static function sendNotification(string $channelId, array $embedMessage): void
+    {
+        $bot_token = config('discord.bot_token');
+
+        $response = $client->post("https://discord.com/api/v9/channels/". $channelId ."/messages", [
+            'headers' => [
+                'Authorization' => $bot_token,
+                'Content-Type' => 'application/json'
+            ],
+            'json' => $embedMessage,
+        ]);
     }
 }

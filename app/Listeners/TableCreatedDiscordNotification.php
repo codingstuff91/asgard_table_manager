@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Models\Game;
-use GuzzleHttp\Client;
 use App\Events\TableCreated;
 use App\Services\DiscordService;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,9 +20,6 @@ class TableCreatedDiscordNotification
     {
         $game = Game::find($event->game);
         
-        $client = new Client();
-        $bot_token = config('discord.bot_token');
-
         $discordChannelId = resolve(DiscordService::class)->getChannelByDate($event->day->date);
 
         $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/' . $event->day->id;
@@ -57,12 +53,6 @@ class TableCreatedDiscordNotification
             ]
         ];
 
-        $response = $client->post("https://discord.com/api/v9/channels/". $discordChannelId ."/messages", [
-            'headers' => [
-                'Authorization' => $bot_token,
-                'Content-Type' => 'application/json'
-            ],
-            'json' => $embedMessage,
-        ]);
+        DiscordService::sendNotification($discordChannelId, $embedMessage);
     }
 }
