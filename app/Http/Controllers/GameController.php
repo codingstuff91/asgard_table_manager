@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Game;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Requests\GameStoreRequest;
+use App\Models\Category;
+use App\Models\Game;
+use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
@@ -24,7 +24,7 @@ class GameController extends Controller
     public function create()
     {
         $categories = Category::all();
-        
+
         return view('game.create', compact('categories'));
     }
 
@@ -37,20 +37,18 @@ class GameController extends Controller
     public function store(GameStoreRequest $request)
     {
         Game::create([
-            'name'        => $request->name,
+            'name' => $request->name,
             'category_id' => $request->category_id,
         ]);
 
-        
         $redirectUrl = session()->get('create_table_url') ?? route('games.index');
-        
+
         return redirect($redirectUrl);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Game  $game
      * @return \Illuminate\Http\Response
      */
     public function edit(Game $game)
@@ -58,16 +56,14 @@ class GameController extends Controller
         $categories = Category::all();
 
         return view('game.edit', [
-            'game' => $game, 
-            'categories' => $categories
+            'game' => $game,
+            'categories' => $categories,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Game  $game
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Game $game)
