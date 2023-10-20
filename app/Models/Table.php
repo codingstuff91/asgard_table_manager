@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Day;
-use App\Models\Game;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Table extends Model
 {
@@ -34,6 +32,6 @@ class Table extends Model
 
     public function game()
     {
-        return $this->belongsTo(Game::class);    
+        return $this->belongsTo(Game::class);
     }
 }

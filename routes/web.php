@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
-use App\Http\Controllers\TableController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TableController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        /** Days route */
+    /** Days route */
     Route::resource('days', App\Http\Controllers\DayController::class);
 
     /** Games routes */
@@ -46,4 +45,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-

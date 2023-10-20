@@ -8,5 +8,5 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'bot_token' => "Bot " . env('DISCORD_BOT_TOKEN'),
+    'bot_token' => 'Bot '.env('DISCORD_BOT_TOKEN'),
 ];

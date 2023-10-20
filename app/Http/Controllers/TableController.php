@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Actions\UserSubscriptionAction;
 use App\DataObjects\TableData;
-use App\Logic\TableLogic;
-use App\Models\Day;
-use App\Models\Game;
-use App\Models\User;
-use App\Models\Table;
-use App\Models\Category;
 use App\Events\TableCreated;
 use App\Events\TableDeleted;
 use App\Events\TableUpdated;
-use Illuminate\Http\Request;
 use App\Events\UserTableSubscribed;
 use App\Events\UserTableUnsubscribed;
 use App\Http\Requests\TableStoreRequest;
+use App\Logic\TableLogic;
+use App\Models\Category;
+use App\Models\Day;
+use App\Models\Game;
+use App\Models\Table;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class TableController extends Controller
 {
@@ -31,10 +31,7 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
-        $tableAttributes = new TableData(
-            $day->id,
-            $request->user()->id,
-            ...$request->validated());
+        $tableAttributes = TableData::make($day, $request);
 
         if (TableLogic::isAlreadyExists($tableAttributes)) {
             return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
@@ -68,12 +65,12 @@ class TableController extends Controller
 
         $table->update([
             'players_number' => $request->players_number,
-            'total_points'   => $request->total_points,
-            'start_hour'     => substr($request->start_hour, 0, 5),
-            'description'    => $request->description,
+            'total_points' => $request->total_points,
+            'start_hour' => substr($request->start_hour, 0, 5),
+            'description' => $request->description,
         ]);
 
-        event(new TableUpdated($table, $request->user(), $day, (int)$request->game_id));
+        event(new TableUpdated($table, $request->user(), $day, (int) $request->game_id));
 
         return redirect()->route('days.show', $day);
     }
