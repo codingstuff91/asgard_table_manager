@@ -2,9 +2,8 @@
 
 namespace App\DataObjects;
 
-use App\Models\Day;
-use Illuminate\Support\Facades\Request;
 use App\Http\Requests\TableStoreRequest;
+use App\Models\Day;
 
 class TableData
 {
