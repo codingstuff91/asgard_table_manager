@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Day;
+use App\Models\Table;
+use App\Models\User;
 use Illuminate\Support\Facades\Event;
 
 test('The create table form displays all categories', function () {
@@ -23,19 +26,56 @@ test('a table is created successfully', function () {
     $this->actingAs(\App\Models\User::first());
 
     $response = $this->post(route('table.store', \App\Models\Day::first()->id), [
-        'organizer_id'   => \App\Models\User::first()->id,
-        'day_id'         => \App\Models\Day::first()->id,
-        'game_id'        => \App\Models\Game::first()->id,
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
+        'game_id' => \App\Models\Game::first()->id,
         'players_number' => 5,
-        'total_points'   => 1000,
-        'start_hour'     => "21:00",
+        'total_points' => 1000,
+        'start_hour' => '21:00',
     ]);
 
     expect($response)->toBeRedirect(route('days.show', \App\Models\Day::first()->id));
 
     expect(['organizer_id' => \App\Models\User::first()->id])->toBeInDatabase('tables');
 
+    expect(['user_id' => User::first()->id])->toBeInDatabase('table_user');
+
     Event::assertDispatched(App\Events\TableCreated::class);
+});
+
+test('a table must not be created twice or more', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $day = Day::first();
+
+    // Try to create a new table once
+    $response = $this->post(route('table.store', $day), [
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
+        'game_id' => \App\Models\Game::first()->id,
+        'players_number' => 5,
+        'total_points' => 1000,
+        'start_hour' => '21:00',
+    ]);
+
+    expect(Table::count())->toBe(2);
+
+    // Try to create the same table twice
+    $response = $this->post(route('table.store', $day), [
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
+        'game_id' => \App\Models\Game::first()->id,
+        'players_number' => 5,
+        'total_points' => 1000,
+        'start_hour' => '21:00',
+    ]);
+
+    expect(Table::count())->toBe(2);
+
+    expect($response)
+        ->toBeRedirect(route('days.show', Day::first()->id))
+        ->toHaveSession('error');
 });
 
 test('a table is updated successfully', function () {
@@ -45,11 +85,11 @@ test('a table is updated successfully', function () {
     $this->actingAs(\App\Models\User::first());
 
     $response = $this->patch(route('table.update', \App\Models\Table::first()->id), [
-        'day_id'         => \App\Models\Day::first()->id,
-        'game_id'        => \App\Models\Game::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
+        'game_id' => \App\Models\Game::first()->id,
         'players_number' => 5,
-        'total_points'   => 1000,
-        'start_hour'     => "21:00",
+        'total_points' => 1000,
+        'start_hour' => '21:00',
     ]);
 
     expect($response)->toBeRedirect(route('days.show', \App\Models\Day::first()->id));
@@ -62,11 +102,11 @@ test('a table can not be created without defining a number of players', function
     $this->actingAs(\App\Models\User::first());
 
     $response = $this->post(route('table.store', \App\Models\Day::first()->id), [
-        'organizer_id'   => \App\Models\User::first()->id,
-        'day_id'         => \App\Models\Day::first()->id,
-        'game_id'        => \App\Models\Game::first()->id,
-        'total_points'   => 1000,
-        'start_hour'     => "21:00",
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
+        'game_id' => \App\Models\Game::first()->id,
+        'total_points' => 1000,
+        'start_hour' => '21:00',
     ]);
 
     expect($response)->toHaveInvalid('players_number');
@@ -77,10 +117,10 @@ test('a table can not be created without defining a start hour', function () {
     $this->actingAs(\App\Models\User::first());
 
     $response = $this->post(route('table.store', \App\Models\Day::first()->id), [
-        'organizer_id'   => \App\Models\User::first()->id,
-        'day_id'         => \App\Models\Day::first()->id,
-        'game_id'        => \App\Models\Game::first()->id,
-        'total_points'   => 1000,
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
+        'game_id' => \App\Models\Game::first()->id,
+        'total_points' => 1000,
         'players_number' => 5,
     ]);
 
@@ -92,11 +132,11 @@ test('a table can not be created without selecting a game', function () {
     $this->actingAs(\App\Models\User::first());
 
     $response = $this->post(route('table.store', \App\Models\Day::first()->id), [
-        'organizer_id'   => \App\Models\User::first()->id,
-        'day_id'         => \App\Models\Day::first()->id,
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
         'players_number' => 5,
-        'total_points'   => 1000,
-        'start_hour'     => "21:00",
+        'total_points' => 1000,
+        'start_hour' => '21:00',
     ]);
 
     expect($response)->toHaveInvalid('game_id');
@@ -107,10 +147,10 @@ test('a table can not be created without defining the total points', function ()
     $this->actingAs(\App\Models\User::first());
 
     $response = $this->post(route('table.store', \App\Models\Day::first()->id), [
-        'organizer_id'   => \App\Models\User::first()->id,
-        'day_id'         => \App\Models\Day::first()->id,
+        'organizer_id' => \App\Models\User::first()->id,
+        'day_id' => \App\Models\Day::first()->id,
         'players_number' => 5,
-        'start_hour'     => "21:00",
+        'start_hour' => '21:00',
     ]);
 
     expect($response)->toHaveInvalid('total_points');
@@ -128,7 +168,7 @@ test('a user is subscribed to a table', function () {
 
     expect($table->users()->count())->toBe(1);
 
-    $this->get(route('table.subscribe',[$table, $user]));
+    $this->get(route('table.subscribe', [$table, $user]));
 
     expect($table->users()->count())->toBe(2);
 
@@ -147,11 +187,11 @@ test('a user is unsubscribed of a table', function () {
 
     expect($table->users()->count())->toBe(1);
 
-    $this->get(route('table.subscribe',[$table, $user]));
+    $this->get(route('table.subscribe', [$table, $user]));
 
     expect($table->users()->count())->toBe(2);
 
-    $this->get(route('table.unsubscribe',[$table, $user]));
+    $this->get(route('table.unsubscribe', [$table, $user]));
 
     Event::assertDispatched(App\Events\UserTableUnsubscribed::class);
     Event::assertListening(App\Events\UserTableUnsubscribed::class, App\Listeners\UserUnsubscriptionDiscordNotification::class);
@@ -168,7 +208,7 @@ test('a user can not delete a table he didnt created', function () {
     $response = $this->get(route('days.show', \App\Models\Day::first()->id));
     $response->assertOk();
 
-    $response->assertDontSee("img/delete.png");
+    $response->assertDontSee('img/delete.png');
 });
 
 test('an admin user can delete a table he didnt created', function () {
@@ -179,7 +219,7 @@ test('an admin user can delete a table he didnt created', function () {
     $response = $this->get(route('days.show', \App\Models\Day::first()->id));
     $response->assertOk();
 
-    $response->assertSee("img/delete.png");
+    $response->assertSee('img/delete.png');
 });
 
 test('a user can delete a table', function () {
@@ -196,4 +236,27 @@ test('a user can delete a table', function () {
     Event::assertDispatched(App\Events\TableDeleted::class);
 
     expect(\App\Models\Table::all()->count())->toBe(0);
+});
+
+test('a user could not subscribe to a table if the max number of players is reached', function () {
+    Event::fake();
+
+    $this->seed();
+
+    $user = User::first();
+    $anotherUser = User::factory()->create();
+
+    $this->actingAs($user);
+
+    $table = Table::first();
+    $day = Day::first();
+
+    $response = $this->get(route('table.subscribe', [$table, $user]));
+    expect($table->users()->count())->toBe(2);
+
+    // The user can not subscribe to a table and is redirected to the correct day table with an error message
+    $this->actingAs($anotherUser);
+    $response = $this->get(route('table.subscribe', [$table, $anotherUser]));
+
+    expect($response)->toBeRedirect(route('days.show', [$day]));
 });
