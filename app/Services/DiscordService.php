@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 
 class DiscordService
 {
@@ -22,6 +23,42 @@ class DiscordService
         };
 
         return $channelId;
+    }
+
+    public static function buildEmbedNotificationMessage($event)
+    {
+        $tableLinkText = 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/'.$event->day->id;
+
+        $embedMessage = [
+            'content' => 'Une table est disponible sur ASGARD-TABLE-MANAGER',
+            'embeds' => [
+                [
+                    'title' => 'Table de : '.$event->game->name,
+                    'description' => $tableLinkText,
+                    'author' => [
+                        'name' => 'Créateur : '.Auth::user()->name,
+                    ],
+                    'color' => '65280',
+                    'fields' => [
+                        [
+                            'name' => 'Date',
+                            'value' => $event->day->date->format('d/m/Y'),
+                            'inline' => true,
+                        ],
+                        [
+                            'name' => 'Heure',
+                            'value' => $event->table->start_hour,
+                            'inline' => true,
+                        ],
+                    ],
+                    'footer' => [
+                        'text' => $event->table->description,
+                    ],
+                ],
+            ],
+        ];
+
+        return $embedMessage;
     }
 
     public static function sendNotification(string $channelId, array $embedMessage): void

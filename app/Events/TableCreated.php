@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Day;
+use App\Models\Game;
 use App\Models\User;
 use App\Models\Table;
 use Illuminate\Support\Facades\Auth;
