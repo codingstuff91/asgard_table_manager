@@ -75,13 +75,11 @@ class DiscordService
 
     public static function sendNotification(string $channelId, array $embedMessage): void
     {
-        $bot_token = config('discord.bot_token');
-
         $client = new Client;
 
-        $client->post('https://discord.com/api/v9/channels/'.$channelId.'/messages', [
+        $client->post(config('discord.api_url').$channelId.'/messages', [
             'headers' => [
-                'Authorization' => $bot_token,
+                'Authorization' => config('discord.bot_token'),
                 'Content-Type' => 'application/json',
             ],
             'json' => $embedMessage,
