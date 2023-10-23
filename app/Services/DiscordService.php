@@ -70,7 +70,7 @@ class DiscordService
 
     private static function setNotificationTitle(Day $day)
     {
-        return 'Plus d\'informations sur http://table-manager.jeuf5892.odns.fr/days/'.$day->id;
+        return 'Plus d\'informations sur '.config('app.url').'/days/'.$day->id;
     }
 
     public static function sendNotification(string $channelId, array $embedMessage): void
@@ -79,7 +79,7 @@ class DiscordService
 
         $client = new Client();
 
-        $response = $client->post("https://discord.com/api/v9/channels/". $channelId ."/messages", [
+        $client->post("https://discord.com/api/v9/channels/". $channelId ."/messages", [
             'headers' => [
                 'Authorization' => $bot_token,
                 'Content-Type' => 'application/json'
