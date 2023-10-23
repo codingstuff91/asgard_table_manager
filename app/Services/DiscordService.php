@@ -59,7 +59,7 @@ class DiscordService
         ];
     }
 
-    private static function setNotificationContent(string $eventType): string
+    public static function setNotificationContent(string $eventType): string
     {
         return match($eventType){
             'create' => EmbedMessageTitle::CREATED->value,
