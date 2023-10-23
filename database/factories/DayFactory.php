@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Day;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DayFactory extends Factory
 {

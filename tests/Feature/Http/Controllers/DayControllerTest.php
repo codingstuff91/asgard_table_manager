@@ -64,7 +64,7 @@ test('A day is created successfully', function () {
     expect($response)->toHaveValid(['date'])
         ->and($response)->toBeRedirect(route('days.index'))
         ->and([
-            'date' => $date
+            'date' => $date,
         ])->toBeInDatabase(table: 'days');
 });
 
@@ -79,6 +79,6 @@ test('The past days are hidden from index page', function () {
     $response = $this->get(route('days.index'));
 
     expect($response)
-    ->toBeOk()
-    ->not->toContainText($pastDay->date->format('d/m/Y'));
+        ->toBeOk()
+        ->not->toContainText($pastDay->date->format('d/m/Y'));
 });

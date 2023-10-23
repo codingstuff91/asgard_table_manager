@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Day;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DaySeeder extends Seeder
 {
