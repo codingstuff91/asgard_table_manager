@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use Carbon\Carbon;
-use App\Models\Day;
 use App\Enums\EmbedMessageTitle;
+use App\Models\Day;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,7 +61,7 @@ class DiscordService
 
     public static function setNotificationContent(string $eventType): string
     {
-        return match($eventType){
+        return match ($eventType) {
             'create' => EmbedMessageTitle::CREATED->value,
             'update' => EmbedMessageTitle::UPDATED->value,
             'delete' => EmbedMessageTitle::DELETED->value,
@@ -77,12 +77,12 @@ class DiscordService
     {
         $bot_token = config('discord.bot_token');
 
-        $client = new Client();
+        $client = new Client;
 
-        $client->post("https://discord.com/api/v9/channels/". $channelId ."/messages", [
+        $client->post('https://discord.com/api/v9/channels/'.$channelId.'/messages', [
             'headers' => [
                 'Authorization' => $bot_token,
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
             ],
             'json' => $embedMessage,
         ]);

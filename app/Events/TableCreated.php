@@ -4,13 +4,12 @@ namespace App\Events;
 
 use App\Models\Day;
 use App\Models\Game;
-use App\Models\User;
 use App\Models\Table;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class TableCreated
 {

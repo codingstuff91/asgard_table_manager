@@ -16,8 +16,8 @@ test('The correct channel ID is returned according to the day of a date', functi
     'Another Day' => ['2023-05-18', 1069369413570138192],
 ]);
 
-test('the notification content text is set correctly', function(string $eventType, EmbedMessageTitle $embedMessageTitle){
-    $discordService = new DiscordService();
+test('the notification content text is set correctly', function (string $eventType, EmbedMessageTitle $embedMessageTitle) {
+    $discordService = new DiscordService;
 
     $contentText = $discordService::setNotificationContent($eventType);
 
