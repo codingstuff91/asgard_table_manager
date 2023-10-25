@@ -27,16 +27,24 @@ class DiscordService
         return $channelId;
     }
 
-    public static function buildEmbedNotificationMessage($event, string $eventType)
+    public static function buildEmbedNotification($event, string $eventType)
+    {
+        return match ($eventType) {
+            'create', 'update' => self::generateLongEmbedNotification($event, $eventType),
+            'delete' => self::generateShortEmbedNotification($event, $eventType),
+        };
+    }
+
+    public static function generateLongEmbedNotification($event, string $eventType): array
     {
         return [
             'content' => self::setNotificationContent($eventType),
             'embeds' => [
                 [
-                    'title' => 'Table de : '.$event->game->name,
+                    'title' => 'Table de : ' . $event->game->name,
                     'description' => self::setNotificationTitle($event->day),
                     'author' => [
-                        'name' => 'Créateur : '.Auth::user()->name,
+                        'name' => 'Créateur : ' . Auth::user()->name,
                     ],
                     'color' => '65280',
                     'fields' => [
@@ -53,6 +61,22 @@ class DiscordService
                     ],
                     'footer' => [
                         'text' => $event->table->description,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private static function generateShortEmbedNotification($event, string $eventType): array
+    {
+        return [
+            'content' => self::setNotificationContent($eventType),
+            'embeds' => [
+                [
+                    'title' => 'La Table de '.$event->game->name.' prévue le '.$event->day->date->format('d/m/Y').' à '.$event->table->start_hour.' est annulée. ',
+                    'color' => '16711680',
+                    'author' => [
+                        'name' => 'Annulée par : '.$event->user->name,
                     ],
                 ],
             ],
