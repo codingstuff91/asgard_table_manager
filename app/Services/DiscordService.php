@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageTitle;
 use App\Models\Day;
 use Carbon\Carbon;
@@ -46,7 +47,7 @@ class DiscordService
                     'author' => [
                         'name' => 'Créateur : ' . Auth::user()->name,
                     ],
-                    'color' => '65280',
+                    'color' => EmbedColor::CREATED_OR_UPDATED,
                     'fields' => [
                         [
                             'name' => 'Date',
@@ -74,7 +75,7 @@ class DiscordService
             'embeds' => [
                 [
                     'title' => 'La Table de '.$event->game->name.' prévue le '.$event->day->date->format('d/m/Y').' à '.$event->table->start_hour.' est annulée. ',
-                    'color' => '16711680',
+                    'color' => EmbedColor::DELETED,
                     'author' => [
                         'name' => 'Annulée par : '.$event->user->name,
                     ],
