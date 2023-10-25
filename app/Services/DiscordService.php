@@ -27,15 +27,15 @@ class DiscordService
         return $channelId;
     }
 
-    public static function buildEmbedNotification($event, string $eventType)
+    public static function buildEmbedStructure($event, string $eventType): array
     {
         return match ($eventType) {
-            'create', 'update' => self::generateLongEmbedNotification($event, $eventType),
-            'delete' => self::generateShortEmbedNotification($event, $eventType),
+            'create', 'update' => self::generateLongEmbed($event, $eventType),
+            'delete' => self::generateShortEmbed($event, $eventType),
         };
     }
 
-    public static function generateLongEmbedNotification($event, string $eventType): array
+    public static function generateLongEmbed($event, string $eventType): array
     {
         return [
             'content' => self::setNotificationContent($eventType),
@@ -67,7 +67,7 @@ class DiscordService
         ];
     }
 
-    private static function generateShortEmbedNotification($event, string $eventType): array
+    private static function generateShortEmbed($event, string $eventType): array
     {
         return [
             'content' => self::setNotificationContent($eventType),

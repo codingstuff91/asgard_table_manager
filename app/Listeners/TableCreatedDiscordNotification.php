@@ -16,7 +16,7 @@ class TableCreatedDiscordNotification
     {
         $discordChannelId = resolve(DiscordService::class)->getChannelByDate($event->day->date);
 
-        $embedMessage = DiscordService::buildEmbedNotification($event, 'create');
+        $embedMessage = DiscordService::buildEmbedStructure($event, 'create');
 
         DiscordService::sendNotification($discordChannelId, $embedMessage);
     }
