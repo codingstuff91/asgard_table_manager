@@ -38,11 +38,11 @@ class DiscordService
     public static function generateLongEmbed($event, string $eventType): array
     {
         return [
-            'content' => self::setNotificationContent($eventType),
+            'content' => self::setEmbedContent($eventType),
             'embeds' => [
                 [
                     'title' => 'Table de : ' . $event->game->name,
-                    'description' => self::setNotificationTitle($event->day),
+                    'description' => self::setEmbedTitle($event->day),
                     'author' => [
                         'name' => 'Créateur : ' . Auth::user()->name,
                     ],
@@ -70,7 +70,7 @@ class DiscordService
     private static function generateShortEmbed($event, string $eventType): array
     {
         return [
-            'content' => self::setNotificationContent($eventType),
+            'content' => self::setEmbedContent($eventType),
             'embeds' => [
                 [
                     'title' => 'La Table de '.$event->game->name.' prévue le '.$event->day->date->format('d/m/Y').' à '.$event->table->start_hour.' est annulée. ',
@@ -83,7 +83,7 @@ class DiscordService
         ];
     }
 
-    public static function setNotificationContent(string $eventType): string
+    public static function setEmbedContent(string $eventType): string
     {
         return match ($eventType) {
             'create' => EmbedMessageTitle::CREATED->value,
@@ -92,7 +92,7 @@ class DiscordService
         };
     }
 
-    private static function setNotificationTitle(Day $day)
+    private static function setEmbedTitle(Day $day): string
     {
         return 'Plus d\'informations sur '.config('app.url').'/days/'.$day->id;
     }

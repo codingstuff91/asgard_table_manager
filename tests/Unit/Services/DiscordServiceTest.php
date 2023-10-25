@@ -19,7 +19,7 @@ test('The correct channel ID is returned according to the day of a date', functi
 test('the notification content text is set correctly', function (string $eventType, EmbedMessageTitle $embedMessageTitle) {
     $discordService = new DiscordService;
 
-    $contentText = $discordService::setNotificationContent($eventType);
+    $contentText = $discordService::setEmbedContent($eventType);
 
     expect($contentText)->toBe($embedMessageTitle->value);
 })->with([
