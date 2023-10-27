@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
+use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
-use App\Events\TableCreated;
 use App\Events\TableDeleted;
 use App\Events\TableUpdated;
 use App\Events\UserTableSubscribed;
@@ -20,6 +21,13 @@ use Illuminate\Http\Request;
 
 class TableController extends Controller
 {
+    public function __construct(
+        public CreateDiscordNotificationAction $createDiscordNotificationAction,
+        public DiscordNotificationData $discordNotificationData,
+    )
+    {
+    }
+
     public function create(Day $day)
     {
         $categories = Category::all();
@@ -44,7 +52,9 @@ class TableController extends Controller
 
         app(UserSubscriptionAction::class)->execute($table, $user);
 
-        event(new TableCreated($table, $day, $game));
+        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
         return redirect()->route('days.show', $day);
     }
@@ -115,4 +125,5 @@ class TableController extends Controller
 
         return redirect()->back();
     }
+
 }
