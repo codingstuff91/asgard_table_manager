@@ -15,6 +15,7 @@ use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TableController extends Controller
@@ -69,7 +70,7 @@ class TableController extends Controller
         return view('table.edit', compact('table', 'day', 'categories', 'games', 'tableGame', 'tableGameCategory'));
     }
 
-    public function update(Table $table, Request $request)
+    public function update(Table $table, Request $request): RedirectResponse
     {
         $table->update([
             'players_number' => $request->players_number,
@@ -85,11 +86,11 @@ class TableController extends Controller
         return redirect()->route('days.show', $table->day);
     }
 
-    public function subscribe(Table $table, User $user)
+    public function subscribe(Table $table, User $user): RedirectResponse
     {
-        $numerOfPlayers = $table->users()->count();
+        $playersNumber = $table->users()->count();
 
-        if ($numerOfPlayers === $table->players_number) {
+        if ($playersNumber === $table->players_number) {
             return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
         }
 
@@ -100,7 +101,7 @@ class TableController extends Controller
         return redirect()->back();
     }
 
-    public function unSubscribe(Table $table, User $user)
+    public function unSubscribe(Table $table, User $user): RedirectResponse
     {
         $table->users()->detach($user);
 
@@ -109,7 +110,7 @@ class TableController extends Controller
         return redirect()->back();
     }
 
-    public function destroy(Table $table)
+    public function destroy(Table $table): RedirectResponse
     {
         $table->users()->detach();
 
