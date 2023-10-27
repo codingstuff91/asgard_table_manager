@@ -6,8 +6,6 @@ use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
 use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
-use App\Events\TableDeleted;
-use App\Events\TableUpdated;
 use App\Events\UserTableSubscribed;
 use App\Events\UserTableUnsubscribed;
 use App\Http\Requests\TableStoreRequest;
@@ -73,8 +71,6 @@ class TableController extends Controller
 
     public function update(Table $table, Request $request)
     {
-        $day = $table->day;
-
         $table->update([
             'players_number' => $request->players_number,
             'total_points' => $request->total_points,
@@ -82,9 +78,11 @@ class TableController extends Controller
             'description' => $request->description,
         ]);
 
-        event(new TableUpdated($table, $request->user(), $day, (int) $request->game_id));
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        return redirect()->route('days.show', $day);
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
+
+        return redirect()->route('days.show', $table->day);
     }
 
     public function subscribe(Table $table, User $user)
@@ -113,15 +111,13 @@ class TableController extends Controller
 
     public function destroy(Table $table)
     {
-        $game = $table->game;
-        $day = $table->day;
-        $user = $table->organizer;
-
         $table->users()->detach();
 
         $table->delete();
 
-        event(new TableDeleted($table, $day, $game, $user));
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'delete');
 
         return redirect()->back();
     }
