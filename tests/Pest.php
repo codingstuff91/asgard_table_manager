@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -42,7 +43,10 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function mockHttpClient(): void
 {
-    // ..
+    $guzzleMock = Mockery::mock(Client::class);
+    $guzzleMock->shouldReceive('post');
+
+    app()->instance(Client::class, $guzzleMock);
 }
