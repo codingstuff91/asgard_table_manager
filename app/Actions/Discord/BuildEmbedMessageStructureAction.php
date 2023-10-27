@@ -61,10 +61,10 @@ class BuildEmbedMessageStructureAction
             'content' => self::setEmbedContent($notificationType),
             'embeds' => [
                 [
-                    'title' => 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée. ',
+                    'title' => 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée.',
                     'color' => EmbedColor::DELETED,
                     'author' => [
-                        'name' => 'Annulée par : '.$discordNotificationData->user->name,
+                        'name' => 'Annulée par : '. Auth::user()->name,
                     ],
                 ],
             ],
