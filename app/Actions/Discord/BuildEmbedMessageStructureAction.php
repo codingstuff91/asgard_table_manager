@@ -14,7 +14,8 @@ class BuildEmbedMessageStructureAction
         return match ($notificationType) {
             'create', 'update' => self::generateLongEmbed($discordNotificationData, $notificationType),
             'delete' => self::generateShortEmbed($discordNotificationData, $notificationType),
-            'subscribe' => self::generateSubscribeEmbed($discordNotificationData, $notificationType)
+            'subscribe' => self::generateSubscribeEmbed($discordNotificationData, $notificationType),
+            'unsubscribe' => self::generateSubscribeEmbed($discordNotificationData, $notificationType)
         };
     }
 
