@@ -23,8 +23,7 @@ class TableController extends Controller
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
-    )
-    {
+    ) {
     }
 
     public function create(Day $day)
@@ -122,5 +121,4 @@ class TableController extends Controller
 
         return redirect()->back();
     }
-
 }

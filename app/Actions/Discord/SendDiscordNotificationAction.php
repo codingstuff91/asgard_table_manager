@@ -20,6 +20,6 @@ class SendDiscordNotificationAction
             'json' => $embedMessage,
         ]);
 
-        return "Discord notification sent";
+        return 'Discord notification sent';
     }
 }

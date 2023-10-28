@@ -20,16 +20,15 @@ class BuildEmbedMessageStructureAction
     public static function generateLongEmbed(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
-    ): array
-    {
+    ): array {
         return [
             'content' => self::setEmbedContent($notificationType),
             'embeds' => [
                 [
-                    'title' => 'Table de : ' . $discordNotificationData->game->name,
+                    'title' => 'Table de : '.$discordNotificationData->game->name,
                     'description' => self::setEmbedTitle($discordNotificationData),
                     'author' => [
-                        'name' => 'Créateur : ' . Auth::user()->name,
+                        'name' => 'Créateur : '.Auth::user()->name,
                     ],
                     'color' => EmbedColor::CREATED_OR_UPDATED,
                     'fields' => [
@@ -55,8 +54,7 @@ class BuildEmbedMessageStructureAction
     private static function generateShortEmbed(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
-    ): array
-    {
+    ): array {
         return [
             'content' => self::setEmbedContent($notificationType),
             'embeds' => [
@@ -64,7 +62,7 @@ class BuildEmbedMessageStructureAction
                     'title' => 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée.',
                     'color' => EmbedColor::DELETED,
                     'author' => [
-                        'name' => 'Annulée par : '. Auth::user()->name,
+                        'name' => 'Annulée par : '.Auth::user()->name,
                     ],
                 ],
             ],

@@ -10,14 +10,13 @@ class CreateDiscordNotificationAction
         public DefineChannelIdAction $defineChannelIdAction,
         public BuildEmbedMessageStructureAction $buildEmbedMessageStructureAction,
         public SendDiscordNotificationAction $sendDiscordNotificationAction,
-    ){
+    ) {
     }
 
     public function __invoke(
         DiscordNotificationData $discordNotificationData,
         string $notificationType,
-    ): void
-    {
+    ): void {
         $channelId = ($this->defineChannelIdAction)($discordNotificationData->day->date);
 
         $embedMessage = $this->buildEmbedMessageStructureAction::buildEmbedStructure($discordNotificationData, $notificationType);

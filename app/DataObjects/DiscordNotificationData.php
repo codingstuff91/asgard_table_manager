@@ -12,16 +12,14 @@ class DiscordNotificationData
         public Game $game,
         public Table $table,
         public Day $day,
-    )
-    {
+    ) {
     }
 
     public static function make(
         Game $game,
         Table $table,
         Day $day,
-    ): DiscordNotificationData
-    {
+    ): DiscordNotificationData {
         return new self(
             game: $game,
             table: $table,
