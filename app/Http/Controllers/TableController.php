@@ -22,6 +22,7 @@ class TableController extends Controller
 {
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
+        public CreateUserDiscordNotificationAction $createUserDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
     ) {
     }
@@ -95,7 +96,9 @@ class TableController extends Controller
 
         $table->users()->attach($user);
 
-        event(new UserTableSubscribed($user, $table));
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+        ($this->createUserDiscordNotificationAction)($discordNotificationData, 'subscribe');
 
         return redirect()->back();
     }
@@ -104,7 +107,7 @@ class TableController extends Controller
     {
         $table->users()->detach($user);
 
-        event(new UserTableUnsubscribed($user, $table));
+        ($this->createUserDiscordNotificationAction)($discordNotificationData, 'unsubscribe');
 
         return redirect()->back();
     }
