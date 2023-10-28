@@ -75,11 +75,13 @@ class BuildEmbedMessageStructureAction
         string $notificationType
     ): array
     {
+        $titleKeyword = $notificationType == 'subscribed' ? 'inscrit à' : 'désinscrit de';
+
         return [
             'content' => self::setEmbedContent($notificationType),
             'embeds' => [
                 [
-                    'title' => Auth::user()->name.' s\'est inscrit à la table de '.$discordNotificationData->game->name,
+                    'title' => Auth::user()->name.' s\'est '.$titleKeyword.' la table de '.$discordNotificationData->game->name,
                     'description' => self::setEmbedDescription($discordNotificationData),
                     'color' => self::setEmbedColor($notificationType),
                     'fields' => [
@@ -102,11 +104,11 @@ class BuildEmbedMessageStructureAction
     public static function setEmbedContent(string $notificationType): string
     {
         return match ($notificationType) {
-            'create' => EmbedMessageTitle::CREATED_OR_UPDATED->value,
-            'update' => EmbedMessageTitle::CREATED_OR_UPDATED->value,
-            'delete' => EmbedMessageTitle::DELETED->value,
-            'subscribe' => EmbedMessageTitle::SUBSCRIBED->value,
-            'unsubscribe' => EmbedMessageTitle::UNSUBSCRIBED->value,
+            'create' => EmbedMessageContent::CREATED->value,
+            'update' => EmbedMessageContent::UPDATED->value,
+            'delete' => EmbedMessageContent::DELETED->value,
+            'subscribe' => EmbedMessageContent::SUBSCRIBED->value,
+            'unsubscribe' => EmbedMessageContent::UNSUBSCRIBED->value,
         };
     }
 
