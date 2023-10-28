@@ -14,6 +14,7 @@ class BuildEmbedMessageStructureAction
         return match ($notificationType) {
             'create', 'update' => self::generateLongEmbed($discordNotificationData, $notificationType),
             'delete' => self::generateShortEmbed($discordNotificationData, $notificationType),
+            'subscribe' => self::generateSubscribeEmbed($discordNotificationData, $notificationType)
         };
     }
 
@@ -26,11 +27,11 @@ class BuildEmbedMessageStructureAction
             'embeds' => [
                 [
                     'title' => 'Table de : '.$discordNotificationData->game->name,
-                    'description' => self::setEmbedTitle($discordNotificationData),
+                    'description' => self::setEmbedDescription($discordNotificationData),
                     'author' => [
                         'name' => 'Créateur : '.Auth::user()->name,
                     ],
-                    'color' => EmbedColor::CREATED_OR_UPDATED,
+                    'color' => self::setEmbedColor($notificationType),
                     'fields' => [
                         [
                             'name' => 'Date',
@@ -60,9 +61,38 @@ class BuildEmbedMessageStructureAction
             'embeds' => [
                 [
                     'title' => 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée.',
-                    'color' => EmbedColor::DELETED,
+                    'color' => self::setEmbedColor($notificationType),
                     'author' => [
                         'name' => 'Annulée par : '.Auth::user()->name,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public static function generateSubscribeEmbed(        
+        DiscordNotificationData $discordNotificationData,
+        string $notificationType
+    ): array
+    {
+        return [
+            'content' => self::setEmbedContent($notificationType),
+            'embeds' => [
+                [
+                    'title' => Auth::user()->name.' s\'est inscrit à la table de '.$discordNotificationData->game->name,
+                    'description' => self::setEmbedDescription($discordNotificationData),
+                    'color' => self::setEmbedColor($notificationType),
+                    'fields' => [
+                        [
+                            'name' => 'Date',
+                            'value' => $discordNotificationData->day->date->format('d/m/Y'),
+                            'inline' => true,
+                        ],
+                        [
+                            'name' => 'Heure',
+                            'value' => $discordNotificationData->table->start_hour,
+                            'inline' => true,
+                        ],
                     ],
                 ],
             ],
@@ -72,13 +102,26 @@ class BuildEmbedMessageStructureAction
     public static function setEmbedContent(string $notificationType): string
     {
         return match ($notificationType) {
-            'create' => EmbedMessageTitle::CREATED->value,
-            'update' => EmbedMessageTitle::UPDATED->value,
+            'create' => EmbedMessageTitle::CREATED_OR_UPDATED->value,
+            'update' => EmbedMessageTitle::CREATED_OR_UPDATED->value,
             'delete' => EmbedMessageTitle::DELETED->value,
+            'subscribe' => EmbedMessageTitle::SUBSCRIBED->value,
+            'unsubscribe' => EmbedMessageTitle::UNSUBSCRIBED->value,
         };
     }
 
-    private static function setEmbedTitle(DiscordNotificationData $discordNotificationData): string
+    private static function setEmbedColor(string $notificationType): string
+    {
+        return match ($notificationType) {
+            'create' => EmbedColor::CREATED->value,
+            'update' => EmbedColor::UPDATED->value,
+            'delete' => EmbedColor::DELETED->value,
+            'subscribe' => EmbedColor::SUBSCRIBED->value,
+            'unsubscribe' => EmbedColor::UNSUBSCRIBED->value,
+        };
+    }
+
+    private static function setEmbedDescription(DiscordNotificationData $discordNotificationData): string
     {
         return 'Plus d\'informations sur '.config('app.url').'/days/'.$discordNotificationData->day->id;
     }
