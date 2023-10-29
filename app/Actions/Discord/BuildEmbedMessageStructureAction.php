@@ -12,13 +12,13 @@ class BuildEmbedMessageStructureAction
     public static function buildEmbedStructure(DiscordNotificationData $discordNotificationData, string $notificationType): array
     {
         return match ($notificationType) {
-            'create', 'update' => self::generateLongTableStructure($discordNotificationData, $notificationType),
-            'delete' => self::generateShortTableStructure($discordNotificationData, $notificationType),
+            'create', 'update' => self::generateTableAddedOrUpdatedStructure($discordNotificationData, $notificationType),
+            'delete' => self::generateTableCanceledStructure($discordNotificationData, $notificationType),
             'subscribe', 'unsubscribe' => self::generateSubscribingStructure($discordNotificationData, $notificationType),
         };
     }
 
-    public static function generateLongTableStructure(
+    public static function generateTableAddedOrUpdatedStructure(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
     ): array {
@@ -52,7 +52,7 @@ class BuildEmbedMessageStructureAction
         ];
     }
 
-    private static function generateShortTableStructure(
+    private static function generateTableCanceledStructure(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
     ): array {
