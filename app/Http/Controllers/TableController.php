@@ -6,8 +6,6 @@ use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
 use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
-use App\Events\UserTableSubscribed;
-use App\Events\UserTableUnsubscribed;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
 use App\Models\Category;
@@ -22,7 +20,6 @@ class TableController extends Controller
 {
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
-        public CreateUserDiscordNotificationAction $createUserDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
     ) {
     }
@@ -98,7 +95,7 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createUserDiscordNotificationAction)($discordNotificationData, 'subscribe');
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'subscribe');
 
         return redirect()->back();
     }
@@ -107,7 +104,9 @@ class TableController extends Controller
     {
         $table->users()->detach($user);
 
-        ($this->createUserDiscordNotificationAction)($discordNotificationData, 'unsubscribe');
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'unsubscribe');
 
         return redirect()->back();
     }
