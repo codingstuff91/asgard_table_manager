@@ -14,7 +14,7 @@ class DefineChannelIdAction
             0 => 1069338721633194025, // Sunday
             5 => 1069338626237931541, // Friday
             6 => 1069338674753437850, // Saturday
-            default => 1069369413570138192,
+            default => 1069369413570138192, // Any other day
         };
     }
 }
