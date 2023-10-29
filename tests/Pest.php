@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use function Pest\Laravel\actingAs;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,10 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+function login(User $user = null): void
+{
+    actingAs($user ?? User::factory()->create());
+}
 
 function mockHttpClient(): void
 {
