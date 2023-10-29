@@ -4,7 +4,7 @@ namespace App\Actions\Discord;
 
 use App\DataObjects\DiscordNotificationData;
 use App\Enums\EmbedColor;
-use App\Enums\EmbedMessageTitle;
+use App\Enums\EmbedMessageContent;
 use Illuminate\Support\Facades\Auth;
 
 class BuildEmbedMessageStructureAction
@@ -12,14 +12,13 @@ class BuildEmbedMessageStructureAction
     public static function buildEmbedStructure(DiscordNotificationData $discordNotificationData, string $notificationType): array
     {
         return match ($notificationType) {
-            'create', 'update' => self::generateLongEmbed($discordNotificationData, $notificationType),
-            'delete' => self::generateShortEmbed($discordNotificationData, $notificationType),
-            'subscribe' => self::generateSubscribeEmbed($discordNotificationData, $notificationType),
-            'unsubscribe' => self::generateSubscribeEmbed($discordNotificationData, $notificationType)
+            'create', 'update' => self::generateLongTableStructure($discordNotificationData, $notificationType),
+            'delete' => self::generateShortTableStructure($discordNotificationData, $notificationType),
+            'subscribe', 'unsubscribe' => self::generateSubscribingStructure($discordNotificationData, $notificationType),
         };
     }
 
-    public static function generateLongEmbed(
+    public static function generateLongTableStructure(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
     ): array {
@@ -53,7 +52,7 @@ class BuildEmbedMessageStructureAction
         ];
     }
 
-    private static function generateShortEmbed(
+    private static function generateShortTableStructure(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
     ): array {
@@ -71,12 +70,12 @@ class BuildEmbedMessageStructureAction
         ];
     }
 
-    public static function generateSubscribeEmbed(        
+    public static function generateSubscribingStructure(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
     ): array
     {
-        $titleKeyword = $notificationType == 'subscribed' ? 'inscrit à' : 'désinscrit de';
+        $titleKeyword = $notificationType == 'subscribe' ? 'inscrit à' : 'désinscrit de';
 
         return [
             'content' => self::setEmbedContent($notificationType),
@@ -113,14 +112,11 @@ class BuildEmbedMessageStructureAction
         };
     }
 
-    private static function setEmbedColor(string $notificationType): string
+    private static function setEmbedColor(string $notificationType): int
     {
         return match ($notificationType) {
-            'create' => EmbedColor::CREATED->value,
-            'update' => EmbedColor::UPDATED->value,
-            'delete' => EmbedColor::DELETED->value,
-            'subscribe' => EmbedColor::SUBSCRIBED->value,
-            'unsubscribe' => EmbedColor::UNSUBSCRIBED->value,
+            'create', 'update', 'subscribe' => EmbedColor::CREATED->value,
+            'delete', 'unsubscribe' => EmbedColor::DELETED->value,
         };
     }
 
