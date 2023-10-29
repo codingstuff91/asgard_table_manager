@@ -15,6 +15,7 @@ use App\Models\Table;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TableController extends Controller
 {
@@ -83,7 +84,7 @@ class TableController extends Controller
         return redirect()->route('days.show', $table->day);
     }
 
-    public function subscribe(Table $table, User $user): RedirectResponse
+    public function subscribe(Table $table): RedirectResponse
     {
         $playersNumber = $table->users()->count();
 
@@ -91,7 +92,7 @@ class TableController extends Controller
             return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
         }
 
-        $table->users()->attach($user);
+        $table->users()->attach(Auth::user());
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
@@ -100,9 +101,9 @@ class TableController extends Controller
         return redirect()->back();
     }
 
-    public function unSubscribe(Table $table, User $user): RedirectResponse
+    public function unSubscribe(Table $table): RedirectResponse
     {
-        $table->users()->detach($user);
+        $table->users()->detach(Auth::user());
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 

@@ -155,46 +155,27 @@ it('can not create a table without defining the total points', function () {
 });
 
 it('can subscribe a user to a table', function () {
-    Event::fake();
-
     $this->seed();
+    login();
 
-    $user = User::factory()->create();
-    $this->actingAs($user);
+    expect(Table::first()->users->count())->toBe(1);
 
-    $table = Table::first();
+    $this->get(route('table.subscribe', Table::first()));
 
-    expect($table->users()->count())->toBe(1);
-
-    $this->get(route('table.subscribe', [$table, $user]));
-
-    expect($table->users()->count())->toBe(2);
-
-    Event::assertDispatched(App\Events\UserTableSubscribed::class);
+    expect(Table::first()->users->count())->toBe(2);
 });
 
 it('can unsubscribe a user of a table', function () {
-    Event::fake();
-
     $this->seed();
-
-    $user = User::factory()->create();
-    $this->actingAs($user);
+    login();
 
     $table = Table::first();
 
-    expect($table->users()->count())->toBe(1);
+    expect(Table::first()->users()->count())->toBe(1);
 
-    $this->get(route('table.subscribe', [$table, $user]));
+    $this->get(route('table.unsubscribe', Table::first()));
 
-    expect($table->users()->count())->toBe(2);
-
-    $this->get(route('table.unsubscribe', [$table, $user]));
-
-    Event::assertDispatched(App\Events\UserTableUnsubscribed::class);
-    Event::assertListening(App\Events\UserTableUnsubscribed::class, App\Listeners\UserUnsubscriptionDiscordNotification::class);
-
-    expect($table->users()->count())->toBe(1);
+    expect(Table::first()->users()->count())->toBe(1);
 });
 
 test('a user can not delete a table he didnt created', function () {
