@@ -7,12 +7,10 @@ use App\DataObjects\DiscordNotificationData;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
-use App\Models\User;
-use GuzzleHttp\Client;
 
 it('should send the discord notification', function () {
     $this->seed();
-    $this->actingAs(User::first());
+    login();
 
     $notificationData = DiscordNotificationData::make(
         Game::first(),
@@ -20,10 +18,7 @@ it('should send the discord notification', function () {
         Day::first(),
     );
 
-    $guzzleMock = Mockery::mock(Client::class);
-    $guzzleMock->shouldReceive('post');
-
-    app()->instance(Client::class, $guzzleMock);
+    mockHttpClient();
 
     $client = Mockery::mock(SendDiscordNotificationAction::class);
     $client->shouldReceive('__invoke');
