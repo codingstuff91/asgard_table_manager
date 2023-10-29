@@ -25,7 +25,7 @@ it('should return a long embed message structure when creating or updating a tab
 
     expect($embedMessageStructure['content'])->toBe($contentMessage)
         ->and($embedMessageStructure['embeds'][0]['title'])->toBe('Table de : '.$notificationData->game->name)
-        ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '. route('days.show', $notificationData->day->id))
+        ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '.route('days.show', $notificationData->day->id))
         ->and($embedMessageStructure['embeds'][0]['author']['name'])->toBe('Créateur : '.Auth::user()->name)
         ->and($embedMessageStructure['embeds'][0]['color'])->toBe(EmbedColor::CREATED->value)
         ->and($embedMessageStructure['embeds'][0]['fields'][0]['value'])->toBe($notificationData->day->date->format('d/m/Y'))
@@ -61,7 +61,7 @@ it('should return an embed structure message when subscribing an user to a table
 
     expect($embedMessageStructure['content'])->toBe(EmbedMessageContent::SUBSCRIBED->value)
         ->and($embedMessageStructure['embeds'][0]['title'])->toBe(Auth::user()->name.' s\'est inscrit à la table de '.$notificationData->game->name)
-        ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '. route('days.show', $notificationData->day->id))
+        ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '.route('days.show', $notificationData->day->id))
         ->and($embedMessageStructure['embeds'][0]['color'])->toBe(EmbedColor::CREATED->value);
 });
 
@@ -76,6 +76,6 @@ it('should return an embed structure message when unsubscribing a user of a tabl
 
     expect($embedMessageStructure['content'])->toBe(EmbedMessageContent::UNSUBSCRIBED->value)
         ->and($embedMessageStructure['embeds'][0]['title'])->toBe(Auth::user()->name.' s\'est désinscrit de la table de '.$notificationData->game->name)
-        ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '. route('days.show', $notificationData->day->id))
+        ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '.route('days.show', $notificationData->day->id))
         ->and($embedMessageStructure['embeds'][0]['color'])->toBe(EmbedColor::DELETED->value);
 });

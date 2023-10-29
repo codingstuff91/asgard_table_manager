@@ -73,8 +73,7 @@ class BuildEmbedMessageStructureAction
     public static function generateSubscribingStructure(
         DiscordNotificationData $discordNotificationData,
         string $notificationType
-    ): array
-    {
+    ): array {
         $titleKeyword = $notificationType == 'subscribe' ? 'inscrit à' : 'désinscrit de';
 
         return [
