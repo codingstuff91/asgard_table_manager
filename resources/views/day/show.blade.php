@@ -8,13 +8,13 @@
         </button>
     </x-slot>
 
-    <div class="w-full mt-2 mx-auto lg:max-w-7xl">
+    <div class="w-full mt-2 mx-auto lg:max-w-7xl lg:px-4">
         @if(session('error'))
             <div class="text-center text-xl text-white font-semibold bg-red-500 w-full p-2 rounded-lg">
                 {{ session('error') }}
             </div>
         @endif
-        <div class="mt-4">
+        <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
                 <livewire:table-card :table="$table" />
             @endforeach
