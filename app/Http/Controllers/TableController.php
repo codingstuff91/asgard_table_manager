@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Discord\CreateDiscordNotificationAction;
+use App\Actions\UserSubscriptionAction;
+use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
+use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
+use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
-use App\Models\User;
 use App\Models\Table;
-use App\Models\Category;
-use App\Events\TableCreated;
-use App\Events\TableDeleted;
-use App\Events\TableUpdated;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Events\UserTableSubscribed;
-use App\Events\UserTableUnsubscribed;
-use App\Http\Requests\TableStoreRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TableController extends Controller
 {
+    public function __construct(
+        public CreateDiscordNotificationAction $createDiscordNotificationAction,
+        public DiscordNotificationData $discordNotificationData,
+    ) {
+    }
+
     public function create(Day $day)
     {
         $categories = Category::all();
@@ -30,18 +36,22 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
-        $tableAttributes = new TableData(
-            $day->id,
-            $request->user()->id,
-            ...$request->validated());
+        $game = Game::findOrFail($request->game_id);
+
+        $tableAttributes = TableData::make($day, $request);
 
         if (TableLogic::isAlreadyExists($tableAttributes)) {
             return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
         }
 
         $table = Table::create($tableAttributes->toArray());
+        $user = $request->user();
 
-        event(new TableCreated($table, $request->user(), $day, $request->game_id));
+        app(UserSubscriptionAction::class)->execute($table, $user);
+
+        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
         return redirect()->route('days.show', $day);
     }
@@ -58,57 +68,59 @@ class TableController extends Controller
         return view('table.edit', compact('table', 'day', 'categories', 'games', 'tableGame', 'tableGameCategory'));
     }
 
-    public function update(Table $table, Request $request)
+    public function update(Table $table, Request $request): RedirectResponse
     {
-        $day = $table->day;
-
         $table->update([
             'players_number' => $request->players_number,
-            'total_points'   => $request->total_points,
-            'start_hour'     => substr($request->start_hour, 0, 5),
-            'description'    => $request->description,
+            'total_points' => $request->total_points,
+            'start_hour' => substr($request->start_hour, 0, 5),
+            'description' => $request->description,
         ]);
 
-        event(new TableUpdated($table, $request->user(), $day, (int)$request->game_id));
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        return redirect()->route('days.show', $day);
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
+
+        return redirect()->route('days.show', $table->day);
     }
 
-    public function subscribe(Table $table, User $user)
+    public function subscribe(Table $table): RedirectResponse
     {
-        $numerOfPlayers = $table->users()->count();
+        $playersNumber = $table->users()->count();
 
-        if ($numerOfPlayers === $table->players_number) {
+        if ($playersNumber === $table->players_number) {
             return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
         }
 
-        $table->users()->attach($user);
+        $table->users()->attach(Auth::user());
 
-        event(new UserTableSubscribed($user, $table));
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        return redirect()->back();
-    }
-
-    public function unSubscribe(Table $table, User $user)
-    {
-        $table->users()->detach($user);
-
-        event(new UserTableUnsubscribed($user, $table));
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'subscribe');
 
         return redirect()->back();
     }
 
-    public function destroy(Table $table)
+    public function unSubscribe(Table $table): RedirectResponse
     {
-        $game = $table->game;
-        $day = $table->day;
-        $user = $table->organizer;
+        $table->users()->detach(Auth::user());
 
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'unsubscribe');
+
+        return redirect()->back();
+    }
+
+    public function destroy(Table $table): RedirectResponse
+    {
         $table->users()->detach();
 
         $table->delete();
 
-        event(new TableDeleted($table, $day, $game, $user));
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'delete');
 
         return redirect()->back();
     }
