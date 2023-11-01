@@ -4,8 +4,8 @@
             <h2 class="text-lg font-bold">{{ $table->game->name }}</h2>
             <h3 class="text-sm">Créateur : {{ $table->organizer->name }}</h3>
         </div>
-        <div>
-            <div class="flex justify-center">
+        <div class="flex flex-col items-center">
+            <div class="flex justify-center mr-2">
                 @can('edit_table', $table)
                     <button class="mr-2 h-6 w-6">
                         <a
@@ -70,7 +70,7 @@
         </div>
     </div>
     @if($table->description)
-        <div class="mx-4 pb-2">
+        <div class="mx-4 pb-2 text-justify">
             <h2>{{ $table->description }}</h2>
         </div>
     @endif
