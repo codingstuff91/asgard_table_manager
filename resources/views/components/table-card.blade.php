@@ -1,5 +1,5 @@
 <div class="w-full bg-gray-200 rounded-lg mt-2">
-    <div id="title" class="bg-green-500 p-2 text-white flex justify-between items-center rounded-t-lg">
+    <div id="title" class="py-2 bg-green-500 text-white flex justify-between items-center rounded-t-lg">
         <div class="pl-2 w-[75%]">
             <h2 class="text-lg font-bold">{{ $table->game->name }}</h2>
             <h3 class="text-sm">Créateur : {{ $table->organizer->name }}</h3>
@@ -22,7 +22,7 @@
                         @method('DELETE')
                         <button
                             type="submit"
-                            class="ml-2 pt-1"
+                            class="ml-2"
                             onclick="return confirm('Etes-vous certain de vouloir annuler cette table ?')"
                         >
                             <img src="{{ asset('img/delete.png')}}" class="h-6 w-6">
@@ -46,7 +46,27 @@
             @endforeach
         </div>
         <div class="pr-2">
-            <img src="{{ asset('img/add-user.png')}}"  class="h-8 w-8">
+            @if (collect($table->users)->pluck('name')->doesntContain(Auth::user()->name))
+                <button class="relative bottom-0 px-4 py-2">
+                    <a
+                        href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}"
+                        onclick="return confirm('Etes-vous certain de vouloir vous inscrire ?')"
+                    >
+                        <img src="{{ asset('img/add-user.png')}}" class="w-8 h-8">
+                    </a>
+                </button>
+            @endif
+
+            @if (collect($table->users)->pluck('name')->contains(Auth::user()->name))
+                <button class="relative bottom-0 px-4 py-2">
+                    <a
+                        href="{{ route('table.unsubscribe', [$table->id, Auth::user()->id]) }}"
+                        onclick="return confirm('Etes-vous certain de vouloir vous desinscrire ?')"
+                    >
+                        <img src="{{ asset('img/delete-user.png') }}" class="w-8 h-8">
+                    </a>
+                </button>
+            @endif
         </div>
     </div>
     @if($table->description)
