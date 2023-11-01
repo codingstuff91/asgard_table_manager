@@ -16,7 +16,7 @@
         @endif
         <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
-                <livewire:table-card :table="$table" />
+                <x-table-card :table="$table" />
             @endforeach
         </div>
     </div>
