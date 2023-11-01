@@ -7,7 +7,7 @@
         <div>
             <div class="flex justify-center">
                 @can('edit_table', $table)
-                    <button class="mr-2">
+                    <button class="mr-2 h-6 w-6">
                         <a
                             href="{{ route('table.edit', $table->id) }}"
                             onclick="return confirm('Etes-vous certain de vouloir faire une mise à jour ?')"
@@ -22,10 +22,10 @@
                         @method('DELETE')
                         <button
                             type="submit"
-                            class="ml-2"
+                            class="ml-2 h-6 w-6"
                             onclick="return confirm('Etes-vous certain de vouloir annuler cette table ?')"
                         >
-                            <img src="{{ asset('img/delete.png')}}" class="h-6 w-6">
+                            <img src="{{ asset('img/delete.png')}}">
                         </button>
                     </form>
                 @endcan
