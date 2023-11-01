@@ -1,7 +1,7 @@
 <div class="w-full bg-gray-200 rounded-lg mt-2">
     <div id="title" class="bg-green-500 p-2 text-white flex justify-between items-center rounded-t-lg">
         <div class="pl-2 w-[75%]">
-            <h2 class="text-lg font-bold">Chroniques oubliées contemporain</h2>
+            <h2 class="text-lg font-bold">{{ $table->game->name }}</h2>
             <h3 class="text-sm">Créateur : {{ $table->organizer->name }}</h3>
         </div>
         <div>
@@ -30,8 +30,7 @@
     </div>
     @if($table->description)
         <div class="mx-4 pb-2">
-            <h2 class="font-bold">Description</h2>
-            <p>{{ $table->description }}</p>
+            <h2>{{ $table->description }}</h2>
         </div>
     @endif
 </div>
