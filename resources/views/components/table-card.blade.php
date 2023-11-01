@@ -47,7 +47,7 @@
         </div>
         <div class="pr-2">
             @if (collect($table->users)->pluck('name')->doesntContain(Auth::user()->name))
-                <button class="relative bottom-0 px-4 py-2">
+                <button>
                     <a
                         href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}"
                         onclick="return confirm('Etes-vous certain de vouloir vous inscrire ?')"
@@ -58,7 +58,7 @@
             @endif
 
             @if (collect($table->users)->pluck('name')->contains(Auth::user()->name))
-                <button class="relative bottom-0 px-4 py-2">
+                <button>
                     <a
                         href="{{ route('table.unsubscribe', [$table->id, Auth::user()->id]) }}"
                         onclick="return confirm('Etes-vous certain de vouloir vous desinscrire ?')"
