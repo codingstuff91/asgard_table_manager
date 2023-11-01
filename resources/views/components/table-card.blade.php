@@ -5,9 +5,30 @@
             <h3 class="text-sm">Créateur : {{ $table->organizer->name }}</h3>
         </div>
         <div>
-            <div class="flex justify-center mb-2">
-                <img src="{{ asset('img/edit.png')}}" class="h-6 w-6 mr-4">
-                <img src="{{ asset('img/delete.png')}}" class="h-6 w-6 ml-4">
+            <div class="flex justify-center">
+                @can('edit_table', $table)
+                    <button class="mr-2">
+                        <a
+                            href="{{ route('table.edit', $table->id) }}"
+                            onclick="return confirm('Etes-vous certain de vouloir faire une mise à jour ?')"
+                        >
+                            <img src="{{ asset('img/edit.png')}}" class="h-6 w-6">
+                        </a>
+                    </button>
+                @endcan
+                @can('delete_table', $table)
+                    <form action="{{ route('table.delete', $table->id) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button
+                            type="submit"
+                            class="ml-2 pt-1"
+                            onclick="return confirm('Etes-vous certain de vouloir annuler cette table ?')"
+                        >
+                            <img src="{{ asset('img/delete.png')}}" class="h-6 w-6">
+                        </button>
+                    </form>
+                @endcan
             </div>
             <h2 class="mt-4 pr-2 text-lg font-bold">{{ $table->start_hour }}</h2>
         </div>
