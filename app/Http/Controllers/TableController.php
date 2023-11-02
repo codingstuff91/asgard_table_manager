@@ -12,7 +12,6 @@ use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
