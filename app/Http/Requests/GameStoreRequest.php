@@ -24,8 +24,8 @@ class GameStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|unique:games,name',
-            'category_id' => 'required'
+            'name' => 'required|unique:games,name',
+            'category_id' => 'required',
         ];
     }
 

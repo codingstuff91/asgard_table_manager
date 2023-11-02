@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Game;
 use App\Models\Category;
+use App\Models\Game;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class GameSeeder extends Seeder
 {

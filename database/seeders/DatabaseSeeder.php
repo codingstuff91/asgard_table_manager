@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Day;
 use App\Models\Game;
-use App\Models\User;
 use App\Models\Table;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
 
         Table::factory()
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->has(User::factory())
-        ->create([
-            'organizer_id' => User::first()->id,
-        ]);
+            ->for(Game::factory())
+            ->for(Day::factory())
+            ->has(User::factory())
+            ->create([
+                'organizer_id' => User::first()->id,
+            ]);
     }
 }

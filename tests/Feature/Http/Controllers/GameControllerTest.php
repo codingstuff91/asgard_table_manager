@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Category;
-use App\Models\Day;
 use App\Models\Game;
 use App\Models\User;
 
