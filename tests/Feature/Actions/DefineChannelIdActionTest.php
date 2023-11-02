@@ -1,11 +1,9 @@
 <?php
 
-use App\Services\DiscordService;
+use App\Actions\Discord\DefineChannelIdAction;
 
 test('The correct channel ID is returned according to the day of a date', function (string $date, int $discordChannel) {
-    $discordService = new DiscordService;
-
-    $channelId = $discordService->getChannelByDate($date);
+    $channelId = app(DefineChannelIdAction::class)($date);
 
     expect($channelId)->toBe($discordChannel);
 })->with([
