@@ -50,7 +50,7 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
+//        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
         return redirect()->route('days.show', $day);
     }
