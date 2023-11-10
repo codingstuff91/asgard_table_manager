@@ -37,7 +37,7 @@ class TableController extends Controller
     {
         $game = Game::findOrFail($request->game_id);
 
-        $tableAttributes = TableData::make($day, $request);
+        $tableAttributes = TableData::fromRequest($day, $request);
 
         if (TableLogic::isAlreadyExists($tableAttributes)) {
             return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
