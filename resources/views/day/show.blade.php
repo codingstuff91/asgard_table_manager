@@ -27,4 +27,22 @@
             @endforeach
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.category').forEach(function (category) {
+                category.addEventListener('click', function () {
+                    let categoryId = this.getAttribute('category-id');
+
+                    document.querySelectorAll('.game-table').forEach(function (table) {
+                        table.style.display = 'none';
+                    });
+
+                    document.querySelectorAll('.game-table[data-category="' + categoryId + '"]').forEach(function (table) {
+                        table.style.display = 'block';
+                    });
+                });
+            });
+        });
+    </script>
 </x-app-layout>
