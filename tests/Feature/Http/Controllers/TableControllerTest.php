@@ -31,6 +31,7 @@ it('can create a new table', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -54,6 +55,7 @@ it('can not create a table twice', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -66,6 +68,7 @@ it('can not create a table twice', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -87,6 +90,7 @@ it('can update a table successfully', function () {
     $response = $this->patch(route('table.update', Table::first()->id), [
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -103,6 +107,7 @@ it('can not create a table without giving a number of players', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'total_points' => 1000,
         'start_hour' => '21:00',
     ]);
@@ -118,6 +123,7 @@ it('can not create a table without giving a start hour', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'total_points' => 1000,
         'players_number' => 5,
     ]);
