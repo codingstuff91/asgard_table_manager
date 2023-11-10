@@ -181,12 +181,11 @@ it('can unsubscribe a user of a table', function () {
     expect(Table::first()->users()->count())->toBe(1);
 });
 
-it('can not subscribe a user who is already subscribed to another table with the same start hour for the current day', function() {
+it('can not subscribe a user who is already subscribed to another table with the same start hour for the current day', function () {
     $this->seed();
     login();
 
     app(UserSubscriptionAction::class)->execute(Table::first(), Auth::user());
-
 
     $anotherTableAtSameHour = Table::factory()
         ->for(Game::factory())

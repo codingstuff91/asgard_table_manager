@@ -2,10 +2,8 @@
 
 namespace App\Logic;
 
-use App\DataObjects\DiscordNotificationData;
 use App\Models\Day;
 use App\Models\Table;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class UserLogic
@@ -17,11 +15,11 @@ class UserLogic
             ->where('id', '!=', $table->id)
             ->get();
 
-        if($tables->isEmpty()) {
+        if ($tables->isEmpty()) {
             return false;
         }
 
-        foreach($tables as $table) {
+        foreach ($tables as $table) {
             if ($table->users->contains(Auth::user())) {
                 return true;
             }

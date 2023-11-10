@@ -31,7 +31,7 @@ test('it should return true if an user is subscribed to a table with the same st
         ->and($hasAlreadySubscribed)->toBe(true);
 });
 
-test('it should return false if an user is not already subscribed to another table with the same start hour for the current day', function() {
+test('it should return false if an user is not already subscribed to another table with the same start hour for the current day', function () {
     $this->seed();
     login();
 
