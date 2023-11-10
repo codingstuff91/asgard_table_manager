@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\storeDayRequest;
+use App\Models\Category;
 use App\Models\Day;
 use App\Models\Table;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class DayController extends Controller
 {
     /**
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return View
      */
     public function index(Request $request)
     {
@@ -24,25 +28,36 @@ class DayController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return View
      */
     public function create(Request $request)
     {
         return view('day.create');
     }
 
+    /**
+     * @param Day $day
+     * @return View
+     */
     public function show(Day $day)
     {
         $tables = Table::with(['users', 'game'])
             ->where('day_id', $day->id)
             ->get();
 
-        return view('day.show', compact('tables', 'day'));
+        $tablesCountPerCategory = Category::withCount([
+            'tables' => function ($query) use ($day) {
+                $query->where('day_id', $day->id);
+            }
+        ])->get();
+
+        return view('day.show', compact('tables', 'day', 'tablesCountPerCategory'));
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param storeDayRequest $request
+     * @return RedirectResponse
      */
     public function store(storeDayRequest $request)
     {
