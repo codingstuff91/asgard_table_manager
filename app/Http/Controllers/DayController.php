@@ -35,6 +35,7 @@ class DayController extends Controller
     {
         $tables = Table::with(['users', 'game'])
             ->where('day_id', $day->id)
+            ->orderBy('start_hour', 'asc')
             ->get();
 
         return view('day.show', compact('tables', 'day'));
