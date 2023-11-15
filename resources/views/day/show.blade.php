@@ -17,13 +17,13 @@
 
         <div class="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-4">
             @foreach($tablesCountPerCategory as $table)
-                <x-table-count-category :table="$table" :id="$table->id"></x-table-count-category>
+                <x-table-count-category :table="$table" :id="$table->id" :color="$table->color" />
             @endforeach
         </div>
 
         <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
-                <x-table-card :table="$table" />
+                <x-table-card :table="$table" :color="$table->game->category->color"/>
             @endforeach
         </div>
     </div>
