@@ -20,7 +20,7 @@
         "defstudio/pest-plugin-laravel-expectations": "1.12.*",
         "fakerphp/faker": "1.22.*",
         "laravel-shift/blueprint": "2.5.*",
-        "laravel/pint": "1.10.*",
+        "laravel/pint": "1.13.*",
         "laravel/sail": "1.22.*",
         "mockery/mockery": "1.5.*",
         "nunomaduro/collision": "6.4.*",
