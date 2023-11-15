@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ad1c1d6c6c5511f83f39be64cc90878",
+    "content-hash": "afeb8174369bb4a58987002d5807802b",
     "packages": [
         {
             "name": "brick/math",
@@ -2604,16 +2604,16 @@
         },
         {
             "name": "opcodesio/log-viewer",
-            "version": "v2.4.1",
+            "version": "v2.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "caddf3336e4a3c23e655e0c1a11b2ae8e6ab4c7d"
+                "reference": "34619b89ec0501222a661863e80dc2c92618d8f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/caddf3336e4a3c23e655e0c1a11b2ae8e6ab4c7d",
-                "reference": "caddf3336e4a3c23e655e0c1a11b2ae8e6ab4c7d",
+                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/34619b89ec0501222a661863e80dc2c92618d8f3",
+                "reference": "34619b89ec0501222a661863e80dc2c92618d8f3",
                 "shasum": ""
             },
             "require": {
@@ -2676,9 +2676,19 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v2.4.1"
+                "source": "https://github.com/opcodesio/log-viewer/tree/v2.5.6"
             },
-            "time": "2023-04-05T05:44:00+00:00"
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/arunas",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/arukompas",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-09-03T08:22:57+00:00"
         },
         {
             "name": "pestphp/pest",
