@@ -8,24 +8,21 @@
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/breeze": "^1.18",
-        "laravel/framework": "^9.19",
+        "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "opcodesio/log-viewer": "^2.4",
-        "pestphp/pest": "^1.16",
-        "pestphp/pest-plugin-laravel": "^1.1"
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
-        "defstudio/pest-plugin-laravel-expectations": "^1.12",
         "fakerphp/faker": "^1.9.1",
-        "laravel-shift/blueprint": "^2.4",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {
