@@ -72,6 +72,7 @@
                     <x-input-label class="mt-2">Description complémentaire</x-input-label>
                     <textarea
                         name="description"
+                        id="description"
                         class="w-full rounded-lg border border-gray-300"
                         placeholder="Ajoutez ici des informations complémentaires concernant votre table"
                         rows="3">
@@ -88,6 +89,9 @@
     </div>
     <script>
         var category = document.getElementById("gameCategory");
+        var description = document.getElementById("description");
+
+        description.innerText = "";
 
         category.addEventListener("change", function() {
             var gameList = document.getElementById("gameName");

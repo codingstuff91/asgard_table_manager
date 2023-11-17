@@ -44,6 +44,7 @@ class DayController extends Controller
     {
         $tables = Table::with(['users', 'game.category'])
             ->where('day_id', $day->id)
+            ->orderBy('start_hour', 'asc')
             ->get();
 
         $tablesCountPerCategory = Category::withCount([

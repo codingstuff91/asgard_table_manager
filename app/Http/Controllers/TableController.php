@@ -8,6 +8,7 @@ use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
+use App\Logic\UserLogic;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
@@ -82,10 +83,12 @@ class TableController extends Controller
 
     public function subscribe(Table $table): RedirectResponse
     {
-        $playersNumber = $table->users()->count();
-
-        if ($playersNumber === $table->players_number) {
+        if ($table->users()->count() === $table->players_number) {
             return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
+        }
+
+        if (app(UserLogic::class)->hasSubscribedToAnotherTableWithTheSameStartHour($table->day, $table)) {
+            return redirect()->route('days.show', $table->day)->with(['error' => 'Vous êtes déjà inscrit à une autre table à la même heure ce jour là']);
         }
 
         $table->users()->attach(Auth::user());

@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             ->has(User::factory())
             ->create([
                 'organizer_id' => User::first()->id,
+                'start_hour' => '21:00',
             ]);
     }
 }

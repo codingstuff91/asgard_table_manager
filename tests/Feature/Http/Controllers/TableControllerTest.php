@@ -1,11 +1,14 @@
 <?php
 
+use App\Actions\UserSubscriptionAction;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
+use function Pest\Laravel\get;
 
 it('Should display all categories in the create view form', function () {
     $this->seed();
@@ -182,6 +185,27 @@ it('can unsubscribe a user of a table', function () {
     $this->get(route('table.unsubscribe', Table::first()));
 
     expect(Table::first()->users()->count())->toBe(1);
+});
+
+it('can not subscribe a user who is already subscribed to another table with the same start hour for the current day', function () {
+    $this->seed();
+    login();
+
+    app(UserSubscriptionAction::class)->execute(Table::first(), Auth::user());
+
+    $anotherTableAtSameHour = Table::factory()
+        ->for(Game::factory())
+        ->for(Day::first())
+        ->create([
+            'organizer_id' => User::factory(),
+            'start_hour' => '21:00',
+        ]);
+
+    $response = get(route('table.subscribe', $anotherTableAtSameHour));
+
+    $response->assertRedirect(route('days.show', Table::first()->day));
+
+    expect($anotherTableAtSameHour->users->count())->toBe(0);
 });
 
 test('a user can not delete a table he didnt created', function () {
