@@ -1,12 +1,13 @@
 <?php
 
-use App\Actions\UserSubscriptionAction;
-use App\Logic\UserLogic;
 use App\Models\Day;
 use App\Models\Game;
-use App\Models\Table;
 use App\Models\User;
+use App\Models\Table;
+use App\Logic\UserLogic;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Actions\UserSubscriptionAction;
 
 test('it should return true if an user is subscribed to a table with the same start hour for the current day', function () {
     $this->seed();
@@ -17,6 +18,7 @@ test('it should return true if an user is subscribed to a table with the same st
     $anotherTableAtSameHour = Table::factory()
         ->for(Game::factory())
         ->for(Day::first())
+        ->for(Category::first())
         ->has(User::factory())
         ->create([
             'organizer_id' => User::first()->id,

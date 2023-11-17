@@ -196,6 +196,7 @@ it('can not subscribe a user who is already subscribed to another table with the
     $anotherTableAtSameHour = Table::factory()
         ->for(Game::factory())
         ->for(Day::first())
+        ->for(Category::first())
         ->create([
             'organizer_id' => User::factory(),
             'start_hour' => '21:00',
