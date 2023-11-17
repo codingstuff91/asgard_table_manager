@@ -34,4 +34,9 @@ class Table extends Model
     {
         return $this->belongsTo(Game::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

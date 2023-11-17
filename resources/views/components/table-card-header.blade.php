@@ -1,4 +1,4 @@
-<div id="title" class="py-2 bg-green-500 text-white flex justify-between items-center rounded-t-lg">
+<div id="title" class="py-2 {{ $color }} text-white flex justify-between items-center rounded-t-lg">
         <div class="pl-2 w-[75%]">
             <h2 class="text-lg font-bold">{{ $table->game->name }}</h2>
             <h3 class="text-sm">Créateur : {{ $table->organizer->name }}</h3>

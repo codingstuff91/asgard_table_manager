@@ -17,4 +17,9 @@ class Category extends Model
     {
         return $this->hasMany(Game::class);
     }
+
+    public function tables()
+    {
+        return $this->hasMany(Table::class);
+    }
 }

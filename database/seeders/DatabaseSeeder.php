@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
         Table::factory()
             ->for(Game::factory())
             ->for(Day::factory())
+            ->for(Category::factory())
             ->has(User::factory())
             ->create([
                 'organizer_id' => User::first()->id,

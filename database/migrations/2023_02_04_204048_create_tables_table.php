@@ -18,6 +18,7 @@ class CreateTablesTable extends Migration
             $table->integer('organizer_id');
             $table->integer('day_id');
             $table->string('game_id');
+            $table->integer('category_id');
             $table->integer('players_number');
             $table->integer('total_points');
             $table->string('start_hour');
