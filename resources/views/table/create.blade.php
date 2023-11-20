@@ -11,31 +11,7 @@
                 <form action="{{ route('table.store', $day->id) }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
 
-                    <livewire:search-game />
-
-                    <x-input-label>Catégorie de jeu</x-input-label>
-                    <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                        name="category_id"
-                        id="gameCategory">
-                        <option value="">x-- Choisir une catégorie --x</option>
-                        @foreach ($categories as $category)
-                            <option
-                                value="{{ $category->id }}"
-                                {{ $category->id == old('category_id') ? "selected" : "" }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
-
-                    <x-input-label class="mt-2">Nom du jeu</x-input-label>
-                    <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                        name="game_id"
-                        id="gameName">
-                        <option value="">
-                            x-- Choisir un jeu --x
-                        </option>
-                    </select>
+                    <livewire:game-selection-modal />
                     <x-input-error class="mt-2" :messages="$errors->get('game_id')" />
 
                     <x-secondary-button class="my-2">
