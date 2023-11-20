@@ -34,7 +34,6 @@ class TableStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'category_id.required' => 'Veuillez choisir une catégorie',
             'game_id.required' => 'Veuillez choisir un jeu',
             'players_number.required' => 'Veuillez définir un nombre de joueurs',
             'players_number.integer' => 'Veuillez saisir un nombre entier',
