@@ -71,6 +71,7 @@ class TableController extends Controller
     public function update(Table $table, Request $request): RedirectResponse
     {
         $table->update([
+            'game_id' => $request->game_id,
             'players_number' => $request->players_number,
             'total_points' => $request->total_points,
             'start_hour' => substr($request->start_hour, 0, 5),
