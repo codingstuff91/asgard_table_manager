@@ -9,4 +9,14 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateGame extends CreateRecord
 {
     protected static string $resource = GameResource::class;
+
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return 'Nouveau jeu ajouté';
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

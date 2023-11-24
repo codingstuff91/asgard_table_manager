@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\GameResource\Pages;
 use App\Filament\Resources\GameResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Game;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -28,11 +29,13 @@ class GameResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('category_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('category_id')
+                    ->label('Category')
+                    ->options(Category::all()->pluck('name', 'id'))
+                    ->label('Catégorie'),
                 Forms\Components\TextInput::make('name')
-                    ->required(),
+                    ->required()
+                    ->label('Nom'),
             ]);
     }
 
