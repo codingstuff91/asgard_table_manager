@@ -7,6 +7,7 @@ use App\Filament\Resources\GameResource\RelationManagers;
 use App\Models\Game;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,6 +17,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class GameResource extends Resource
 {
     protected static ?string $model = Game::class;
+
+    protected static ?string $modelLabel = 'Jeu';
+
+    protected static ?string $pluralModelLabel = 'Jeux';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -35,7 +40,9 @@ class GameResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->label('Nom'),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->label('Nom'),
                 Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
                     ->sortable()
