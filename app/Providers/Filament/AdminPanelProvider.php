@@ -60,6 +60,8 @@ class AdminPanelProvider extends PanelProvider
                     ->url('/dashboard', shouldOpenInNewTab: false)
                     ->icon('heroicon-o-arrow-left-circle')
                     ->sort(3),
-            ]);
+            ])
+            ->brandLogo(fn () => asset('img/logo_asgard.png'))
+            ->brandLogoHeight('3.5rem');
     }
 }
