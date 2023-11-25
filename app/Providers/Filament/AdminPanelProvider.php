@@ -58,8 +58,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make('Retour appli')
                     ->url('/dashboard', shouldOpenInNewTab: false)
-                    ->icon('heroicon-o-presentation-chart-line')
-                    ->icon('heroicon-o-arrow-uturn-left')
+                    ->icon('heroicon-o-arrow-left-circle')
                     ->sort(3),
             ]);
     }
