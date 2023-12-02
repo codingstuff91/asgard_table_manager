@@ -11,6 +11,7 @@
         "laravel/framework": "10.32.*",
         "laravel/sanctum": "3.3.*",
         "laravel/tinker": "2.8.*",
+        "livewire/livewire": "^3.2",
         "pestphp/pest": "2.24.*",
         "pestphp/pest-plugin-laravel": "2.2.*"
     },
