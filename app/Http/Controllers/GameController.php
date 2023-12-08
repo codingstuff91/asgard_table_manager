@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GameStoreRequest;
-use App\Models\Category;
 use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class GameController extends Controller
 {
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Store the create table link into session and redirect into create game admin panel page
      */
     public function create()
     {
-        $categories = Category::all();
-
-        return view('game.create', compact('categories'));
+        return redirect('/admin/games/create');
     }
 
     public function searchByCategory(Request $request)
