@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 class GameController extends Controller
 {
     /**
-     * Store the create table link into session and redirect into create game admin panel page
+     * Redirect to create game admin panel page
      */
     public function create()
     {
