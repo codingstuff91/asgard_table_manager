@@ -37,7 +37,7 @@
                     <x-input-error class="mt-2" :messages="$errors->get('game_id')" />
 
                     <x-secondary-button class="my-2">
-                        <a href="{{ route('games.create') }}">Ajouter un jeu</a>
+                        <a href="/admin/games/create">Ajouter un jeu</a>
                     </x-secondary-button>
 
                     <x-input-label class="mt-2">Nombre joueurs max</x-input-label>
