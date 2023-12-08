@@ -88,14 +88,20 @@ it('can update a table successfully', function () {
     mockHttpClient();
 
     $response = $this->patch(route('table.update', Table::first()->id), [
-        'day_id' => Day::first()->id,
-        'game_id' => Game::first()->id,
+        'game_id' => 2,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
     ]);
 
-    expect($response)->toBeRedirect(route('days.show', Day::first()->id));
+    $tableUpdated = Table::first();
+
+    expect($tableUpdated->game_id)->toBe('2')
+        ->and($tableUpdated->players_number)->toBe(5)
+        ->and($tableUpdated->total_points)->toBe(1000)
+        ->and($tableUpdated->start_hour)->toBe("21:00")
+        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
+
 });
 
 it('can not create a table without giving a number of players', function () {
