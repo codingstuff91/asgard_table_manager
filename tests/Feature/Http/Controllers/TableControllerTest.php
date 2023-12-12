@@ -8,6 +8,7 @@ use App\Models\Table;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
+
 use function Pest\Laravel\get;
 
 it('Should display all categories in the create view form', function () {

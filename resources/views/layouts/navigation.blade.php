@@ -15,8 +15,8 @@
                     <x-nav-link :href="route('days.index')" :active="request()->routeIs('days.index')">
                         {{ __('Sessions') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('games.index')" :active="request()->routeIs('games.index')">
-                        {{ __('Jeux') }}
+                    <x-nav-link href="/admin">
+                        {{ __('Admin') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -73,9 +73,9 @@
             <x-responsive-nav-link :href="route('days.index')" :active="request()->routeIs('days.index')">
                 {{ __('Sessions') }}
             </x-responsive-nav-link>
-            <x-nav-link :href="route('games.index')" :active="request()->routeIs('games.index')">
-                {{ __('Jeux') }}
-            </x-nav-link>
+            <x-responsive-nav-link href="/admin">
+                {{ __('Admin') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
