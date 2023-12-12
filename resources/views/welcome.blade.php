@@ -25,12 +25,18 @@
                         <x-primary-button>
                             <a href="{{ route('dashboard') }}">Tableau de bord</a>
                         </x-primary-button>
+                        <x-primary-button>
+                            <a href="http://atm-documentation.jeuf5892.odns.fr/" target="_blank">Documentation</a>
+                        </x-primary-button>
                     @else
                         <x-primary-button class="mx-2">
                             <a href="{{ route('register') }}">Inscription</a>
                         </x-primary-button>
                         <x-primary-button class="mx-2">
                             <a href="{{ route('login') }}">Connexion</a>
+                        </x-primary-button>
+                        <x-primary-button>
+                            <a href="http://atm-documentation.jeuf5892.odns.fr/" target="_blank">Documentation</a>
                         </x-primary-button>
                     @endauth
                 </div>
