@@ -2,89 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GameStoreRequest;
-use App\Models\Category;
 use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class GameController extends Controller
 {
-    public function index()
-    {
-        $games = Game::with('category')->get();
-
-        return view('game.index')->with(['games' => $games]);
-    }
-
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Redirect to create game admin panel page
      */
     public function create()
     {
-        $categories = Category::all();
-
-        return view('game.create', compact('categories'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(GameStoreRequest $request)
-    {
-        Game::create([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-        ]);
-
-        $redirectUrl = session()->get('create_table_url') ?? route('games.index');
-
-        return redirect($redirectUrl);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Game $game)
-    {
-        $categories = Category::all();
-
-        return view('game.edit', [
-            'game' => $game,
-            'categories' => $categories,
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Game $game)
-    {
-        $game->update([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-        ]);
-
-        return to_route('games.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect('/admin/games/create');
     }
 
     public function searchByCategory(Request $request)

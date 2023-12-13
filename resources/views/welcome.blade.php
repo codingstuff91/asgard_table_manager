@@ -17,7 +17,7 @@
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div class="w-full flex flex-col justify-center items-center pt-8">
                     <img src="{{ asset('/img/logo_asgard.png') }}" class="w-32 h-32">
-                    <h1 class="mt-2 text-3xl font-bold">Table manager</h1>
+                    <h1 class="mt-2 text-3xl font-bold dark:text-gray-400">Table manager</h1>
                 </div>
 
                 <div class="my-4 mx-6 flex justify-center sm:w-[300px] sm:mx-auto">
@@ -25,12 +25,18 @@
                         <x-primary-button>
                             <a href="{{ route('dashboard') }}">Tableau de bord</a>
                         </x-primary-button>
+                        <x-primary-button>
+                            <a href="http://atm-documentation.jeuf5892.odns.fr/" target="_blank">Documentation</a>
+                        </x-primary-button>
                     @else
                         <x-primary-button class="mx-2">
                             <a href="{{ route('register') }}">Inscription</a>
                         </x-primary-button>
                         <x-primary-button class="mx-2">
                             <a href="{{ route('login') }}">Connexion</a>
+                        </x-primary-button>
+                        <x-primary-button>
+                            <a href="http://atm-documentation.jeuf5892.odns.fr/" target="_blank">Documentation</a>
                         </x-primary-button>
                     @endauth
                 </div>
@@ -41,11 +47,11 @@
                         <div class="p-6">
                             <div class="mt-2 text-lg text-gray-600 dark:text-gray-400 text-justify">
                                 <p class="mt-2">Cette application web a été spécialement conçue pour aider les membres de l'association ASGARD à organiser des soirées de jeux de cartes, de plateaux et de rôles en toute simplicité. .</p>
-                                <p class="mt-2">Grâce à cette plateforme, les organisateurs peuvent facilement gérer la création de tables de jeux et l'inscription des participants.</p>   
-                                <p class="mt-2">La première étape pour utiliser notre application consiste à créer un compte en ligne. Cela ne prend que quelques minutes et vous permettra d'accéder à toutes les fonctionnalités de l'application. 
+                                <p class="mt-2">Grâce à cette plateforme, les organisateurs peuvent facilement gérer la création de tables de jeux et l'inscription des participants.</p>
+                                <p class="mt-2">La première étape pour utiliser notre application consiste à créer un compte en ligne. Cela ne prend que quelques minutes et vous permettra d'accéder à toutes les fonctionnalités de l'application.
                                 Une fois votre compte créé, vous pouvez créer une nouvelle soirée de jeux en sélectionnant le type de jeux que vous souhaitez proposer.</p>
-                                <p class="mt-2">Ensuite, vous pouvez créer des tables de jeux en définissant le nombre de joueurs, le type de jeu, le nombre de points et l'heure de début. 
-                                Les joueurs intéressés peuvent ensuite s'inscrire sur ces tables.</p>                   
+                                <p class="mt-2">Ensuite, vous pouvez créer des tables de jeux en définissant le nombre de joueurs, le type de jeu, le nombre de points et l'heure de début.
+                                Les joueurs intéressés peuvent ensuite s'inscrire sur ces tables.</p>
                             </div>
                         </div>
                     </div>
