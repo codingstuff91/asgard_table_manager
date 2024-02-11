@@ -6,6 +6,7 @@ use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
 use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
+use App\Enums\GameCategory;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
 use App\Logic\UserLogic;
@@ -47,7 +48,9 @@ class TableController extends Controller
         $table = Table::create($tableAttributes->toArray());
         $user = $request->user();
 
-        app(UserSubscriptionAction::class)->execute($table, $user);
+        if($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
+            app(UserSubscriptionAction::class)->execute($table, $user);
+        }
 
         $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
