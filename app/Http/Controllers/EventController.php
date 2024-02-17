@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventStoreRequest;
 use App\Models\Event;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class EventController extends Controller
         return view('event.create');
     }
 
-    public function store(Request $request)
+    public function store(EventStoreRequest $request)
     {
 //        dd($request->all());
 
