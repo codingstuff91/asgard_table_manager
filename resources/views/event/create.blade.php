@@ -29,6 +29,7 @@
                         rows="3">
                         {{ old('description') }}
                     </textarea>
+                    <x-input-error class="mt-2" :messages="$errors->get('description')" />
 
                     <x-primary-button class="mt-4">
                         Confirmer
