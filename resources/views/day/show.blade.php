@@ -6,6 +6,9 @@
         <button class="mt-2 bg-green-500 px-4 py-2 rounded-lg text-white">
             <a href="{{ route('table.create', $day->id) }}">Ouvrir une table</a>
         </button>
+        <x-secondary-button>
+            <a href="{{ route('events.create', $day->id) }}">Créer un événement</a>
+        </x-secondary-button>
     </x-slot>
 
     <div class="w-full mt-2 mx-auto lg:max-w-7xl lg:px-4">

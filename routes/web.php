@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TableController;
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('table/{table}/subscribe', [TableController::class, 'subscribe'])->name('table.subscribe');
     Route::get('table/{table}/unsubscribe', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
+
+    Route::resource('events', EventController::class);
 });
 
 require __DIR__.'/auth.php';
