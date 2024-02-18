@@ -20,6 +20,15 @@
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
 
+                    <x-input-label class="mt-2">Heure de début</x-input-label>
+                    <x-text-input
+                        type="time"
+                        class="w-full"
+                        name="start_hour"
+                        value="{{ old('start_hour') }}">
+                    </x-text-input>
+                    <x-input-error class="mt-2" :messages="$errors->get('start_hour')" />
+
                     <x-input-label class="mt-2">Description complémentaire</x-input-label>
                     <textarea
                         name="description"

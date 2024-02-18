@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 30);
             $table->text('description');
+            $table->string('start_hour', 5);
             $table->timestamps();
         });
     }

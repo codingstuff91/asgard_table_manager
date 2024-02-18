@@ -26,6 +26,7 @@ class EventStoreRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => 'required',
+            'start_hour' => 'required',
         ];
     }
 
@@ -34,6 +35,7 @@ class EventStoreRequest extends FormRequest
         return [
             'name.required' => 'Veuillez saisir un nom',
             'description.required' => 'Veuillez fournir une description',
+            'start_hour.required' => 'Veuillez fournir une heure de début',
         ];
     }
 }

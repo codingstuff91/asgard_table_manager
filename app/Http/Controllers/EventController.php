@@ -19,6 +19,7 @@ class EventController extends Controller
         Event::create([
             'name' => $request->name,
             'description' => $request->description,
+            'start_hour' => $request->start_hour,
         ]);
 
         return to_route('days.show', $day);

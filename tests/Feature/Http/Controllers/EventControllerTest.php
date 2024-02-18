@@ -29,6 +29,7 @@ it('can create a new event', function () {
     $response = $this->post(route('event.store', $day), [
         'name' => 'example',
         'description' => 'description',
+        'start_hour' => '14:00',
     ]);
 
     expect(['name' => 'example'])->toBeInDatabase('events');
@@ -57,4 +58,17 @@ it('can not create an event without a description', function () {
     ]);
 
     expect($response)->toHaveInvalid('description');
+});
+
+it('can not create an event without a start_hour', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $response = $this->post(route('event.store', Day::first()->id), [
+        'name' => 'example',
+        'description' => 'description',
+        'start_hour' => '',
+    ]);
+
+    expect($response)->toHaveInvalid('start_hour');
 });
