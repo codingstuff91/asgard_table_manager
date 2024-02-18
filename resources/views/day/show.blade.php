@@ -7,7 +7,7 @@
             <a href="{{ route('table.create', $day->id) }}">Ouvrir une table</a>
         </button>
         <x-secondary-button>
-            <a href="{{ route('events.create', $day->id) }}">Créer un événement</a>
+            <a href="{{ route('event.create', $day->id) }}">Créer un événement</a>
         </x-secondary-button>
     </x-slot>
 

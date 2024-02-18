@@ -8,7 +8,7 @@
     <div class="py-4">
         <div class="sm:max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white w-full rounded-lg p-4">
-                <form action="{{ route('events.store') }}" method="POST" class="flex flex-col justify-center items-center">
+                <form action="{{ route('event.store', $day) }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
 
                     <x-input-label>Nom de l'évènement</x-input-label>

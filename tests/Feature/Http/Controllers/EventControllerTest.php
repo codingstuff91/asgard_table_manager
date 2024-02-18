@@ -16,7 +16,7 @@ it('can render the event create page', function () {
     $this->actingAs(User::first());
 
     $day = Day::first();
-    $response = $this->get(route('events.create', $day));
+    $response = $this->get(route('event.create', $day));
 
     $response->assertOk();
 });
@@ -26,7 +26,7 @@ it('can create a new event', function () {
     $this->actingAs(User::first());
 
     $day = Day::first();
-    $response = $this->post(route('events.store', $day), [
+    $response = $this->post(route('event.store', $day), [
         'name' => 'example',
         'description' => 'description',
     ]);
@@ -39,7 +39,7 @@ it('can not create an event without a name', function () {
     $this->seed();
     $this->actingAs(User::first());
 
-    $response = $this->post(route('events.store', Day::first()->id), [
+    $response = $this->post(route('event.store', Day::first()->id), [
         'name' => '',
         'description' => 'description',
     ]);
@@ -51,7 +51,7 @@ it('can not create an event without a description', function () {
     $this->seed();
     $this->actingAs(User::first());
 
-    $response = $this->post(route('events.store', Day::first()->id), [
+    $response = $this->post(route('event.store', Day::first()->id), [
         'name' => 'example',
         'description' => '',
     ]);
