@@ -14,6 +14,20 @@
                     </a>
                 </button>
             @endcan
+
+                @can('delete_event')
+                    <form action="{{ route('event.delete', $event->id) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button
+                            type="submit"
+                            class="ml-2 h-6 w-6"
+                            onclick="return confirm('Etes-vous certain de vouloir annuler cet évènement ?')"
+                        >
+                            <img src="{{ asset('img/delete.png')}}">
+                        </button>
+                    </form>
+                @endcan
         </div>
     </div>
 

@@ -43,5 +43,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit_event', function (User $user) {
             return $user->admin ;
         });
+
+        Gate::define('delete_event', function (User $user) {
+            return $user->admin ;
+        });
     }
 }
