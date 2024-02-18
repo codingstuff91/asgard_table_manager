@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class DayController extends Controller
 {
+    private const EVENT_CATEGORY = 5;
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -38,7 +40,15 @@ class DayController extends Controller
             ->orderBy('start_hour', 'asc')
             ->get();
 
-        return view('day.show', compact('tables', 'day'));
+        $events = Table::with(['users', 'game'])
+            ->where('day_id', $day->id)
+            ->whereHas('game', function ($query) {
+                $query->where('category_id', self::EVENT_CATEGORY);
+            })
+            ->orderBy('start_hour', 'asc')
+            ->get();
+
+        return view('day.show', compact('tables', 'day', 'events'));
     }
 
     /**
