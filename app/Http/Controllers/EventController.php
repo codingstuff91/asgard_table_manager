@@ -17,6 +17,7 @@ class EventController extends Controller
     public function store(EventStoreRequest $request, Day $day)
     {
         Event::create([
+            'day_id' => $day->id,
             'name' => $request->name,
             'description' => $request->description,
             'start_hour' => $request->start_hour,

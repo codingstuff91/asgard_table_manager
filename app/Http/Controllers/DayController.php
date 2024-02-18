@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\storeDayRequest;
 use App\Models\Day;
+use App\Models\Event;
 use App\Models\Table;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,12 @@ class DayController extends Controller
             ->where('day_id', $day->id)
             ->orderBy('start_hour', 'asc')
             ->get();
+
+        $events = Event::with('users')
+            ->where('day_id', $day->id)
+            ->get();
+
+        dd($events);
 
         return view('day.show', compact('tables', 'day'));
     }
