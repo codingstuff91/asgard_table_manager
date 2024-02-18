@@ -14,6 +14,18 @@
                 {{ session('error') }}
             </div>
         @endif
+
+        @if($events->count() != 0)
+            <h1 class="text-2xl font-bold my-2 text-white text-center">Evenements</h1>
+            <div class="text-center text-xl font-semibold w-full p-2 rounded-lg">
+                @foreach ($events as $event)
+                    <x-table-card :table="$event" />
+                @endforeach
+            </div>
+        @endif
+
+        <h1 class="text-2xl font-bold my-2 text-white text-center">Tables disponibles</h1>
+
         <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
                 <x-table-card :table="$table" />
