@@ -48,7 +48,8 @@ Route::middleware('auth')->group(function () {
     /** Events routes */
     Route::get('event/{day}/create', [EventController::class, 'create'])->name('event.create');
     Route::post('event/{day}/store', [EventController::class, 'store'])->name('event.store');
-    Route::post('event/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
+    Route::get('event/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
+    Route::put('event/{event}', [EventController::class, 'update'])->name('event.update');
     Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.delete');
     Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
     Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');

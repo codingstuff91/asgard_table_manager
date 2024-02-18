@@ -28,9 +28,20 @@ class EventController extends Controller
         return to_route('days.show', $day);
     }
 
-    public function edit()
+    public function edit(Event $event)
     {
-        return 'test';
+        return view('event.edit', compact('event'));
+    }
+
+    public function update(Request $request, Event $event)
+    {
+        $event->update([
+            'name' => $request->name,
+            'start_hour' => substr($request->start_hour, 0, 5),
+            'description' => $request->description,
+        ]);
+
+        return to_route('days.show', $event->day_id);
     }
 
     public function subscribe(Event $event): RedirectResponse
