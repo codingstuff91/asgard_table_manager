@@ -1,6 +1,6 @@
 <div id="main-body" class="mt-1 px-2 pb-4 flex w-full justify-between items-center sm:mx-auto sm:justify-between">
     <div class="px-2 w-[20%] sm:px-4">
-        <h2 class="font-bold">Joueurs</h2>
+        <h2 class="font-bold">Participants</h2>
         <h3 class="text-sm p-1 rounded-lg text-center cursor-pointer">
             {{ $table->users->count() }} / {{ $table->players_number }}
         </h3>
