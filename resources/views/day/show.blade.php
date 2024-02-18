@@ -25,7 +25,7 @@
             @endforeach
         @endif
 
-        <h2>Tables disponibles</h2>
+        <h2 class="text-white text-center text-xl font-bold my-2">Tables disponibles</h2>
         <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
                 <x-table-card :table="$table" />
