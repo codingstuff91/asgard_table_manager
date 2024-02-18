@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::post('event/{day}/store', [EventController::class, 'store'])->name('event.store');
     Route::post('event/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
     Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.delete');
+    Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
+    Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');
 });
 
 require __DIR__.'/auth.php';

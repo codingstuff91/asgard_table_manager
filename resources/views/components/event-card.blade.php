@@ -1,6 +1,6 @@
-<div class="w-full bg-gray-200 rounded-lg mt-2">
+<div class="w-full bg-gray-200 rounded-lg mt-2 mx-auto lg:w-1/2">
     <x-event-card-header :event="$event"/>
 
-    <p class="px-4 pb-2 text-justify">{{ $event->description }}</p>
+    <x-event-card-body :event="$event"/>
 </div>
 

@@ -43,9 +43,9 @@ class DayController extends Controller
             ->where('day_id', $day->id)
             ->get();
 
-        dd($events);
+//        dd($events);
 
-        return view('day.show', compact('tables', 'day'));
+        return view('day.show', compact('tables', 'day', 'events'));
     }
 
     /**
