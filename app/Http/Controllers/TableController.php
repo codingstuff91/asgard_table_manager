@@ -52,9 +52,9 @@ class TableController extends Controller
             app(UserSubscriptionAction::class)->execute($table, $user);
         }
 
-        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
-
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
+//        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+//
+//        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
         return redirect()->route('days.show', $day);
     }
