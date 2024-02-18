@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Event;
 use App\Models\User;
 use App\Models\Table;
 use Illuminate\Support\Facades\Gate;
@@ -37,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('edit_table', function (User $user, Table $table) {
             return $user->id === $table->organizer_id || $user->admin ;
+        });
+
+        Gate::define('edit_event', function (User $user) {
+            return $user->admin ;
         });
     }
 }

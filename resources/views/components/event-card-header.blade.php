@@ -1,10 +1,19 @@
-<div class="py-2 bg-green-500 rounded-t-lg">
+<div class="py-2 bg-slate-400 rounded-t-lg">
         <div class="px-4 flex justify-between items-center">
             <h2 class="text-lg font-bold">{{ $event->name }}</h2>
             <h2 class="text-lg font-bold">{{ $event->start_hour }}</h2>
         </div>
         <div class="px-4 flex justify-end items-center">
-
+            @can('edit_event')
+                <button class="mr-2 h-6 w-6">
+                    <a
+                        href="{{ route('event.edit', $event->id) }}"
+                        onclick="return confirm('Etes-vous certain de vouloir éditer cet évènement ?')"
+                    >
+                        <img src="{{ asset('img/edit.png')}}" class="h-6 w-6">
+                    </a>
+                </button>
+            @endcan
         </div>
     </div>
 

@@ -25,4 +25,9 @@ class EventController extends Controller
 
         return to_route('days.show', $day);
     }
+
+    public function edit()
+    {
+        return 'test';
+    }
 }
