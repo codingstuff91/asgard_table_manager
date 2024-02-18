@@ -1,14 +1,19 @@
 <x-app-layout>
     <x-slot name="header" class="flex flex-row justify-between">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-bold text-2xl text-gray-800 text-center dark:text-gray-200 leading-tight">
             Session du {{ $day->date->format('d/m/Y') }}
         </h2>
-        <button class="mt-2 bg-green-500 px-4 py-2 rounded-lg text-white">
-            <a href="{{ route('table.create', $day->id) }}">Ouvrir une table</a>
-        </button>
-        <x-secondary-button>
-            <a href="{{ route('event.create', $day->id) }}">Créer un événement</a>
-        </x-secondary-button>
+        <div class="mt-2 flex flex-col items-center sm:flex-row sm:justify-center">
+            <x-secondary-button class="my-2 sm:my-0">
+                <img src="{{ asset('/img/game-table.png') }}" class="w-8 h-8 mr-2" alt="">
+                <a href="{{ route('table.create', $day->id) }}">Ouvrir une table</a>
+            </x-secondary-button>
+            <x-secondary-button class="ml-0 sm:ml-2">
+                <img src="{{ asset('/img/calendar.png') }}" class="w-8 h-8 mr-2" alt="">
+
+                <a href="{{ route('event.create', $day->id) }}">Créer un événement</a>
+            </x-secondary-button>
+        </div>
     </x-slot>
 
     <div class="w-full mt-2 mx-auto lg:max-w-7xl lg:px-4">
