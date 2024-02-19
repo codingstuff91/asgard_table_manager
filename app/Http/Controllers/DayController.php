@@ -21,8 +21,6 @@ class DayController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-//        dd($days);
-
         return view('day.index', compact('days'));
     }
 
@@ -44,8 +42,6 @@ class DayController extends Controller
         $events = Event::with('users')
             ->where('day_id', $day->id)
             ->get();
-
-//        dd($events);
 
         return view('day.show', compact('tables', 'day', 'events'));
     }
