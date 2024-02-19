@@ -100,3 +100,27 @@ it('can update a table successfully', function () {
         ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
 
 });
+
+it('can subscribe a user to an event', function () {
+    $this->seed();
+    login();
+
+    expect(Event::first()->users->count())->toBe(1);
+
+    $this->get(route('event.subscribe', Event::first()));
+
+    expect(Event::first()->users->count())->toBe(2);
+});
+
+it('can unsubscribe a user of an event', function () {
+    $this->seed();
+    login();
+
+    $event = Event::first();
+
+    expect(Event::first()->users()->count())->toBe(1);
+
+    $this->get(route('event.unsubscribe', Event::first()));
+
+    expect(Event::first()->users()->count())->toBe(1);
+});

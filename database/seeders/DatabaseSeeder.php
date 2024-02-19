@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
         Event::factory()
+            ->has(User::factory())
             ->create([
                 'day_id' => Day::first()->id,
             ]);
