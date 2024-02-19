@@ -44,4 +44,9 @@ class Day extends Model
     {
         return $this->hasMany(Table::class);
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }
