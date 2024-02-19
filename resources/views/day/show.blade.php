@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header" class="flex flex-row justify-between">
-        <h2 class="font-bold text-2xl text-gray-800 text-center dark:text-gray-200 leading-tight">
+        <h2 class="font-bold text-xl text-gray-800 text-center dark:text-gray-200 leading-tight lg:text-2xl">
             Session du {{ $day->date->format('d/m/Y') }}
         </h2>
         <div class="mt-2 flex flex-col items-center sm:flex-row sm:justify-center">
