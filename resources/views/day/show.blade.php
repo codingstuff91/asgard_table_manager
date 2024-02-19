@@ -24,13 +24,13 @@
         @endif
 
         @if($events->count() != 0)
-            <h2 class="my-2 text-white text-xl my-2 text-center font-bold">Evenements</h2>
+            <h2 class="my-2 text-black text-xl my-2 text-center font-bold dark:text-white">Evenements</h2>
             @foreach ($events as $event)
                 <x-event-card :event="$event"/>
             @endforeach
         @endif
 
-        <h2 class="text-white text-center text-xl font-bold my-2">Tables disponibles</h2>
+        <h2 class="text-black text-center text-xl font-bold my-2 dark:text-white">Tables disponibles</h2>
         <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
                 <x-table-card :table="$table" />
