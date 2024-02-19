@@ -1,12 +1,7 @@
 <?php
 
-use App\Actions\UserSubscriptionAction;
-use App\Models\Category;
 use App\Models\Day;
-use App\Models\Game;
-use App\Models\Table;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 
 use function Pest\Laravel\get;
