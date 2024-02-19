@@ -11,11 +11,11 @@
                 <a href="{{ route('days.create') }}">Créer nouvelle session</a>
             </x-primary-button>
             @foreach ($days as $day)
-                <div class="mt-2 bg-white dark:bg-gray-800 overflow-hidden shadow-sm flex justify-between items-center sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100 text-lg font-extrabold ">
+                <div class="mt-2 bg-white dark:bg-gray-600 overflow-hidden shadow-sm flex justify-between items-center sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100 text-lg font-extrabold lg:text-2xl">
                         <a href="{{ route('days.show', $day->id) }}">{{ $day->fullDayName }} {{ $day->date->format('d/m/Y')}}</a>
                     </div>
-                    <div class="p-6 text-gray-900 dark:text-gray-100 text-lg font-extrabold">
+                    <div class="p-6 text-gray-900 dark:text-gray-100 text-lg font-extrabold lg:text-2xl">
                         <p>{{ $day->tables_count }} tables</p>
                         @if($day->events_count > 0)
                             <p>{{ $day->events_count }} évènement {{ $day->events_count > 1 ? 's' : '' }}</p>
