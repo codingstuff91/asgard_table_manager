@@ -19,7 +19,7 @@ class GameController extends Controller
     public function searchByCategory(Request $request)
     {
         return Game::where('category_id', $request->category)
-            ->orderBy('name', 'asc')
+            ->orderBy('name', 'desc')
             ->get();
     }
 }
