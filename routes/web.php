@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TableController;
@@ -43,6 +44,15 @@ Route::middleware('auth')->group(function () {
     Route::get('table/{table}/subscribe', [TableController::class, 'subscribe'])->name('table.subscribe');
     Route::get('table/{table}/unsubscribe', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
+
+    /** Events routes */
+    Route::get('event/{day}/create', [EventController::class, 'create'])->name('event.create');
+    Route::post('event/{day}/store', [EventController::class, 'store'])->name('event.store');
+    Route::get('event/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
+    Route::put('event/{event}', [EventController::class, 'update'])->name('event.update');
+    Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.delete');
+    Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
+    Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');
 });
 
 require __DIR__.'/auth.php';
