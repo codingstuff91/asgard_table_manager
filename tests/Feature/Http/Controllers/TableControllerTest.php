@@ -213,12 +213,11 @@ test('A user can not see the edit action button for a table he didnt created', f
     $this->seed();
 
     $user = User::factory()->create();
-    $this->actingAs($user);
 
-    $response = $this->get(route('days.show', Day::first()->id));
-    $response->assertOk();
-
-    $response->assertDontSee('img/edit.png');
+    $this->actingAs($user)
+        ->get(route('days.show', Day::first()->id))
+        ->assertOk()
+        ->assertDontSee('img/edit.png');
 });
 
 test('An admin user can see the edit action button for a table he didnt created', function () {
@@ -231,9 +230,10 @@ test('An admin user can see the edit action button for a table he didnt created'
     $this->actingAs($adminUser);
 
     $response = $this->get(route('days.show', Day::first()->id));
-    $response->assertOk();
 
-    $response->assertSee('img/edit.png');
+    $response
+        ->assertOk()
+        ->assertSee('img/edit.png');
 });
 
 test('A user can not render the edit page for a table he didnt create', function () {
@@ -243,9 +243,10 @@ test('A user can not render the edit page for a table he didnt create', function
 
     $table = Table::first();
 
-    $this->actingAs($anotherUser);
-
-    $response = $this->get(route('table.edit', $table))->assertForbidden();
+    $this
+        ->actingAs($anotherUser)
+        ->get(route('table.edit', $table))
+        ->assertForbidden();
 });
 
 test('An admin user can render the edit page for a table he didnt create', function () {
@@ -257,32 +258,32 @@ test('An admin user can render the edit page for a table he didnt create', funct
 
     $table = Table::first();
 
-    $this->actingAs($adminUser);
-
-    $this->get(route('table.edit', $table))->assertOk();
+    $this
+        ->actingAs($adminUser)
+        ->get(route('table.edit', $table))
+        ->assertOk();
 });
 
 test('A user can not see the delete action button for a table he didnt created', function () {
     $this->seed();
 
     $user = User::factory()->create();
-    $this->actingAs($user);
 
-    $response = $this->get(route('days.show', Day::first()->id));
-    $response->assertOk();
-
-    $response->assertDontSee('img/delete.png');
+    $this
+        ->actingAs($user)
+        ->get(route('days.show', Day::first()->id))
+        ->assertOk()
+        ->assertDontSee('img/delete.png');
 });
 
 test('An admin user can see the delete action button for a table he didnt created', function () {
     $this->seed();
 
-    $this->actingAs(User::first());
-
-    $response = $this->get(route('days.show', Day::first()->id));
-    $response->assertOk();
-
-    $response->assertSee('img/delete.png');
+    $this
+        ->actingAs(User::first())
+        ->get(route('days.show', Day::first()->id))
+        ->assertOk()
+        ->assertSee('img/delete.png');
 });
 
 test('Deletes a table', function () {
@@ -306,17 +307,19 @@ test('A user could not subscribe to a table if the max number of players is reac
     $user = User::first();
     $anotherUser = User::factory()->create();
 
-    $this->actingAs($user);
-
     $table = Table::first();
     $day = Day::first();
 
-    $response = $this->get(route('table.subscribe', [$table, $user]));
+    $this
+        ->actingAs($user)
+        ->get(route('table.subscribe', [$table, $user]));
+
     expect($table->users()->count())->toBe(2);
 
     // The user can not subscribe to a table and is redirected to the correct day table with an error message
-    $this->actingAs($anotherUser);
-    $response = $this->get(route('table.subscribe', [$table, $anotherUser]));
+    $response = $this
+        ->actingAs($anotherUser)
+        ->get(route('table.subscribe', [$table, $anotherUser]));
 
     expect($response)->toBeRedirect(route('days.show', [$day]));
 });
