@@ -27,6 +27,7 @@ it('Display all game categories in the create view form', function () {
 
 it('Creates a new table', function () {
     $this->seed();
+
     $this->actingAs(User::first());
 
     mockHttpClient();
@@ -40,11 +41,11 @@ it('Creates a new table', function () {
         'start_hour' => '21:00',
     ]);
 
-    expect($response)->toBeRedirect(route('days.show', Day::first()->id));
-
-    expect(['organizer_id' => User::first()->id])->toBeInDatabase('tables');
-
-    expect(['user_id' => User::first()->id])->toBeInDatabase('table_user');
+    expect($response)
+        ->toBeRedirect(route('days.show', Day::first()->id))
+        ->and(['organizer_id' => User::first()->id])->toBeInDatabase('tables')
+        ->and(['user_id' => User::first()->id])->toBeInDatabase('table_user')
+        ->and(Table::count())->toBe(2);
 });
 
 it('Can not create the same table twice', function () {
