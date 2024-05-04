@@ -208,8 +208,33 @@ it('can not subscribe a user who is already subscribed to another table with the
 
     expect($anotherTableAtSameHour->users->count())->toBe(0);
 });
+test('A user can not edit a table he didnt create', function () {
+    $this->seed();
 
-test('a user can not delete a table he didnt created', function () {
+    $anotherUser = User::factory()->create();
+
+    $table = Table::first();
+
+    $this->actingAs($anotherUser);
+
+    $response = $this->get(route('table.edit', $table))->assertForbidden();
+});
+
+test('An admin user can edit a table he didnt create', function () {
+    $this->seed();
+
+    $adminUser = User::factory()->create([
+        'admin' => true,
+    ]);
+
+    $table = Table::first();
+
+    $this->actingAs($adminUser);
+
+    $this->get(route('table.edit', $table))->assertOk();
+});
+
+test('a user can not see the delete action button for a table he didnt created', function () {
     $this->seed();
 
     $user = User::factory()->create();
@@ -221,7 +246,7 @@ test('a user can not delete a table he didnt created', function () {
     $response->assertDontSee('img/delete.png');
 });
 
-test('an admin user can delete a table he didnt created', function () {
+test('an admin user can see the delete action button for a table he didnt created', function () {
     $this->seed();
 
     $this->actingAs(User::first());
