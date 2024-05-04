@@ -208,6 +208,34 @@ it('Can not subscribe a user already subscribed to another table with the same s
 
     expect($anotherTableAtSameHour->users->count())->toBe(0);
 });
+
+test('A user can not see the edit action button for a table he didnt created', function () {
+    $this->seed();
+
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $response = $this->get(route('days.show', Day::first()->id));
+    $response->assertOk();
+
+    $response->assertDontSee('img/edit.png');
+});
+
+test('An admin user can see the edit action button for a table he didnt created', function () {
+    $this->seed();
+
+    $adminUser = User::factory()->create([
+        'admin' => true,
+    ]);
+
+    $this->actingAs($adminUser);
+
+    $response = $this->get(route('days.show', Day::first()->id));
+    $response->assertOk();
+
+    $response->assertSee('img/edit.png');
+});
+
 test('A user can not render the edit page for a table he didnt create', function () {
     $this->seed();
 
