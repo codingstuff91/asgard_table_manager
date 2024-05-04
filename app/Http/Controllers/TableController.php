@@ -17,6 +17,7 @@ use App\Models\Table;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TableController extends Controller
 {
@@ -61,6 +62,10 @@ class TableController extends Controller
 
     public function edit(Table $table)
     {
+        if (! Gate::allows('edit_table', $table)) {
+            abort(403);
+        }
+
         $categories = Category::all();
         $games = Game::all();
 
