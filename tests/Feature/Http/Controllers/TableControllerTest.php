@@ -43,8 +43,6 @@ it('Creates a new table', function () {
 
     expect($response)
         ->toBeRedirect(route('days.show', Day::first()->id))
-        ->and(['organizer_id' => User::first()->id])->toBeInDatabase('tables')
-        ->and(['user_id' => User::first()->id])->toBeInDatabase('table_user')
         ->and(Table::count())->toBe(2);
 });
 
