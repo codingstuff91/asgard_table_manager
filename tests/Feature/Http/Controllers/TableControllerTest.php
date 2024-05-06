@@ -1,13 +1,17 @@
 <?php
 
+use App\Actions\UserSubscriptionAction;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 
-it('Should display all categories in the create view form', function () {
+use function Pest\Laravel\get;
+
+it('Display all game categories in the create view form', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -21,8 +25,9 @@ it('Should display all categories in the create view form', function () {
     }
 });
 
-it('can create a new table', function () {
+it('Creates a new table', function () {
     $this->seed();
+
     $this->actingAs(User::first());
 
     mockHttpClient();
@@ -37,14 +42,12 @@ it('can create a new table', function () {
         'start_hour' => '21:00',
     ]);
 
-    expect($response)->toBeRedirect(route('days.show', Day::first()->id));
-
-    expect(['organizer_id' => User::first()->id])->toBeInDatabase('tables');
-
-    expect(['user_id' => User::first()->id])->toBeInDatabase('table_user');
+    expect($response)
+        ->toBeRedirect(route('days.show', Day::first()->id))
+        ->and(Table::count())->toBe(2);
 });
 
-it('can not create a table twice', function () {
+it('Can not create the same table twice', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -81,7 +84,7 @@ it('can not create a table twice', function () {
 
 });
 
-it('can update a table successfully', function () {
+it('Updates a table', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -96,10 +99,17 @@ it('can update a table successfully', function () {
         'start_hour' => '21:00',
     ]);
 
-    expect($response)->toBeRedirect(route('days.show', Day::first()->id));
+    $tableUpdated = Table::first();
+
+    expect($tableUpdated->game_id)->toBe('2')
+        ->and($tableUpdated->players_number)->toBe(5)
+        ->and($tableUpdated->total_points)->toBe(1000)
+        ->and($tableUpdated->start_hour)->toBe("21:00")
+        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
+
 });
 
-it('can not create a table without giving a number of players', function () {
+it('Can not create a table without the number of players', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -115,7 +125,7 @@ it('can not create a table without giving a number of players', function () {
     expect($response)->toHaveInvalid('players_number');
 });
 
-it('can not create a table without giving a start hour', function () {
+it('Can not create a table without a start hour', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -131,7 +141,7 @@ it('can not create a table without giving a start hour', function () {
     expect($response)->toHaveInvalid('start_hour');
 });
 
-it('can not create a table without selecting a game', function () {
+it('Can not create a table without a game', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -146,7 +156,7 @@ it('can not create a table without selecting a game', function () {
     expect($response)->toHaveInvalid('game_id');
 });
 
-it('can not create a table without defining the total points', function () {
+it('Can not create a table without total points', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -160,7 +170,7 @@ it('can not create a table without defining the total points', function () {
     expect($response)->toHaveInvalid('total_points');
 });
 
-it('can subscribe a user to a table', function () {
+it('Subscribes a user to a table', function () {
     $this->seed();
     login();
 
@@ -171,7 +181,7 @@ it('can subscribe a user to a table', function () {
     expect(Table::first()->users->count())->toBe(2);
 });
 
-it('can unsubscribe a user of a table', function () {
+it('Unsubscribes a user of a table', function () {
     $this->seed();
     login();
 
@@ -184,30 +194,106 @@ it('can unsubscribe a user of a table', function () {
     expect(Table::first()->users()->count())->toBe(1);
 });
 
-test('a user can not delete a table he didnt created', function () {
+it('Can not subscribe a user already subscribed to another table with the same start hour for the same day', function () {
+    $this->seed();
+    login();
+
+    app(UserSubscriptionAction::class)->execute(Table::first(), Auth::user());
+
+    $anotherTableAtSameHour = Table::factory()
+        ->for(Game::factory())
+        ->for(Day::first())
+        ->for(Category::first())
+        ->create([
+            'organizer_id' => User::factory(),
+            'start_hour' => '21:00',
+        ]);
+
+    $response = get(route('table.subscribe', $anotherTableAtSameHour));
+
+    $response->assertRedirect(route('days.show', Table::first()->day));
+
+    expect($anotherTableAtSameHour->users->count())->toBe(0);
+});
+
+test('A user can not see the edit action button for a table he didnt created', function () {
     $this->seed();
 
     $user = User::factory()->create();
-    $this->actingAs($user);
 
-    $response = $this->get(route('days.show', Day::first()->id));
-    $response->assertOk();
-
-    $response->assertDontSee('img/delete.png');
+    $this->actingAs($user)
+        ->get(route('days.show', Day::first()->id))
+        ->assertOk()
+        ->assertDontSee('img/edit.png');
 });
 
-test('an admin user can delete a table he didnt created', function () {
+test('An admin user can see the edit action button for a table he didnt created', function () {
     $this->seed();
 
-    $this->actingAs(User::first());
+    $adminUser = User::factory()->create([
+        'admin' => true,
+    ]);
+
+    $this->actingAs($adminUser);
 
     $response = $this->get(route('days.show', Day::first()->id));
-    $response->assertOk();
 
-    $response->assertSee('img/delete.png');
+    $response
+        ->assertOk()
+        ->assertSee('img/edit.png');
 });
 
-test('a user can delete a table', function () {
+test('A user can not render the edit page for a table he didnt create', function () {
+    $this->seed();
+
+    $anotherUser = User::factory()->create();
+
+    $table = Table::first();
+
+    $this
+        ->actingAs($anotherUser)
+        ->get(route('table.edit', $table))
+        ->assertForbidden();
+});
+
+test('An admin user can render the edit page for a table he didnt create', function () {
+    $this->seed();
+
+    $adminUser = User::factory()->create([
+        'admin' => true,
+    ]);
+
+    $table = Table::first();
+
+    $this
+        ->actingAs($adminUser)
+        ->get(route('table.edit', $table))
+        ->assertOk();
+});
+
+test('A user can not see the delete action button for a table he didnt created', function () {
+    $this->seed();
+
+    $user = User::factory()->create();
+
+    $this
+        ->actingAs($user)
+        ->get(route('days.show', Day::first()->id))
+        ->assertOk()
+        ->assertDontSee('img/delete.png');
+});
+
+test('An admin user can see the delete action button for a table he didnt created', function () {
+    $this->seed();
+
+    $this
+        ->actingAs(User::first())
+        ->get(route('days.show', Day::first()->id))
+        ->assertOk()
+        ->assertSee('img/delete.png');
+});
+
+test('Deletes a table', function () {
     $this->seed();
     $this->actingAs(User::first());
 
@@ -220,7 +306,7 @@ test('a user can delete a table', function () {
     expect(Table::all()->count())->toBe(0);
 });
 
-test('a user could not subscribe to a table if the max number of players is reached', function () {
+test('A user could not subscribe to a table if the max number of players is reached', function () {
     Event::fake();
 
     $this->seed();
@@ -228,17 +314,19 @@ test('a user could not subscribe to a table if the max number of players is reac
     $user = User::first();
     $anotherUser = User::factory()->create();
 
-    $this->actingAs($user);
-
     $table = Table::first();
     $day = Day::first();
 
-    $response = $this->get(route('table.subscribe', [$table, $user]));
+    $this
+        ->actingAs($user)
+        ->get(route('table.subscribe', [$table, $user]));
+
     expect($table->users()->count())->toBe(2);
 
     // The user can not subscribe to a table and is redirected to the correct day table with an error message
-    $this->actingAs($anotherUser);
-    $response = $this->get(route('table.subscribe', [$table, $anotherUser]));
+    $response = $this
+        ->actingAs($anotherUser)
+        ->get(route('table.subscribe', [$table, $anotherUser]));
 
     expect($response)->toBeRedirect(route('days.show', [$day]));
 });

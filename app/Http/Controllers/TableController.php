@@ -6,8 +6,10 @@ use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
 use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
+use App\Enums\GameCategory;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
+use App\Logic\UserLogic;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
@@ -15,6 +17,7 @@ use App\Models\Table;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TableController extends Controller
 {
@@ -46,7 +49,9 @@ class TableController extends Controller
         $table = Table::create($tableAttributes->toArray());
         $user = $request->user();
 
-        app(UserSubscriptionAction::class)->execute($table, $user);
+        if($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
+            app(UserSubscriptionAction::class)->execute($table, $user);
+        }
 
         $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
@@ -57,6 +62,10 @@ class TableController extends Controller
 
     public function edit(Table $table)
     {
+        if (! Gate::allows('edit_table', $table)) {
+            abort(403);
+        }
+
         $categories = Category::all();
         $games = Game::all();
 
@@ -82,10 +91,12 @@ class TableController extends Controller
 
     public function subscribe(Table $table): RedirectResponse
     {
-        $playersNumber = $table->users()->count();
-
-        if ($playersNumber === $table->players_number) {
+        if ($table->users()->count() === $table->players_number) {
             return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
+        }
+
+        if (app(UserLogic::class)->hasSubscribedToAnotherTableWithTheSameStartHour($table->day, $table)) {
+            return redirect()->route('days.show', $table->day)->with(['error' => 'Vous êtes déjà inscrit à une autre table à la même heure ce jour là']);
         }
 
         $table->users()->attach(Auth::user());

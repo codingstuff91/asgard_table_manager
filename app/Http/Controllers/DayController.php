@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\storeDayRequest;
 use App\Models\Category;
 use App\Models\Day;
+use App\Models\Event;
 use App\Models\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,7 @@ class DayController extends Controller
     public function index(Request $request)
     {
         $days = Day::query()
-            ->withCount('tables')
+            ->withCount(['tables', 'events'])
             ->where('date', '>=', now()->format('Y-m-d'))
             ->orderBy('date', 'asc')
             ->get();
@@ -44,6 +45,7 @@ class DayController extends Controller
     {
         $tables = Table::with(['users', 'game.category'])
             ->where('day_id', $day->id)
+            ->orderBy('start_hour', 'asc')
             ->get();
 
         $tablesCountPerCategory = Category::withCount([
@@ -52,7 +54,11 @@ class DayController extends Controller
             }
         ])->get();
 
-        return view('day.show', compact('tables', 'day', 'tablesCountPerCategory'));
+        $events = Event::with('users')
+            ->where('day_id', $day->id)
+            ->get();
+
+        return view('day.show', compact('tables', 'day', 'tablesCountPerCategory', 'events'));
     }
 
     /**
