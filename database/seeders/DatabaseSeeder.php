@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         Table::factory()
             ->for(Game::factory())
             ->for(Day::factory())
-            ->for(Category::factory())
+            ->for(Category::all()->random())
             ->has(User::factory())
             ->create([
                 'organizer_id' => User::first()->id,
