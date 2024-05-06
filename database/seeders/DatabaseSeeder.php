@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Day;
+use App\Models\Event;
 use App\Models\Game;
 use App\Models\Table;
 use App\Models\User;
@@ -32,6 +33,12 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'organizer_id' => User::first()->id,
                 'start_hour' => '21:00',
+            ]);
+
+        Event::factory()
+            ->has(User::factory())
+            ->create([
+                'day_id' => Day::first()->id,
             ]);
     }
 }

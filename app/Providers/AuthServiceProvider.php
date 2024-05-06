@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\User;
 use App\Models\Table;
-use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,18 +25,40 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
         Gate::define('unsubscribe_user', function (User $user, Table $table) {
             return $user->id === $table->organizer_id;
         });
 
         Gate::define('delete_table', function (User $user, Table $table) {
-            return $user->id === $table->organizer_id || $user->admin ;
+            if ($user->admin) {
+                return true;
+            }
+
+            if ($user->id === $table->organizer_id) {
+                return true;
+            }
+
+            return false;
         });
 
         Gate::define('edit_table', function (User $user, Table $table) {
-            return $user->id === $table->organizer_id || $user->admin ;
+            if ($user->admin) {
+                return true;
+            }
+
+            if ($user->id === $table->organizer_id) {
+                return true;
+            }
+
+            return false;
+        });
+
+        Gate::define('edit_event', function (User $user) {
+            return $user->admin;
+        });
+
+        Gate::define('delete_event', function (User $user) {
+            return $user->admin;
         });
     }
 }
