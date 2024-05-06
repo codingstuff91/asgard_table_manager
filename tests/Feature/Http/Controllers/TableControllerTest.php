@@ -101,7 +101,7 @@ it('Updates a table', function () {
 
     $tableUpdated = Table::first();
 
-    expect($tableUpdated->game_id)->toBe('2')
+    expect($tableUpdated->game_id)->toBe('1')
         ->and($tableUpdated->players_number)->toBe(5)
         ->and($tableUpdated->total_points)->toBe(1000)
         ->and($tableUpdated->start_hour)->toBe("21:00")
