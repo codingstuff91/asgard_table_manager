@@ -12,21 +12,25 @@ class CategorySeeder extends Seeder
         Category::create([
             'name' => 'Jeux de cartes',
             'color' => 'bg-green-500',
+            'icon' => '/img/cards.png',
         ]);
 
         Category::create([
             'name' => 'Jeux de plateau',
             'color' => 'bg-red-500',
+            'icon' => '/img/boardgame.png',
         ]);
 
         Category::create([
             'name' => 'Jeux de rôles',
             'color' => 'bg-blue-500',
+            'icon' => '/img/magicien.png',
         ]);
 
         Category::create([
             'name' => 'Jeux wargame',
             'color' => 'bg-blue-500',
+            'icon' => '/img/soldat.png',
         ]);
     }
 }
