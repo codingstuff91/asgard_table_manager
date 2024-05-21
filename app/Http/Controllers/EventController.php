@@ -57,4 +57,11 @@ class EventController extends Controller
 
         return redirect()->back();
     }
+
+    public function destroy(Event $event): RedirectResponse
+    {
+        $event->delete();
+
+        return redirect()->back();
+    }
 }

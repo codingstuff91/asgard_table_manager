@@ -119,3 +119,16 @@ it('can unsubscribe a user of an event', function () {
 
     expect(Event::first()->users()->count())->toBe(1);
 });
+
+it('deletes an event', function () {
+    $this->seed();
+    login();
+
+    $event = Event::first();
+
+    expect(Event::count())->toBe(1);
+
+    $this->delete(route('event.destroy', Event::first()));
+
+    expect(Event::count())->toBe(0);
+});
