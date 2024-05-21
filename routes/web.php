@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.delete');
     Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
     Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');
+    Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.destroy');
 });
 
 require __DIR__.'/auth.php';

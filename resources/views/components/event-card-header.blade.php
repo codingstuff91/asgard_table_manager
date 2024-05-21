@@ -16,7 +16,7 @@
             @endcan
 
                 @can('delete_event')
-                    <form action="{{ route('event.delete', $event->id) }}" method="post">
+                    <form action="{{ route('event.destroy', $event->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button
