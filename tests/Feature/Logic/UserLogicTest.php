@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\Day;
-use App\Models\Game;
-use App\Models\User;
-use App\Models\Table;
+use App\Actions\UserSubscriptionAction;
 use App\Logic\UserLogic;
 use App\Models\Category;
+use App\Models\Day;
+use App\Models\Game;
+use App\Models\Table;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Actions\UserSubscriptionAction;
 
 test('it should return true if an user is subscribed to a table with the same start hour for the current day', function () {
     $this->seed();

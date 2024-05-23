@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'color' => "bg-green-500",
+            'color' => 'bg-green-500',
         ];
     }
 }

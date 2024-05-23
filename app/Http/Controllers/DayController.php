@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 class DayController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function index(Request $request)
@@ -29,7 +28,6 @@ class DayController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function create(Request $request)
@@ -38,7 +36,6 @@ class DayController extends Controller
     }
 
     /**
-     * @param Day $day
      * @return View
      */
     public function show(Day $day)
@@ -51,7 +48,7 @@ class DayController extends Controller
         $tablesCountPerCategory = Category::withCount([
             'tables' => function ($query) use ($day) {
                 $query->where('day_id', $day->id);
-            }
+            },
         ])->get();
 
         $events = Event::with('users')
@@ -62,7 +59,6 @@ class DayController extends Controller
     }
 
     /**
-     * @param storeDayRequest $request
      * @return RedirectResponse
      */
     public function store(storeDayRequest $request)

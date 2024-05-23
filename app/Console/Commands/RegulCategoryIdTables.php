@@ -28,7 +28,7 @@ class RegulCategoryIdTables extends Command
     {
         $tables = Table::all();
 
-        foreach($tables as $table){
+        foreach ($tables as $table) {
             $table->category_id = $table->game->category_id ?? 0;
 
             $table->save();

@@ -5,7 +5,6 @@ namespace App\Filament\Resources\GameResource\Pages;
 use App\Filament\Resources\GameResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use Illuminate\Support\Facades\Session;
 
 class EditGame extends EditRecord
 {

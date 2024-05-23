@@ -15,7 +15,6 @@ use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -49,13 +48,13 @@ class TableController extends Controller
         $table = Table::create($tableAttributes->toArray());
         $user = $request->user();
 
-        if($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
+        if ($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
             app(UserSubscriptionAction::class)->execute($table, $user);
         }
 
         $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-       ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
         return redirect()->route('days.show', $day);
     }
