@@ -23,7 +23,7 @@
             </div>
         @endif
 
-            <h2 class="text-center text-xl text-center text-white">Filtres par catégories</h2>
+            <h2 class="my-4 text-center text-xl font-bold text-center text-black dark:text-white">Filtres par catégories</h2>
 
             <div class="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-4">
             @foreach($tablesCountPerCategory as $table)
@@ -38,8 +38,8 @@
             @endforeach
         @endif
 
-        <h2 class="text-black text-center text-xl font-bold my-2 dark:text-white">Tables disponibles</h2>
-        <div class="w-full rounded-lg pt-2 mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
+        <h2 class="text-black text-center text-xl font-bold mt-4 dark:text-white">Tables disponibles</h2>
+        <div class="w-full rounded-lg mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
                 <x-table-card :table="$table" :color="$table->game->category->color"/>
             @endforeach
