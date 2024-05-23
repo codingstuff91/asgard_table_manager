@@ -27,7 +27,12 @@
 
             <div class="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-4">
             @foreach($tablesCountPerCategory as $table)
-                <x-table-count-category :table="$table" :id="$table->id" :color="$table->color" :icon="$table->icon"/>
+                <x-table-count-category 
+                    :table="$table"
+                    :id="$table->id"
+                    :color="$table->color"
+                    :icon="$table->icon"
+                />
             @endforeach
         </div>
 
