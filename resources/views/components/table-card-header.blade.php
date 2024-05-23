@@ -1,7 +1,10 @@
-<div id="title" class="py-2 {{ $color }} text-white flex justify-between items-center rounded-t-lg">
+<div
+    id="title"
+    class="py-2 {{ $color }} flex justify-between items-center rounded-t-lg"
+>
         <div class="pl-2 w-[75%]">
-            <h2 class="text-lg font-bold">{{ $table->game->name }}</h2>
-            <h3 class="text-sm">Créateur : {{ $table->organizer->name }}</h3>
+            <h2 class="text-xl font-bold text-black">{{ $table->game->name }}</h2>
+            <h3 class="text-sm text-black">Créateur : {{ $table->organizer->name }}</h3>
         </div>
         <div class="flex flex-col items-center">
             <div class="flex justify-center mr-2">
