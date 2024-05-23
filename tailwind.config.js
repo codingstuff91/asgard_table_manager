@@ -7,12 +7,22 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
-
+    safelist: [
+        'bg-red-500',
+        'bg-indigo-500',
+        'bg-emerald-500',
+        'bg-yellow-500',
+    ],
     theme: {
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                red: {
+                    100: '#fdf8f6',
+                }
+            }
         },
         screens: {
             'xs': '320px',
