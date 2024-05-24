@@ -36,6 +36,7 @@ it('Creates a new table', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -57,6 +58,7 @@ it('Can not create the same table twice', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -69,6 +71,7 @@ it('Can not create the same table twice', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -88,7 +91,9 @@ it('Updates a table', function () {
     mockHttpClient();
 
     $response = $this->patch(route('table.update', Table::first()->id), [
-        'game_id' => 2,
+        'day_id' => Day::first()->id,
+        'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'players_number' => 5,
         'total_points' => 1000,
         'start_hour' => '21:00',
@@ -96,10 +101,10 @@ it('Updates a table', function () {
 
     $tableUpdated = Table::first();
 
-    expect($tableUpdated->game_id)->toBe('2')
+    expect($tableUpdated->game_id)->toBe('1')
         ->and($tableUpdated->players_number)->toBe(5)
         ->and($tableUpdated->total_points)->toBe(1000)
-        ->and($tableUpdated->start_hour)->toBe("21:00")
+        ->and($tableUpdated->start_hour)->toBe('21:00')
         ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
 
 });
@@ -112,6 +117,7 @@ it('Can not create a table without the number of players', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'total_points' => 1000,
         'start_hour' => '21:00',
     ]);
@@ -127,6 +133,7 @@ it('Can not create a table without a start hour', function () {
         'organizer_id' => User::first()->id,
         'day_id' => Day::first()->id,
         'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
         'total_points' => 1000,
         'players_number' => 5,
     ]);
@@ -196,6 +203,7 @@ it('Can not subscribe a user already subscribed to another table with the same s
     $anotherTableAtSameHour = Table::factory()
         ->for(Game::factory())
         ->for(Day::first())
+        ->for(Category::first())
         ->create([
             'organizer_id' => User::factory(),
             'start_hour' => '21:00',

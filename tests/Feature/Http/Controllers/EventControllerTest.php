@@ -1,10 +1,8 @@
 <?php
 
 use App\Models\Day;
-use App\Models\User;
 use App\Models\Event;
-
-use function Pest\Laravel\get;
+use App\Models\User;
 
 it('can render the event create page', function () {
     $this->seed();
@@ -91,7 +89,7 @@ it('can update a table successfully', function () {
 
     expect($eventUpdated->name)->toBe('edited')
         ->and($eventUpdated->description)->toBe('description')
-        ->and($eventUpdated->start_hour)->toBe("21:00")
+        ->and($eventUpdated->start_hour)->toBe('21:00')
         ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
 
 });

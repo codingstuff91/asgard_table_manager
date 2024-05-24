@@ -2,6 +2,7 @@
 
 use App\Actions\UserSubscriptionAction;
 use App\Logic\UserLogic;
+use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
@@ -17,6 +18,7 @@ test('it should return true if an user is subscribed to a table with the same st
     $anotherTableAtSameHour = Table::factory()
         ->for(Game::factory())
         ->for(Day::first())
+        ->for(Category::first())
         ->has(User::factory())
         ->create([
             'organizer_id' => User::first()->id,

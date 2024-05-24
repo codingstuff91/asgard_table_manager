@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\GameResource\Pages;
 
-use Illuminate\Support\Facades\Session;
 use App\Filament\Resources\GameResource;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Session;
 
 class CreateGame extends CreateRecord
 {
