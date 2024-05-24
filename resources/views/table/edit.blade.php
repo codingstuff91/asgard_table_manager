@@ -11,14 +11,14 @@
                 <form action="{{ route('table.update', $table->id) }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
                     @method('PATCH')
-                    
+
                     <x-input-label>Catégorie de jeu</x-input-label>
                     <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                         name="category_id"
                         id="gameCategory">
                         <option value="">x-- Choisir une catégorie --x</option>
                         @foreach ($categories as $category)
-                            <option 
+                            <option
                                 value="{{ $category->id }}"
                                 {{ $category->id === $tableGameCategory->id ? 'selected' : '' }}
                             >
@@ -34,57 +34,46 @@
                         id="gameName">
                         <option value="">x-- Choisir un jeu --x</option>
                         @foreach ($games as $game)
-                            <option 
+                            <option
                                 value="{{ $game->id }}"
                                 {{ $game->id == $tableGame->id ? 'selected' : '' }}>
                                     {{ $game->name }}
-                            </option> 
+                            </option>
                         @endforeach
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('game_id')" />
-                    
+
                     <x-secondary-button class="my-2">
                         <a href="{{ route('games.create') }}">Ajouter un jeu</a>
                     </x-secondary-button>
 
                     <x-input-label class="mt-2">Nombre joueurs max</x-input-label>
-                    <x-text-input 
-                        type="number" 
-                        class="w-full" 
-                        name="players_number" 
-                        placeholder="Nombre de joueurs" 
+                    <x-text-input
+                        type="number"
+                        class="w-full"
+                        name="players_number"
+                        placeholder="Nombre de joueurs"
                         value="{{ $table->players_number }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('players_number')" />
 
-                    <x-input-label class="mt-2">Nombre points</x-input-label>
-                    <x-text-input 
-                        type="number" 
-                        class="w-full" 
-                        name="total_points" 
-                        placeholder="Nombre de points" 
-                        value="{{ $table->total_points }}">
-                    </x-text-input>
-                    <x-input-error class="mt-2" :messages="$errors->get('total_points')" />
-
-
                     <x-input-label class="mt-2">Heure de début</x-input-label>
-                        <x-text-input 
-                        type="time" 
-                        class="w-full" 
+                        <x-text-input
+                        type="time"
+                        class="w-full"
                         name="start_hour"
                         value="{{ $table->start_hour }}">
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('start_hour')" />
 
                     <x-input-label class="mt-2">Description complémentaire</x-input-label>
-                    <textarea 
+                    <textarea
                         name="description"
                         class="w-full
-                        rounded-lg border border-gray-300" 
+                        rounded-lg border border-gray-300"
                         placeholder="Ajoutez ici des informations complémentaires concernant votre table" rows="4">{{ $table->description }}</textarea>
                     <x-input-error class="mt-2" :messages="$errors->get('description')" />
-                    
+
                     <x-primary-button class="mt-4">
                         Mettre à jour
                     </x-primary-button>
@@ -92,7 +81,7 @@
             </div>
         </div>
     </div>
-    <script>        
+    <script>
         // récupérer l'élément <select> avec l'ID "monSelect"
         var category = document.getElementById("gameCategory");
 

@@ -50,16 +50,6 @@
                     </x-text-input>
                     <x-input-error class="mt-2" :messages="$errors->get('players_number')" />
 
-                    <x-input-label class="mt-2">Nombre points</x-input-label>
-                    <x-text-input
-                        type="number"
-                        class="w-full"
-                        name="total_points"
-                        placeholder="Nombre de points"
-                        value="{{ old('total_points') }}">
-                    </x-text-input>
-                    <x-input-error class="mt-2" :messages="$errors->get('total_points')" />
-
                     <x-input-label class="mt-2">Heure de début</x-input-label>
                     <x-text-input
                         type="time"
