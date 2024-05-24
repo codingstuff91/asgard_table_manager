@@ -40,26 +40,30 @@
                         <a href="{{ route('games.create') }}">Ajouter un jeu</a>
                     </x-secondary-button>
 
-                    <x-input-label class="mt-2">Nombre joueurs max</x-input-label>
-                    <x-text-input
-                        type="number"
-                        class="w-full"
-                        name="players_number"
-                        placeholder="Nombre de joueurs"
-                        value="{{ old('players_number') }}">
-                    </x-text-input>
-                    <x-input-error class="mt-2" :messages="$errors->get('players_number')" />
+                    <div class="grid grid-cols-2 gap-x-4">
+                        <div>
+                            <x-input-label class="mt-2">Nombre joueurs</x-input-label>
+                            <x-text-input
+                                type="number"
+                                class="w-full"
+                                name="players_number"
+                                value="{{ old('players_number') }}">
+                            </x-text-input>
+                            <x-input-error class="mt-2" :messages="$errors->get('players_number')" />
+                        </div>
+                        <div>
+                            <x-input-label class="mt-2">Heure de début</x-input-label>
+                            <x-text-input
+                                type="time"
+                                class="w-full"
+                                name="start_hour"
+                                value="{{ old('start_hour') }}">
+                            </x-text-input>
+                            <x-input-error class="mt-2" :messages="$errors->get('start_hour')" />
+                        </div>
+                    </div>
 
-                    <x-input-label class="mt-2">Heure de début</x-input-label>
-                    <x-text-input
-                        type="time"
-                        class="w-full"
-                        name="start_hour"
-                        value="{{ old('start_hour') }}">
-                    </x-text-input>
-                    <x-input-error class="mt-2" :messages="$errors->get('start_hour')" />
-
-                    <x-input-label class="mt-2">Description complémentaire</x-input-label>
+                    <x-input-label class="mt-4">Description complémentaire</x-input-label>
                     <textarea
                         name="description"
                         id="description"
