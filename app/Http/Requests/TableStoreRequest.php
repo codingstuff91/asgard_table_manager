@@ -26,7 +26,6 @@ class TableStoreRequest extends FormRequest
         return [
             'game_id' => 'required',
             'players_number' => 'required|integer',
-            'total_points' => 'required|integer',
             'start_hour' => 'required',
         ];
     }
@@ -38,8 +37,6 @@ class TableStoreRequest extends FormRequest
             'game_id.required' => 'Veuillez choisir un jeu',
             'players_number.required' => 'Veuillez définir un nombre de joueurs',
             'players_number.integer' => 'Veuillez saisir un nombre entier',
-            'total_points.required' => 'Veuillez définir un nombre de points',
-            'total_points.integer' => 'Veuillez définir un nombre entier',
             'start_hour.required' => 'Veuillez définir une heure de début',
         ];
     }
