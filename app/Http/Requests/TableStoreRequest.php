@@ -35,7 +35,7 @@ class TableStoreRequest extends FormRequest
         return [
             'category_id.required' => 'Veuillez choisir une catégorie',
             'game_id.required' => 'Veuillez choisir un jeu',
-            'players_number.required' => 'Veuillez définir un nombre de joueurs',
+            'players_number.required' => 'Veuillez définir un nombre de joueurs maximum',
             'players_number.integer' => 'Veuillez saisir un nombre entier',
             'start_hour.required' => 'Veuillez définir une heure de début',
         ];
