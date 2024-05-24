@@ -15,7 +15,6 @@ use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -40,7 +39,7 @@ class TableController extends Controller
     {
         $game = Game::findOrFail($request->game_id);
 
-        $tableAttributes = TableData::make($day, $request);
+        $tableAttributes = TableData::fromRequest($day, $request);
 
         if (TableLogic::isAlreadyExists($tableAttributes)) {
             return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
@@ -49,7 +48,7 @@ class TableController extends Controller
         $table = Table::create($tableAttributes->toArray());
         $user = $request->user();
 
-        if($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
+        if ($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
             app(UserSubscriptionAction::class)->execute($table, $user);
         }
 
@@ -76,15 +75,11 @@ class TableController extends Controller
         return view('table.edit', compact('table', 'day', 'categories', 'games', 'tableGame', 'tableGameCategory'));
     }
 
-    public function update(Table $table, Request $request): RedirectResponse
+    public function update(Table $table, TableStoreRequest $request): RedirectResponse
     {
-        $table->update([
-            'game_id' => $request->game_id,
-            'players_number' => $request->players_number,
-            'total_points' => $request->total_points,
-            'start_hour' => substr($request->start_hour, 0, 5),
-            'description' => $request->description,
-        ]);
+        $tableAttributes = TableData::fromRequest($table->day, $request);
+
+        $table->update($tableAttributes->toArray());
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
