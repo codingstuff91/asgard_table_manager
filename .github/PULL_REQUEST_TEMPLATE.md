@@ -6,6 +6,8 @@ Please also include relevant motivation and context.
 
 List any dependencies that are required for this change.
 
+## Screenshots
+
 ## Type of change
 
 - [ ] New feature (non-breaking change which adds functionality)
