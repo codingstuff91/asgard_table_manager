@@ -23,7 +23,6 @@ class TableFactory extends Factory
     {
         return [
             'players_number' => 2,
-            'total_points' => $this->faker->numberBetween(1000, 3000),
             'start_hour' => $this->faker->time,
         ];
     }

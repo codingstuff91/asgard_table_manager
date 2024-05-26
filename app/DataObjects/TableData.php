@@ -13,7 +13,6 @@ class TableData
         public int $game_id,
         public int $category_id,
         public int $players_number,
-        public int $total_points,
         public string $start_hour,
         public ?string $description = null,
     ) {
@@ -27,7 +26,6 @@ class TableData
             $request->game_id,
             $request->category_id,
             $request->players_number,
-            $request->total_points,
             $request->start_hour,
             $request->description ?? null,
         );
@@ -41,7 +39,6 @@ class TableData
             'game_id' => $this->game_id,
             'category_id' => $this->category_id,
             'players_number' => $this->players_number,
-            'total_points' => $this->total_points,
             'start_hour' => $this->start_hour,
             'description' => $this->description ?? null,
         ];
