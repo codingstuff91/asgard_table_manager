@@ -37,6 +37,8 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
+        dd('test');
+
         $game = Game::findOrFail($request->game_id);
 
         $tableAttributes = TableData::fromRequest($day, $request);
