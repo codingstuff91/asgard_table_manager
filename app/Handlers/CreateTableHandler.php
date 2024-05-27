@@ -12,6 +12,7 @@ use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use App\Models\User;
+use App\Repositories\GameRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,8 @@ class CreateTableHandler
 {
     public function __construct(
         protected UserSubscriptionAction $userSubscriptionAction,
-        protected CreateDiscordNotificationAction $createDiscordNotificationAction
+        protected CreateDiscordNotificationAction $createDiscordNotificationAction,
+        protected GameRepository $gameRepository,
     )
     {
         //
@@ -31,7 +33,7 @@ class CreateTableHandler
         $request = $command->request;
 
         try {
-            $game = $this->findGame($request->game_id);
+            $game = $this->gameRepository->findOrFail($request->game_id);
             $tableAttributes = TableData::fromRequest($day, $request);
 
             $this->checkIfTableExists($tableAttributes);
@@ -47,11 +49,6 @@ class CreateTableHandler
 
             return redirect()->route('days.show', $day)->with(['error' => 'Une erreur est survenue lors de la création de la table.']);
         }
-    }
-
-    private function findGame(int $gameId): Game
-    {
-        return Game::findOrFail($gameId);
     }
 
     private function checkIfTableExists(TableData $tableAttributes)
