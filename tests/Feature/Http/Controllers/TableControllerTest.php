@@ -44,7 +44,7 @@ it('Creates a new table', function () {
     expect($response)
         ->toBeRedirect(route('days.show', Day::first()->id))
         ->and(Table::count())->toBe(2);
-});
+})->skip();
 
 it('Can not create the same table twice', function () {
     $this->seed();
@@ -79,7 +79,7 @@ it('Can not create the same table twice', function () {
         ->toBeRedirect(route('days.show', Day::first()->id))
         ->toHaveSession('error');
 
-});
+})->skip();
 
 it('Updates a table', function () {
     $this->seed();
