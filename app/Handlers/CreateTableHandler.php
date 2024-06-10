@@ -32,17 +32,17 @@ class CreateTableHandler
     public function handle(CreateTableCommand $command)
     {
         $day = $command->day;
+        $game = $command->game;
         $request = $command->request;
 
         try {
-            $game = $this->gameRepository->findOrFail($request->game_id);
             $tableAttributes = TableData::fromRequest($day, $request);
 
             $this->checkIfTableExists($tableAttributes);
 
             $table = $this->createTable($tableAttributes);
 
-            $this->handleUserSubscription($game, $table, $request->user());
+            $this->handleUserSubscription($table, $request->user());
             $this->sendDiscordNotification($game, $table, $day);
 
             return redirect()->route('days.show', $day);
@@ -65,9 +65,9 @@ class CreateTableHandler
         return Table::create($tableAttributes->toArray());
     }
 
-    private function handleUserSubscription(Game $game, Table $table, User $user): void
+    private function handleUserSubscription(Table $table, User $user): void
     {
-        if ($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
+        if ($table->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
             $this->userSubscriptionAction->execute($table, $user);
         }
     }

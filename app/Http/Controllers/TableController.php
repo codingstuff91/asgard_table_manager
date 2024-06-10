@@ -16,6 +16,7 @@ use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
+use App\Repositories\GameRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -26,6 +27,7 @@ class TableController extends Controller
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
         public CreateTableHandler $createTableHandler,
+        public GameRepository $gameRepository,
     ) {
     }
 
@@ -40,7 +42,9 @@ class TableController extends Controller
 
     public function store(Day $day, TableStoreRequest $request)
     {
-        $command = new CreateTableCommand($day, $request);
+        $game = $this->gameRepository->findOrFail($request->game_id);
+
+        $command = new CreateTableCommand($day, $game, $request);
 
         return $this->createTableHandler->handle($command);
     }
