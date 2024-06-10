@@ -3,15 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Discord\CreateDiscordNotificationAction;
-use App\Actions\UserSubscriptionAction;
 use App\Commands\CreateTableCommand;
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
-use App\DataObjects\TableData;
-use App\Enums\GameCategory;
 use App\Handlers\TableHandler;
 use App\Http\Requests\TableStoreRequest;
-use App\Logic\TableLogic;
 use App\Logic\UserLogic;
 use App\Models\Category;
 use App\Models\Day;
@@ -68,7 +64,7 @@ class TableController extends Controller
 
     public function update(Table $table, TableStoreRequest $request): RedirectResponse
     {
-        $command  = new UpdateTableCommand($table, $request);
+        $command = new UpdateTableCommand($table, $request);
 
         return $this->tableHandler->handleUpdate($command);
     }

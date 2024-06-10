@@ -10,8 +10,7 @@ class UpdateTableCommand
     public function __construct(
         public Table $table,
         public TableStoreRequest $request
-    )
-    {
+    ) {
         //
     }
 }

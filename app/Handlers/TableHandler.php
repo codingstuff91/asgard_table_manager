@@ -65,7 +65,7 @@ class TableHandler
 
             return redirect()->route('days.show', $command->table->day);
         } catch (Exception $e) {
-            Log::error('Error updating table: ' . $e->getMessage());
+            Log::error('Error updating table: '.$e->getMessage());
 
             return redirect()->route('days.show', $command->table->day)->with(['error' => 'Une erreur est survenue lors de la mise à jour de la table.']);
         }
