@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
 use App\Commands\CreateTableCommand;
+use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
 use App\Enums\GameCategory;
@@ -67,15 +68,9 @@ class TableController extends Controller
 
     public function update(Table $table, TableStoreRequest $request): RedirectResponse
     {
-        $tableAttributes = TableData::fromRequest($table->day, $request);
+        $command  = new UpdateTableCommand($table, $request);
 
-        $table->update($tableAttributes->toArray());
-
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
-
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
-
-        return redirect()->route('days.show', $table->day);
+        return $this->tableHandler->handleUpdate($command);
     }
 
     public function subscribe(Table $table): RedirectResponse
