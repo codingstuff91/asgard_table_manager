@@ -8,7 +8,7 @@ use App\Commands\CreateTableCommand;
 use App\DataObjects\DiscordNotificationData;
 use App\DataObjects\TableData;
 use App\Enums\GameCategory;
-use App\Handlers\CreateTableHandler;
+use App\Handlers\TableHandler;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
 use App\Logic\UserLogic;
@@ -26,7 +26,7 @@ class TableController extends Controller
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
-        public CreateTableHandler $createTableHandler,
+        public TableHandler $tableHandler,
         public GameRepository $gameRepository,
     ) {
     }
@@ -46,7 +46,7 @@ class TableController extends Controller
 
         $command = new CreateTableCommand($day, $game, $request);
 
-        return $this->createTableHandler->handle($command);
+        return $this->tableHandler->handleCreate($command);
     }
 
     public function edit(Table $table)

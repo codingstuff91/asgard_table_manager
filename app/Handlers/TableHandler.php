@@ -18,7 +18,7 @@ use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
-class CreateTableHandler
+class TableHandler
 {
     public function __construct(
         protected UserSubscriptionAction $userSubscriptionAction,
@@ -29,7 +29,7 @@ class CreateTableHandler
         //
     }
 
-    public function handle(CreateTableCommand $command)
+    public function handleCreate(CreateTableCommand $command)
     {
         $day = $command->day;
         $game = $command->game;
