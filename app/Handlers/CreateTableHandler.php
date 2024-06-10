@@ -76,6 +76,7 @@ class CreateTableHandler
     {
         if (App::environment('production')) {
             $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+
             ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
         }
     }
