@@ -125,3 +125,32 @@ test('A warning message can be stored', function () {
     expect($day->refresh()->explanation)->toBe($explanationTest)
         ->and($response)->toBeRedirect(route('days.index'));
 });
+
+test('The warning message is visible on the show page if exists', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $day = Day::first();
+    $explanationTest = 'Example of explanation';
+
+    $this->patch(route('days.confirm_warning', $day), [
+        'explanation' => $explanationTest,
+    ]);
+
+    $showDayView = get(route('days.show', $day));
+
+    expect($showDayView)->toContainText($explanationTest);
+});
+
+test('The warning message is hidden when it doesnt exists', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $day = Day::first();
+    $explanationTest = 'Example of explanation';
+
+    $showDayView = get(route('days.show', $day));
+
+    expect($showDayView)->not()->toContainText($explanationTest)
+        ->and($showDayView)->not()->toContainText("<h3 class='my-4 text-white text-center w-full bg-red-500 rounded-lg'>");
+});
