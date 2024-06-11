@@ -12,11 +12,12 @@
                     @csrf
                     @method('PATCH')
 
-                    <x-input-label>Message explicatif</x-input-label>
+                    <x-input-label>Message explicatif de mise en garde</x-input-label>
                     <textarea
+                        id="explanation"
                         name="explanation"
                         class="w-full rounded-lg border border-gray-300"
-                        placeholder="Ajoutez ici des informations complémentaires"
+                        placeholder="Ajoutez ici votre message"
                         rows="3">
                         {{ old('explanation') }}
                     </textarea>
@@ -30,4 +31,9 @@
             </div>
         </div>
     </div>
+    <script>
+        let explanation = document.getElementById("explanation");
+
+        explanation.innerText = "";
+    </script>
 </x-app-layout>

@@ -7,7 +7,7 @@ use function Pest\Laravel\get;
 
 test('The index page is rendered correctly', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $response = $this->get(route('days.index'));
 
@@ -16,7 +16,7 @@ test('The index page is rendered correctly', function () {
 
 test('The create page is rendered correctly', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $response = $this->get(route('days.create'));
 
@@ -25,7 +25,7 @@ test('The create page is rendered correctly', function () {
 
 test('The show page is rendered correctly', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $response = $this->get(route('days.show', \App\Models\Day::first()->id));
 
@@ -34,7 +34,7 @@ test('The show page is rendered correctly', function () {
 
 test('A day can not be created twice', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $response = $this->post(route('days.store'), [
         'date' => now(),
@@ -45,7 +45,7 @@ test('A day can not be created twice', function () {
 
 test('A day can not be created without choosing a date', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $response = $this->post(route('days.store'), [
         'date' => '',
@@ -56,7 +56,7 @@ test('A day can not be created without choosing a date', function () {
 
 test('A day is created successfully', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $date = now()->add('day', 1);
 
@@ -73,7 +73,7 @@ test('A day is created successfully', function () {
 
 test('The past days are hidden from index page', function () {
     $this->seed();
-    $this->actingAs(\App\Models\User::first());
+    $this->actingAs(User::first());
 
     $pastDay = Day::factory()->create([
         'date' => now()->sub('day', 1),
@@ -96,4 +96,17 @@ test('the edit warning page is rendered correctly', function () {
     $response = get(route('days.warning', $day));
 
     expect($response)->toBeOk();
+});
+
+test('the warning could not be store without an explanation', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $day = Day::first();
+
+    $response = $this->patch(route('days.confirm_warning', $day), [
+        'explanation' => '',
+    ]);
+
+    expect($response)->toHaveInvalid(['explanation']);
 });

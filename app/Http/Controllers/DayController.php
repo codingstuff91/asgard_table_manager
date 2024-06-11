@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\storeDayRequest;
+use App\Http\Requests\WarningTableRequest;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Event;
@@ -71,5 +72,10 @@ class DayController extends Controller
     public function edit_warning(Day $day)
     {
         return view('day.warning', compact('day'));
+    }
+
+    public function confirm_warning(Day $day, WarningTableRequest $request)
+    {
+        return "test";
     }
 }
