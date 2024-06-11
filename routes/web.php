@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     /** Days route */
     Route::resource('days', DayController::class);
     Route::get('/days/{day}/warning', [DayController::class, 'edit_warning'])->name('days.warning');
+    Route::patch('/days/{day}/confirm_warning', [DayController::class, 'confirm_warning'])->name('days.confirm_warning');
 
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');

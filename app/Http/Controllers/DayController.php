@@ -68,8 +68,8 @@ class DayController extends Controller
         return redirect()->route('days.index');
     }
 
-    public function edit_warning()
+    public function edit_warning(Day $day)
     {
-        return view('day.warning');
+        return view('day.warning', compact('day'));
     }
 }
