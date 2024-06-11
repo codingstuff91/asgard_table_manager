@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DayController;
+use App\Http\Controllers\DayController as DayControllerAlias;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
@@ -30,7 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     /** Days route */
-    Route::resource('days', App\Http\Controllers\DayController::class);
+    Route::resource('days', DayController::class);
+    Route::get('/days/{day}/warning', [DayController::class, 'edit_warning'])->name('days.warning');
 
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');

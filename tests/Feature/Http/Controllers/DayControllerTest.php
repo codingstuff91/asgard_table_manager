@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\Day;
+use App\Models\User;
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\get;
 
 test('The index page is rendered correctly', function () {
     $this->seed();
@@ -81,4 +84,16 @@ test('The past days are hidden from index page', function () {
     expect($response)
         ->toBeOk()
         ->not->toContainText($pastDay->date->format('d/m/Y'));
+});
+
+test('the edit warning page is rendered correctly', function () {
+    $this->seed();
+
+    $day = Day::first();
+
+    actingAs(User::first());
+
+    $response = get(route('days.warning', $day));
+
+    expect($response)->toBeOk();
 });
