@@ -110,3 +110,18 @@ test('the warning could not be store without an explanation', function () {
 
     expect($response)->toHaveInvalid(['explanation']);
 });
+
+test('A warning message can be stored', function () {
+    $this->seed();
+    $this->actingAs(User::first());
+
+    $day = Day::first();
+    $explanationTest = 'Example of explanation';
+
+    $response = $this->patch(route('days.confirm_warning', $day), [
+        'explanation' => $explanationTest,
+    ]);
+
+    expect($day->refresh()->explanation)->toBe($explanationTest)
+        ->and($response)->toBeRedirect(route('days.index'));
+});

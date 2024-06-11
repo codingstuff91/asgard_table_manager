@@ -18,6 +18,7 @@ class Day extends Model
      */
     protected $fillable = [
         'date',
+        'explanation',
     ];
 
     /**
