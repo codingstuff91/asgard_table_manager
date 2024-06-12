@@ -165,3 +165,13 @@ test('The cancelation of a day must block the ability to create table', function
         ->can_create_table
         ->toBe(0);
 });
+
+test('The cancellation of a day must delete every tables created', function () {
+    $day = Day::first();
+
+    $this->patch(route('days.confirm_cancel', $day), [
+        'explanation' => 'Example of explanation',
+    ]);
+
+    expect($day->tables->count())->toBe(0);
+});

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Day\DisableDayAction;
+use App\Actions\Day\DeleteDayTablesAction;
 use App\Http\Requests\storeDayRequest;
 use App\Http\Requests\WarningCancelDayRequest;
 use App\Models\Category;
@@ -90,10 +92,9 @@ class DayController extends Controller
 
     public function confirm_cancel(Day $day, WarningCancelDayRequest $request): RedirectResponse
     {
-        $day->update([
-            'explanation' => $request->explanation,
-            'can_create_table' => false,
-        ]);
+        app(DisableDayAction::class)->execute($day, $request->explanation);
+
+        app(DeleteDayTablesAction::class)->execute($day);
 
         return to_route('days.index');
     }
