@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('days', DayController::class);
     Route::get('/days/{day}/warning', [DayController::class, 'edit_warning'])->name('days.warning');
     Route::patch('/days/{day}/confirm_warning', [DayController::class, 'confirm_warning'])->name('days.confirm_warning');
+    Route::get('/days/{day}/cancel', [DayController::class, 'edit_cancel'])->name('days.cancel');
+    Route::patch('/days/{day}/confirm_cancel', [DayController::class, 'confirm_cancel'])->name('days.confirm_cancel');
 
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');

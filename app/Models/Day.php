@@ -19,6 +19,7 @@ class Day extends Model
     protected $fillable = [
         'date',
         'explanation',
+        'can_create_table',
     ];
 
     /**

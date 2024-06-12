@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\storeDayRequest;
-use App\Http\Requests\WarningDayRequest;
+use App\Http\Requests\WarningCancelDayRequest;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Event;
@@ -74,10 +74,25 @@ class DayController extends Controller
         return view('day.warning', compact('day'));
     }
 
-    public function confirm_warning(Day $day, WarningDayRequest $request): RedirectResponse
+    public function confirm_warning(Day $day, WarningCancelDayRequest $request): RedirectResponse
     {
         $day->update([
             'explanation' => $request->explanation,
+        ]);
+
+        return to_route('days.index');
+    }
+
+    public function edit_cancel(Day $day)
+    {
+        return view('day.cancel', compact('day'));
+    }
+
+    public function confirm_cancel(Day $day, WarningCancelDayRequest $request): RedirectResponse
+    {
+        $day->update([
+            'explanation' => $request->explanation,
+            'can_create_table' => false,
         ]);
 
         return to_route('days.index');
