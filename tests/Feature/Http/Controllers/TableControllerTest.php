@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 it('Display all game categories in the create view form', function () {
@@ -307,4 +308,19 @@ test('A user could not subscribe to a table if the max number of players is reac
         ->get(route('table.subscribe', [$table, $anotherUser]));
 
     expect($response)->toBeRedirect(route('days.show', [$day]));
+});
+
+test('Table creation is not allowed if a day has been cancelled', function () {
+    $this->seed();
+    actingAs(User::first());
+
+    $day = Day::first();
+
+    $this->patch(route('days.confirm_cancel', $day), [
+        'explanation' => 'Example of explanation',
+    ]);
+
+    $tableCreationResponse = get(route('table.create', $day));
+
+    expect($tableCreationResponse)->toBeForbidden();
 });
