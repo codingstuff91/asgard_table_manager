@@ -101,7 +101,6 @@ class DayController extends Controller
     public function confirm_cancel(
         Day $day,
         WarningCancelDayRequest $request,
-        CreateDayDiscordNotificationAction $createDayDiscordNotificationAction
     ): RedirectResponse {
         app(DisableDayAction::class)->execute($day, $request->explanation);
 
