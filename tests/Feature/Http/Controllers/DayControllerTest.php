@@ -217,8 +217,19 @@ test('The cancel discord notification is sent', function () {
 });
 
 test('The action buttons are visible for admin users on days index page', function () {
+    loginAdmin();
+
     $indexPageResponse = get(route('days.index'));
 
     $indexPageResponse->assertSee('img/cancel.png');
     $indexPageResponse->assertSee('img/warning.png');
+});
+
+test('The action buttons are hidden for non admin users on days index page', function () {
+    $user = User::firstWhere('admin', false);
+
+    actingAs($user)
+        ->get(route('days.index'))
+        ->assertDontSee('img/cancel.png')
+        ->assertDontSee('img/warning.png');
 });
