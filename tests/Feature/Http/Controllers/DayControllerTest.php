@@ -6,6 +6,7 @@ use App\Actions\Discord\DefineChannelIdAction;
 use App\Actions\Discord\SendDiscordNotificationAction;
 use App\Models\Day;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
@@ -213,4 +214,11 @@ test('The cancel discord notification is sent', function () {
     $response = app(SendDiscordNotificationAction::class)($channelId, $embedMessage);
 
     expect($response)->toBe('Discord notification sent');
+});
+
+test('The action buttons are visible for admin users on days index page', function () {
+    $indexPageResponse = get(route('days.index'));
+
+    $indexPageResponse->assertSee('img/cancel.png');
+    $indexPageResponse->assertSee('img/warning.png');
 });
