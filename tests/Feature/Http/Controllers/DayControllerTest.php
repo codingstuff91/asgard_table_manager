@@ -175,3 +175,16 @@ test('The cancellation of a day must delete every tables created', function () {
 
     expect($day->tables->count())->toBe(0);
 });
+
+test('The cancellation message is visible on the show page if exists', function () {
+    $day = Day::first();
+    $explanationTest = 'Example of explanation';
+
+    $this->patch(route('days.confirm_cancel', $day), [
+        'explanation' => $explanationTest,
+    ]);
+
+    $showDayView = get(route('days.show', $day));
+
+    expect($showDayView)->toContainText($explanationTest);
+});
