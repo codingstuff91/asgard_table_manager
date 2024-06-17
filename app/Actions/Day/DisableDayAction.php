@@ -11,6 +11,7 @@ class DisableDayAction
         $day->update([
             'explanation' => $explanation,
             'can_create_table' => false,
+            'is_cancelled' => true,
         ]);
     }
 }
