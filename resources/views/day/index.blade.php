@@ -16,12 +16,16 @@
                         <a href="{{ route('days.show', $day->id) }}">
                             {{ $day->fullDayName }} {{ $day->date->format('d/m/Y')}}
                         </a>
-                        <a class="mx-4" href="{{ route('days.cancel', $day) }}">
-                            <img class="w-8 h-8" src="img/cancel.png">
-                        </a>
-                        <a href="{{ route('days.warning', $day) }}">
-                            <img class="h-8 w-8" src="img/warning.png">
-                        </a>
+                        @can('cancel_day', $day)
+                            <a class="mx-4" href="{{ route('days.cancel', $day) }}">
+                                <img class="w-8 h-8" src="img/cancel.png">
+                            </a>
+                        @endcan
+                        @can('warning_day', $day)
+                            <a href="{{ route('days.warning', $day) }}">
+                                <img class="h-8 w-8" src="img/warning.png">
+                            </a>
+                        @endcan
                     </div>
                     <div class="p-6 text-gray-900 dark:text-gray-100 text-lg font-extrabold lg:text-2xl">
                         <p>{{ $day->tables_count }} tables</p>
