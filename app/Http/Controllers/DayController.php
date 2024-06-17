@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Day\DisableDayAction;
 use App\Actions\Day\DeleteDayTablesAction;
+use App\Actions\Day\DisableDayAction;
 use App\Actions\Discord\CreateDayDiscordNotificationAction;
-use App\DataObjects\DiscordNotificationData;
 use App\Http\Requests\storeDayRequest;
 use App\Http\Requests\WarningCancelDayRequest;
 use App\Models\Category;

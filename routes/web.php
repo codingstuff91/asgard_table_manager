@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DayController;
-use App\Http\Controllers\DayController as DayControllerAlias;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;

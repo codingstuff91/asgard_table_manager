@@ -31,7 +31,7 @@ it('builds the embed message structure when puts a warning on a table', function
     $embedMessageStructure = app(BuildDayEmbedMessageStructureAction::class)::buildEmbedStructure($day, $explanation, 'warning');
 
     expect($embedMessageStructure['content'])->toBe(EmbedMessageContent::WARNING->value)
-        ->and($embedMessageStructure['embeds'][0]['title'])->toBe("La capacité en salles disponibles pour le ".$day->date->format('d/m/Y')." est réduite.")
+        ->and($embedMessageStructure['embeds'][0]['title'])->toBe('La capacité en salles disponibles pour le '.$day->date->format('d/m/Y').' est réduite.')
         ->and($embedMessageStructure['embeds'][0]['description'])->toBe('Plus d\'informations sur '.route('days.show', $day->id))
         ->and($embedMessageStructure['embeds'][0]['author']['name'])->toBe('Annulée par : '.Auth::user()->name)
         ->and($embedMessageStructure['embeds'][0]['color'])->toBe(EmbedColor::WARNING->value);
