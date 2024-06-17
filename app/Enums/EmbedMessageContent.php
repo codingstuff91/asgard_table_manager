@@ -9,4 +9,6 @@ enum EmbedMessageContent: string
     case DELETED = 'Annulation de table';
     case SUBSCRIBED = 'Inscription de joueur';
     case UNSUBSCRIBED = 'Désinscription de joueur';
+    case CANCELLED = 'Annulation de session';
+    case WARNING = 'Avertissement de session';
 }

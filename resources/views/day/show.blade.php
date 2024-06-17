@@ -3,9 +3,14 @@
         <h2 class="font-bold text-xl text-gray-800 text-center dark:text-gray-200 leading-tight lg:text-2xl">
             Session du {{ $day->date->format('d/m/Y') }}
         </h2>
+        @if($day->explanation !== null)
+        <h3 class="my-4 text-white text-center w-full bg-red-500 rounded-lg">
+            {{ $day->explanation }}
+        </h3>
+        @endif
         <div class="mt-2 flex flex-col items-center sm:flex-row sm:justify-center">
             <x-secondary-button class="my-2 sm:my-0">
-                <img 
+                <img
                     src="{{ asset('/img/game-table.png') }}"
                     class="w-8 h-8 mr-2"
                     alt=""
@@ -40,7 +45,7 @@
 
             <div class="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-4">
             @foreach($tablesCountPerCategory as $table)
-                <x-table-count-category 
+                <x-table-count-category
                     :table="$table"
                     :id="$table->id"
                     :color="$table->color"
@@ -59,7 +64,7 @@
         <h2 class="text-black text-center text-xl font-bold mt-4 dark:text-white">Tables disponibles</h2>
         <div class="w-full rounded-lg mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
-                <x-table-card 
+                <x-table-card
                     :table="$table"
                     :color="$table->game->category->color"
                 />
