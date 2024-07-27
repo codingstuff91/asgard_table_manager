@@ -4,9 +4,17 @@
             Session du {{ $day->date->format('d/m/Y') }}
         </h2>
         @if($day->explanation !== null)
-        <h3 class="my-4 text-white text-center w-full bg-red-500 rounded-lg">
-            {{ $day->explanation }}
-        </h3>
+            <div class="mt-4 flex justify-center items-center gap-x-4 bg-red-500 rounded-lg text-white text-center">
+                <img class="h-8 w-8 mr-8" src="{{ asset('/img/warning.png') }}" alt=""/>
+
+                <h2 class="ml-8">SESSION ANNULEE</h2>
+
+                <img class="h-8 w-8 mr-8" src="{{ asset('/img/warning.png') }}" alt=""/>
+            </div>
+
+            <p class="my-4 text-white text-center w-full bg-red-500 rounded-lg">
+                {{ $day->explanation }}
+            </p>
         @endif
         <div class="mt-2 flex flex-col items-center sm:flex-row sm:justify-center">
             @if($day->can_create_table)
@@ -43,7 +51,7 @@
             </div>
         @endif
 
-            <h2 class="my-4 text-center text-xl font-bold text-center text-black dark:text-white">Filtres par catégories</h2>
+            <h2 class="my-4 text-center text-xl font-bold text-black dark:text-white">Filtres par catégories</h2>
 
             <div class="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-4">
             @foreach($tablesCountPerCategory as $table)
@@ -57,14 +65,14 @@
         </div>
 
         @if($events->count() != 0)
-            <h2 class="my-2 text-black text-xl my-2 text-center font-bold dark:text-white">Evenements</h2>
+            <h2 class="my-2 text-black text-xl text-center font-bold dark:text-white">Evenements</h2>
             @foreach ($events as $event)
                 <x-event-card :event="$event"/>
             @endforeach
         @endif
 
         <h2 class="text-black text-center text-xl font-bold mt-4 dark:text-white">Tables disponibles</h2>
-        <div class="w-full rounded-lg mx-auto w-full sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
+        <div class="w-full rounded-lg mx-auto sm:grid sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
             @foreach ($tables as $table)
                 <x-table-card
                     :table="$table"
