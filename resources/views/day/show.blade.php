@@ -9,28 +9,30 @@
         </h3>
         @endif
         <div class="mt-2 flex flex-col items-center sm:flex-row sm:justify-center">
-            <x-secondary-button class="my-2 sm:my-0">
-                <img
-                    src="{{ asset('/img/game-table.png') }}"
-                    class="w-8 h-8 mr-2"
-                    alt=""
-                >
-                <a href="{{ route('table.create', $day->id) }}">
-                    Ouvrir une table
-                </a>
-            </x-secondary-button>
+            @if($day->can_create_table)
+                <x-secondary-button class="my-2 sm:my-0">
+                    <img
+                        src="{{ asset('/img/game-table.png') }}"
+                        class="w-8 h-8 mr-2"
+                        alt=""
+                    >
+                    <a href="{{ route('table.create', $day->id) }}">
+                        Ouvrir une table
+                    </a>
+                </x-secondary-button>
 
-            <x-secondary-button class="ml-0 sm:ml-2">
-                <img
-                    src="{{ asset('/img/calendar.png') }}"
-                    class="w-8 h-8 mr-2"
-                    alt=""
-                >
+                <x-secondary-button class="ml-0 sm:ml-2">
+                    <img
+                        src="{{ asset('/img/calendar.png') }}"
+                        class="w-8 h-8 mr-2"
+                        alt=""
+                    >
 
-                <a href="{{ route('event.create', $day->id) }}">
-                    Créer un événement
-                </a>
-            </x-secondary-button>
+                    <a href="{{ route('event.create', $day->id) }}">
+                        Créer un événement
+                    </a>
+                </x-secondary-button>
+            @endif
         </div>
     </x-slot>
 

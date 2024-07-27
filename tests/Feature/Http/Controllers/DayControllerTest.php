@@ -233,3 +233,19 @@ test('The action buttons are hidden for non admin users on days index page', fun
         ->assertDontSee('img/cancel.png')
         ->assertDontSee('img/warning.png');
 });
+
+test('The create buttons are hidden for a cancelled day', function () {
+    $day = Day::first();
+    $user = User::first();
+
+    $explanationTest = 'Example of explanation';
+
+    $this->patch(route('days.confirm_cancel', $day), [
+        'explanation' => $explanationTest,
+    ]);
+
+    actingAs($user)
+        ->get(route('days.show', $day))
+        ->assertDontSee('img/game-table.png')
+        ->assertDontSee('img/calendar.png');
+});
