@@ -7,7 +7,7 @@
             <div class="mt-4 flex justify-center items-center gap-x-4 bg-red-500 rounded-lg text-white text-center">
                 <img class="h-8 w-8 mr-8" src="{{ asset('/img/warning.png') }}" alt=""/>
 
-                <h2 class="ml-8">SESSION ANNULEE</h2>
+                <h2 class="ml-8">{{ $day->is_cancelled ? 'SESSION ANNULEE' : 'CAPACITE SALLE RESTREINTE' }}</h2>
 
                 <img class="h-8 w-8 mr-8" src="{{ asset('/img/warning.png') }}" alt=""/>
             </div>
