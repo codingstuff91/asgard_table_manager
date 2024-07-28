@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Day;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -61,12 +62,12 @@ class AuthServiceProvider extends ServiceProvider
             return $user->admin;
         });
 
-        Gate::define('cancel_day', function (User $user) {
-            return $user->admin;
+        Gate::define('cancel_day', function (User $user, Day $day) {
+            return $user->admin && ! $day->is_cancelled;
         });
 
-        Gate::define('warning_day', function (User $user) {
-            return $user->admin;
+        Gate::define('warning_day', function (User $user, Day $day) {
+            return $user->admin && ! $day->is_cancelled;
         });
     }
 }
