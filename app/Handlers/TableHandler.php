@@ -32,25 +32,21 @@ class TableHandler
 
     public function handleCreate(CreateTableCommand $command)
     {
-        $day = $command->day;
-        $game = $command->game;
-        $request = $command->request;
-
         try {
-            $tableAttributes = TableData::fromRequest($day, $request);
+            $tableAttributes = TableData::fromRequest($command->day, $command->request);
 
             $this->checkIfTableExists($tableAttributes);
 
             $table = $this->createTable($tableAttributes);
 
-            $this->handleUserSubscription($table, $request->user());
-            $this->sendDiscordNotification($game, $table, $day);
+            $this->handleUserSubscription($table, $command->request->user());
+            $this->sendDiscordNotification($command->game, $table, $command->day);
 
-            return redirect()->route('days.show', $day);
+            return redirect()->route('days.show', $command->day);
         } catch (Exception $e) {
             Log::error('Error creating table: '.$e->getMessage());
 
-            return redirect()->route('days.show', $day)->with(['error' => 'Une erreur est survenue lors de la création de la table.']);
+            return redirect()->route('days.show', $command->day)->with(['error' => 'Une erreur est survenue lors de la création de la table.']);
         }
     }
 
