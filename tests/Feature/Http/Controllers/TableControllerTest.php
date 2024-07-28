@@ -79,7 +79,7 @@ it('Can not create the same table twice', function () {
         ->toBeRedirect(route('days.show', Day::first()->id))
         ->toHaveSession('error');
 
-})->skip();
+});
 
 it('Updates a table', function () {
     $this->seed();
