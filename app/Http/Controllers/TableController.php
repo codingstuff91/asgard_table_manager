@@ -48,7 +48,11 @@ class TableController extends Controller
 
         $command = new CreateTableCommand($day, $game, $request);
 
-        $this->createTableHandler->handle($command);
+        $table = $this->createTableHandler->handle($command);
+
+        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
         return redirect()->route('days.show', $command->day);
     }

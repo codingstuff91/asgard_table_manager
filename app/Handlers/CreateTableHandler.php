@@ -10,6 +10,7 @@ use App\Logic\TableLogic;
 use App\Models\Table;
 use App\Repositories\GameRepository;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
 class CreateTableHandler
@@ -21,7 +22,7 @@ class CreateTableHandler
         //
     }
 
-    public function handle(CreateTableCommand $command)
+    public function handle(CreateTableCommand $command): Table|RedirectResponse
     {
         try {
             $tableAttributes = TableData::fromRequest($command->day, $command->request);
