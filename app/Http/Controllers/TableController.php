@@ -10,6 +10,7 @@ use App\DataObjects\DiscordNotificationData;
 use App\Handlers\CreateTableHandler;
 use App\Handlers\UpdateTableHandler;
 use App\Http\Requests\TableStoreRequest;
+use App\Logic\TableLogic;
 use App\Logic\UserLogic;
 use App\Models\Category;
 use App\Models\Day;
