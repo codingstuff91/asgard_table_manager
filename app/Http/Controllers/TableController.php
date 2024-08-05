@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Discord\CreateDiscordNotificationAction;
+use App\Actions\UserSubscriptionAction;
 use App\Commands\CreateTableCommand;
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
-use App\Handlers\TableHandler;
+use App\Enums\GameCategory;
+use App\Handlers\CreateTableHandler;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\UserLogic;
 use App\Models\Category;
@@ -23,9 +25,11 @@ class TableController extends Controller
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
-        public TableHandler $tableHandler,
+        public CreateTableHandler $tableHandler,
         public GameRepository $gameRepository,
+        protected UserSubscriptionAction $userSubscriptionAction,
     ) {
+        //
     }
 
     public function create(Day $day)
@@ -37,13 +41,15 @@ class TableController extends Controller
         return view('table.create', compact('day', 'categories'));
     }
 
-    public function store(Day $day, TableStoreRequest $request)
+    public function store(Day $day, TableStoreRequest $request): RedirectResponse
     {
         $game = $this->gameRepository->findOrFail($request->game_id);
 
         $command = new CreateTableCommand($day, $game, $request);
 
-        return $this->tableHandler->handleCreate($command);
+        $this->tableHandler->handleCreate($command);
+
+        return redirect()->route('days.show', $command->day);
     }
 
     public function edit(Table $table)
