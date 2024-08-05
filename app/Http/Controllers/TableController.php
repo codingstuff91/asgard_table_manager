@@ -77,7 +77,11 @@ class TableController extends Controller
     {
         $command = new UpdateTableCommand($table, $request);
 
-        $this->updateTableHandler->handle($command);
+        $table = $this->updateTableHandler->handle($command);
+
+        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+        ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
 
         return redirect()->route('days.show', $command->table->day);
     }
