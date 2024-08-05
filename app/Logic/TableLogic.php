@@ -3,6 +3,7 @@
 namespace App\Logic;
 
 use App\DataObjects\TableData;
+use App\Models\Day;
 use App\Models\Table;
 
 class TableLogic
@@ -16,5 +17,10 @@ class TableLogic
             ->get();
 
         return $table->count() != 0;
+    }
+
+    public static function canCreateTable(Day $day): bool
+    {
+        return $day->can_create_table;
     }
 }
