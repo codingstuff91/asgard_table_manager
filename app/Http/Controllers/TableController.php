@@ -7,8 +7,8 @@ use App\Actions\UserSubscriptionAction;
 use App\Commands\CreateTableCommand;
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
-use App\Enums\GameCategory;
 use App\Handlers\CreateTableHandler;
+use App\Handlers\UpdateTableHandler;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\UserLogic;
 use App\Models\Category;
@@ -25,7 +25,8 @@ class TableController extends Controller
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
-        public CreateTableHandler $tableHandler,
+        public CreateTableHandler $createTableHandler,
+        public UpdateTableHandler $updateTableHandler,
         public GameRepository $gameRepository,
         protected UserSubscriptionAction $userSubscriptionAction,
     ) {
@@ -47,7 +48,7 @@ class TableController extends Controller
 
         $command = new CreateTableCommand($day, $game, $request);
 
-        $this->tableHandler->handleCreate($command);
+        $this->createTableHandler->handleCreate($command);
 
         return redirect()->route('days.show', $command->day);
     }
@@ -72,7 +73,9 @@ class TableController extends Controller
     {
         $command = new UpdateTableCommand($table, $request);
 
-        return $this->tableHandler->handleUpdate($command);
+        $this->updateTableHandler->handleUpdate($command);
+
+        return redirect()->route('days.show', $command->table->day);
     }
 
     public function subscribe(Table $table): RedirectResponse
