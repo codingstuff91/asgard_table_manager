@@ -32,6 +32,8 @@ class CreateTableHandler
             $table = $this->createTable($tableAttributes);
 
             $this->registerCurrentUserToTable($table);
+
+            return $table;
         } catch (Exception $e) {
             Log::error('Error creating table: '.$e->getMessage());
 

@@ -14,7 +14,9 @@ class UpdateTableHandler
         try {
             $tableAttributes = TableData::fromRequest($command->table->day, $command->request);
 
-            return $command->table->update($tableAttributes->toArray());
+            $command->table->update($tableAttributes->toArray());
+
+            return $command->table;
         } catch (Exception $e) {
             Log::error('Error updating table: '.$e->getMessage());
 
