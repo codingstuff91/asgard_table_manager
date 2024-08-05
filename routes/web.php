@@ -1,22 +1,12 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DayController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,7 +20,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     /** Days route */
-    Route::resource('days', App\Http\Controllers\DayController::class);
+    Route::resource('days', DayController::class);
+    Route::get('/days/{day}/warning', [DayController::class, 'edit_warning'])->name('days.warning');
+    Route::patch('/days/{day}/confirm_warning', [DayController::class, 'confirm_warning'])->name('days.confirm_warning');
+    Route::get('/days/{day}/cancel', [DayController::class, 'edit_cancel'])->name('days.cancel');
+    Route::patch('/days/{day}/confirm_cancel', [DayController::class, 'confirm_cancel'])->name('days.confirm_cancel');
 
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');
