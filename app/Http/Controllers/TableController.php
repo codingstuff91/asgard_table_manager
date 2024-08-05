@@ -35,6 +35,10 @@ class TableController extends Controller
 
     public function create(Day $day)
     {
+        if (! TableLogic::canCreateTable($day)) {
+            abort(403);
+        }
+
         $categories = Category::all();
 
         $current_url = session()->put('create_table_url', url()->current());

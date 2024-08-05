@@ -50,6 +50,11 @@ function login(User $user = null): void
     actingAs($user ?? User::factory()->create());
 }
 
+function loginAdmin(User $user = null): void
+{
+    actingAs($user ?? User::factory()->admin()->create());
+}
+
 function mockHttpClient(): void
 {
     $guzzleMock = Mockery::mock(Client::class);
