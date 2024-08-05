@@ -4,7 +4,6 @@ namespace App\Handlers;
 
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\TableData;
-use App\Services\DiscordNotificationService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +14,7 @@ class UpdateTableHandler
         try {
             $tableAttributes = TableData::fromRequest($command->table->day, $command->request);
 
-            $command->table->update($tableAttributes->toArray());
+            return $command->table->update($tableAttributes->toArray());
         } catch (Exception $e) {
             Log::error('Error updating table: '.$e->getMessage());
 
