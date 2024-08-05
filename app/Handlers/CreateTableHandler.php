@@ -21,7 +21,7 @@ class CreateTableHandler
         //
     }
 
-    public function handleCreate(CreateTableCommand $command)
+    public function handle(CreateTableCommand $command)
     {
         try {
             $tableAttributes = TableData::fromRequest($command->day, $command->request);

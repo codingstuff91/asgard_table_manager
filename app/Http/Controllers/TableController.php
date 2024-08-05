@@ -48,7 +48,7 @@ class TableController extends Controller
 
         $command = new CreateTableCommand($day, $game, $request);
 
-        $this->createTableHandler->handleCreate($command);
+        $this->createTableHandler->handle($command);
 
         return redirect()->route('days.show', $command->day);
     }
@@ -73,7 +73,7 @@ class TableController extends Controller
     {
         $command = new UpdateTableCommand($table, $request);
 
-        $this->updateTableHandler->handleUpdate($command);
+        $this->updateTableHandler->handle($command);
 
         return redirect()->route('days.show', $command->table->day);
     }

@@ -31,7 +31,7 @@ class UpdateTableHandler
         //
     }
 
-    public function handleUpdate(UpdateTableCommand $command)
+    public function handle(UpdateTableCommand $command)
     {
         try {
             $tableAttributes = TableData::fromRequest($command->table->day, $command->request);
