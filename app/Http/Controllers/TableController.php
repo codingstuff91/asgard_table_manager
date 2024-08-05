@@ -42,8 +42,6 @@ class TableController extends Controller
 
         $categories = Category::all();
 
-        $current_url = session()->put('create_table_url', url()->current());
-
         return view('table.create', compact('day', 'categories'));
     }
 
