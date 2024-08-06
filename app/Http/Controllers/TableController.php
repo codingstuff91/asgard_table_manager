@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Actions\Discord\CreateDiscordNotificationAction;
 use App\Actions\UserSubscriptionAction;
+use App\Commands\CreateTableCommand;
+use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
-use App\DataObjects\TableData;
-use App\Enums\GameCategory;
+use App\Handlers\CreateTableHandler;
+use App\Handlers\UpdateTableHandler;
 use App\Http\Requests\TableStoreRequest;
 use App\Logic\TableLogic;
 use App\Logic\UserLogic;
@@ -14,6 +16,7 @@ use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
+use App\Repositories\GameRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -23,7 +26,12 @@ class TableController extends Controller
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
+        public CreateTableHandler $createTableHandler,
+        public UpdateTableHandler $updateTableHandler,
+        public GameRepository $gameRepository,
+        protected UserSubscriptionAction $userSubscriptionAction,
     ) {
+        //
     }
 
     public function create(Day $day)
@@ -34,33 +42,22 @@ class TableController extends Controller
 
         $categories = Category::all();
 
-        $current_url = session()->put('create_table_url', url()->current());
-
         return view('table.create', compact('day', 'categories'));
     }
 
-    public function store(Day $day, TableStoreRequest $request)
+    public function store(Day $day, TableStoreRequest $request): RedirectResponse
     {
-        $game = Game::findOrFail($request->game_id);
+        $game = $this->gameRepository->findOrFail($request->game_id);
 
-        $tableAttributes = TableData::fromRequest($day, $request);
+        $command = new CreateTableCommand($day, $game, $request);
 
-        if (TableLogic::isAlreadyExists($tableAttributes)) {
-            return to_route('days.show', $day)->with(['error' => 'Vous ne pouvez pas créer 2 fois la même table']);
-        }
-
-        $table = Table::create($tableAttributes->toArray());
-        $user = $request->user();
-
-        if ($game->category->id !== GameCategory::ROLE_PLAYING_GAME->value) {
-            app(UserSubscriptionAction::class)->execute($table, $user);
-        }
+        $table = $this->createTableHandler->handle($command);
 
         $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
         ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
 
-        return redirect()->route('days.show', $day);
+        return redirect()->route('days.show', $command->day);
     }
 
     public function edit(Table $table)
@@ -81,15 +78,15 @@ class TableController extends Controller
 
     public function update(Table $table, TableStoreRequest $request): RedirectResponse
     {
-        $tableAttributes = TableData::fromRequest($table->day, $request);
+        $command = new UpdateTableCommand($table, $request);
 
-        $table->update($tableAttributes->toArray());
+        $table = $this->updateTableHandler->handle($command);
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
         ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
 
-        return redirect()->route('days.show', $table->day);
+        return redirect()->route('days.show', $command->table->day);
     }
 
     public function subscribe(Table $table): RedirectResponse
