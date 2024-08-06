@@ -3,12 +3,14 @@
 namespace App\Actions;
 
 use App\Models\Table;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserSubscriptionAction
 {
-    public function execute(Table $table, User $user): void
+    public function execute(Table $table): void
     {
-        $table->users()->attach($user);
+        $currentUser = Auth::user();
+
+        $table->users()->attach($currentUser);
     }
 }
