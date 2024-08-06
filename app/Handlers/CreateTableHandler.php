@@ -8,7 +8,6 @@ use App\DataObjects\TableData;
 use App\Enums\GameCategory;
 use App\Logic\TableLogic;
 use App\Models\Table;
-use App\Repositories\GameRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +16,6 @@ class CreateTableHandler
 {
     public function __construct(
         protected UserSubscriptionAction $userSubscriptionAction,
-        protected GameRepository $gameRepository,
     ) {
         //
     }
