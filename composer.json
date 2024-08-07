@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "bugsnag/bugsnag-laravel": "2.28.*",
         "filament/filament": "^3.0-stable",
         "guzzlehttp/guzzle": "7.8.*",
         "laravel/breeze": "1.26.*",
