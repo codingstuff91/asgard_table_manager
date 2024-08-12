@@ -26,7 +26,7 @@ abstract class DiscordNotification implements NotificationInterface
         $this->send($message);
     }
 
-    abstract public function buildMessage(): array;
+    abstract public function buildMessage(DiscordNotificationData $discordNotificationData): array;
 
     public function send(array $message): void
     {
