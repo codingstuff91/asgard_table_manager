@@ -127,7 +127,7 @@ class DayController extends Controller
             return redirect()
                 ->route('days.show', $day)
                 ->with([
-                    'error' => 'Une erreur est survenue lors de l\'annulation de la sessions.',
+                    'error' => 'Une erreur est survenue lors de l\'annulation de la session.',
                 ]);
         }
 
