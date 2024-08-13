@@ -3,12 +3,17 @@
 namespace App\Actions\Discord;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 
 class DefineChannelIdAction
 {
     public function __invoke(string $date)
     {
         $dayDate = Carbon::create($date);
+
+        if (App::environment('local')) {
+            return 882668631891247118;
+        }
 
         return match ($dayDate->dayOfWeek) {
             0 => 1069338721633194025, // Sunday
