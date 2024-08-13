@@ -61,8 +61,8 @@ class TableController extends Controller
             $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
             $discordNotification = ($this->notificationFactory)('create-table', $discordNotificationData);
-
             $discordNotification->handle();
+
         } catch (Exception $e) {
             Log::error('Problem during table creation: '.$e->getMessage());
 
@@ -100,7 +100,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
+        $discordNotification = ($this->notificationFactory)('update-table', $discordNotificationData);
+        $discordNotification->handle();
 
         return redirect()->route('days.show', $command->table->day);
     }
