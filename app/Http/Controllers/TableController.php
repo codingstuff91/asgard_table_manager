@@ -144,7 +144,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'delete');
+        $discordNotification = ($this->notificationFactory)('cancel-table', $discordNotificationData);
+        $discordNotification->handle();
 
         return redirect()->back();
     }
