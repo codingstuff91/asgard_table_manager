@@ -29,6 +29,7 @@ class TableController extends Controller
     public function __construct(
         public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
+        public NotificationFactory $notificationFactory,
         public CreateTableHandler $createTableHandler,
         public UpdateTableHandler $updateTableHandler,
         public GameRepository $gameRepository,
@@ -59,7 +60,7 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-            $discordNotification = NotificationFactory::create('create-table', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)('create-table', $discordNotificationData);
 
             $discordNotification->handle();
         } catch (Exception $e) {

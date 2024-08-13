@@ -2,28 +2,29 @@
 
 namespace App\Notifications\Discord;
 
-use App\Actions\Discord\BuildEmbedMessageStructureAction;
 use App\Actions\Discord\DefineChannelIdAction;
 use App\Actions\Discord\SendDiscordNotificationAction;
 use App\DataObjects\DiscordNotificationData;
 
 abstract class DiscordNotification implements NotificationInterface
 {
+    private int $channelId;
+
     public function __construct(
-        public DefineChannelIdAction $defineChannelIdAction,
         public DiscordNotificationData $discordNotificationData,
+        public DefineChannelIdAction $defineChannelIdAction,
         public SendDiscordNotificationAction $sendDiscordNotificationAction,
-        private int $channelId,
     ) {
+        //
     }
 
-    public function create(): void
+    public function handle(): void
     {
         $this->channelId = ($this->defineChannelIdAction)($this->discordNotificationData->day->date);
 
-        $message = $this->buildMessage($this->discordNotificationData);
+        $notificationContent = $this->buildMessage($this->discordNotificationData);
 
-        $this->send($message);
+        $this->send($notificationContent);
     }
 
     abstract public function buildMessage(DiscordNotificationData $discordNotificationData): array;
