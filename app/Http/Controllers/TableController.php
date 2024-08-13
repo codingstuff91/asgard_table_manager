@@ -16,10 +16,13 @@ use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
+use App\Notifications\Discord\NotificationFactory;
 use App\Repositories\GameRepository;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TableController extends Controller
 {
@@ -49,13 +52,25 @@ class TableController extends Controller
     {
         $game = $this->gameRepository->findOrFail($request->game_id);
 
-        $command = new CreateTableCommand($day, $game, $request);
+        try {
+            $command = new CreateTableCommand($day, $game, $request);
 
-        $table = $this->createTableHandler->handle($command);
+            $table = $this->createTableHandler->handle($command);
 
-        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+            $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
+            $discordNotification = NotificationFactory::create('create-table', $discordNotificationData);
+
+            $discordNotification->handle();
+        } catch (Exception $e) {
+            Log::error('Problem during table creation: '.$e->getMessage());
+
+            return redirect()
+                ->route('days.show', $command->day)
+                ->with([
+                    'error' => 'Une erreur est survenue lors de la création de la table.',
+                ]);
+        }
 
         return redirect()->route('days.show', $command->day);
     }
