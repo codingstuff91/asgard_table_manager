@@ -108,7 +108,7 @@ class TableController extends Controller
             Log::error('Problem during table update: '.$e->getMessage());
 
             return redirect()
-                ->route('days.show', $command->day)
+                ->route('days.show', $table->day)
                 ->with([
                     'error' => 'Une erreur est survenue lors de la mise à jour de la table.',
                 ]);
@@ -131,7 +131,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'subscribe');
+        $discordNotification = ($this->notificationFactory)('user-subscription', $discordNotificationData);
+        $discordNotification->handle();
 
         return redirect()->back();
     }
@@ -142,7 +143,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'unsubscribe');
+        $discordNotification = ($this->notificationFactory)('user-unsubscription', $discordNotificationData);
+        $discordNotification->handle();
 
         return redirect()->back();
     }
