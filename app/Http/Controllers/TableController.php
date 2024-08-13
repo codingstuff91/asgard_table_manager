@@ -94,14 +94,25 @@ class TableController extends Controller
 
     public function update(Table $table, TableStoreRequest $request): RedirectResponse
     {
-        $command = new UpdateTableCommand($table, $request);
+        try {
+            $command = new UpdateTableCommand($table, $request);
 
-        $table = $this->updateTableHandler->handle($command);
+            $table = $this->updateTableHandler->handle($command);
 
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+            $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        $discordNotification = ($this->notificationFactory)('update-table', $discordNotificationData);
-        $discordNotification->handle();
+            $discordNotification = ($this->notificationFactory)('update-table', $discordNotificationData);
+            $discordNotification->handle();
+
+        } catch (Exception $e) {
+            Log::error('Problem during table update: '.$e->getMessage());
+
+            return redirect()
+                ->route('days.show', $command->day)
+                ->with([
+                    'error' => 'Une erreur est survenue lors de la mise à jour de la table.',
+                ]);
+        }
 
         return redirect()->route('days.show', $command->table->day);
     }
@@ -138,14 +149,26 @@ class TableController extends Controller
 
     public function destroy(Table $table): RedirectResponse
     {
-        $table->users()->detach();
+        try {
 
-        $table->delete();
+            $table->users()->detach();
 
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+            $table->delete();
 
-        $discordNotification = ($this->notificationFactory)('cancel-table', $discordNotificationData);
-        $discordNotification->handle();
+            $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+            $discordNotification = ($this->notificationFactory)('cancel-table', $discordNotificationData);
+            $discordNotification->handle();
+
+        } catch (Exception $e) {
+            Log::error('Problem during table cancellation: '.$e->getMessage());
+
+            return redirect()
+                ->route('days.show', $table->day)
+                ->with([
+                    'error' => 'Une erreur est survenue lors de l\'annulation de la table.',
+                ]);
+        }
 
         return redirect()->back();
     }
