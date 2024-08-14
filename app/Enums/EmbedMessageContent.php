@@ -13,4 +13,5 @@ enum EmbedMessageContent: string
     case WARNING = 'Avertissement de session';
     case EVENT_CREATED = 'Nouvel évènement ajouté';
     case EVENT_UPDATED = 'Evènement mis à jour';
+    case EVENT_CANCELLED = 'Evènement annulé';
 }

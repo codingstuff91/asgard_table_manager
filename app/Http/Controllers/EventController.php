@@ -99,6 +99,20 @@ class EventController extends Controller
     {
         $event->delete();
 
-        return redirect()->back();
+        $discordNotificationData = $this->discordNotificationData::make(
+            game: null,
+            table: null,
+            day: $event->day,
+            extra: [
+                'name' => $event->name,
+                'description' => $event->description,
+                'start_hour' => $event->start_hour,
+            ]
+        );
+
+        $discordNotification = ($this->notificationFactory)('cancel-event', $discordNotificationData);
+        $discordNotification->handle();
+
+        return to_route('days.show', $event->day_id);
     }
 }

@@ -128,11 +128,10 @@ it('deletes an event', function () {
     $this->seed();
     login();
 
-    $event = Event::first();
+    mockHttpClient();
 
-    expect(Event::count())->toBe(1);
+    $response = $this->delete(route('event.destroy', Event::first()));
 
-    $this->delete(route('event.destroy', Event::first()));
-
-    expect(Event::count())->toBe(0);
+    expect(Event::count())->toBe(0)
+        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
 });
