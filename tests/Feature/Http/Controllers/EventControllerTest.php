@@ -14,9 +14,11 @@ it('can render the event create page', function () {
     $response->assertOk();
 });
 
-it('can create a new event', function () {
+it('stores a new event', function () {
     $this->seed();
     $this->actingAs(User::first());
+
+    mockHttpClient();
 
     $day = Day::first();
     $response = $this->post(route('event.store', $day), [
@@ -25,8 +27,10 @@ it('can create a new event', function () {
         'start_hour' => '14:00',
     ]);
 
-    expect(['name' => 'example'])->toBeInDatabase('events');
-    expect(['description' => 'description'])->toBeInDatabase('events');
+    expect(['name' => 'example'])->toBeInDatabase('events')
+        ->and(['description' => 'description'])->toBeInDatabase('events')
+        ->and($response)
+        ->toBeRedirect(route('days.show', Day::first()->id));
 });
 
 it('can not create an event without a name', function () {
@@ -75,9 +79,11 @@ it('can render the event edit page', function () {
     $response->assertOk();
 });
 
-it('can update a table successfully', function () {
+it('can update an event successfully', function () {
     $this->seed();
     $this->actingAs(User::first());
+
+    mockHttpClient();
 
     $response = $this->put(route('event.update', Event::first()), [
         'name' => 'edited',
