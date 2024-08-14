@@ -11,5 +11,4 @@ interface NotificationInterface
     public function buildMessage(DiscordNotificationData $discordNotificationData): array;
 
     public function send(array $message): void;
-
 }

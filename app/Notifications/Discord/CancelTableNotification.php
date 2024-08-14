@@ -18,7 +18,7 @@ class CancelTableNotification extends DiscordNotification
                     'title' => self::setMessageTitle($discordNotificationData),
                     'color' => EmbedColor::DELETED->value,
                     'author' => [
-                        'name' => 'Annulée par : ' . Auth::user()->name,
+                        'name' => 'Annulée par : '.Auth::user()->name,
                     ],
                 ],
             ],
@@ -27,6 +27,6 @@ class CancelTableNotification extends DiscordNotification
 
     private static function setMessageTitle(DiscordNotificationData $discordNotificationData): string
     {
-        return 'La Table de ' . $discordNotificationData->game->name . ' prévue le ' . $discordNotificationData->day->date->format('d/m/Y') . ' à ' . $discordNotificationData->table->start_hour . ' est annulée.';
+        return 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée.';
     }
 }
