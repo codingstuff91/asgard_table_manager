@@ -64,6 +64,20 @@ class EventController extends Controller
             'description' => $request->description,
         ]);
 
+        $discordNotificationData = $this->discordNotificationData::make(
+            game: null,
+            table: null,
+            day: $event->day,
+            extra: [
+                'name' => $request->name,
+                'description' => $request->description,
+                'start_hour' => $request->start_hour,
+            ]
+        );
+
+        $discordNotification = ($this->notificationFactory)('update-event', $discordNotificationData);
+        $discordNotification->handle();
+
         return to_route('days.show', $event->day_id);
     }
 
