@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Actions\Day\DeleteDayTablesAction;
 use App\Actions\Day\DisableDayAction;
-use App\Actions\Discord\CreateDayDiscordNotificationAction;
 use App\DataObjects\DiscordNotificationData;
 use App\Http\Requests\storeDayRequest;
 use App\Http\Requests\WarningCancelDayRequest;
@@ -22,7 +21,6 @@ use Illuminate\Support\Facades\Log;
 class DayController extends Controller
 {
     public function __construct(
-        public CreateDayDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
         public NotificationFactory $notificationFactory,
     ) {

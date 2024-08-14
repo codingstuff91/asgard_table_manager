@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Discord\CreateDiscordNotificationAction;
-use App\Actions\UserSubscriptionAction;
 use App\Commands\CreateTableCommand;
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
@@ -27,13 +25,11 @@ use Illuminate\Support\Facades\Log;
 class TableController extends Controller
 {
     public function __construct(
-        public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
         public NotificationFactory $notificationFactory,
         public CreateTableHandler $createTableHandler,
         public UpdateTableHandler $updateTableHandler,
         public GameRepository $gameRepository,
-        protected UserSubscriptionAction $userSubscriptionAction,
     ) {
         //
     }
