@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\DataObjects\DiscordNotificationData;
 use App\Http\Requests\EventStoreRequest;
 use App\Models\Day;
 use App\Models\Event;
+use App\Notifications\Discord\NotificationFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
+    public function __construct(
+        public DiscordNotificationData $discordNotificationData,
+        public NotificationFactory $notificationFactory,
+    ) {
+        //
+    }
+
     public function create(Request $request, Day $day)
     {
         return view('event.create')->with(['day' => $day->id]);
@@ -24,6 +33,20 @@ class EventController extends Controller
             'description' => $request->description,
             'start_hour' => $request->start_hour,
         ]);
+
+        $discordNotificationData = $this->discordNotificationData::make(
+            game: null,
+            table: null,
+            day: $day,
+            extra: [
+                'name' => $request->name,
+                'description' => $request->description,
+                'start_hour' => $request->start_hour,
+            ]
+        );
+
+        $discordNotification = ($this->notificationFactory)('create-event', $discordNotificationData);
+        $discordNotification->handle();
 
         return to_route('days.show', $day);
     }
