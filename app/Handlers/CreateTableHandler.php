@@ -10,7 +10,6 @@ use App\Logic\TableLogic;
 use App\Models\Table;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 
 class CreateTableHandler
 {
@@ -22,25 +21,15 @@ class CreateTableHandler
 
     public function handle(CreateTableCommand $command): Table|RedirectResponse
     {
-        try {
-            $tableAttributes = TableData::fromRequest($command->day, $command->request);
+        $tableAttributes = TableData::fromRequest($command->day, $command->request);
 
-            $this->checkIfTableExists($tableAttributes);
+        $this->checkIfTableExists($tableAttributes);
 
-            $table = $this->createTable($tableAttributes);
+        $table = $this->createTable($tableAttributes);
 
-            $this->registerCurrentUserToTable($table);
+        $this->registerCurrentUserToTable($table);
 
-            return $table;
-        } catch (Exception $e) {
-            Log::error('Error creating table: '.$e->getMessage());
-
-            return redirect()
-                ->route('days.show', $command->day)
-                ->with([
-                    'error' => 'Une erreur est survenue lors de la création de la table.',
-                ]);
-        }
+        return $table;
     }
 
     private function checkIfTableExists(TableData $tableAttributes): void

@@ -11,4 +11,7 @@ enum EmbedMessageContent: string
     case UNSUBSCRIBED = 'Désinscription de joueur';
     case CANCELLED = 'Annulation de session';
     case WARNING = 'Avertissement de session';
+    case EVENT_CREATED = 'Nouvel évènement ajouté';
+    case EVENT_UPDATED = 'Evènement mis à jour';
+    case EVENT_CANCELLED = 'Evènement annulé';
 }

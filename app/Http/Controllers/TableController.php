@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Discord\CreateDiscordNotificationAction;
-use App\Actions\UserSubscriptionAction;
 use App\Commands\CreateTableCommand;
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\DiscordNotificationData;
@@ -16,20 +14,22 @@ use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
+use App\Notifications\Discord\NotificationFactory;
 use App\Repositories\GameRepository;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TableController extends Controller
 {
     public function __construct(
-        public CreateDiscordNotificationAction $createDiscordNotificationAction,
         public DiscordNotificationData $discordNotificationData,
+        public NotificationFactory $notificationFactory,
         public CreateTableHandler $createTableHandler,
         public UpdateTableHandler $updateTableHandler,
         public GameRepository $gameRepository,
-        protected UserSubscriptionAction $userSubscriptionAction,
     ) {
         //
     }
@@ -49,13 +49,25 @@ class TableController extends Controller
     {
         $game = $this->gameRepository->findOrFail($request->game_id);
 
-        $command = new CreateTableCommand($day, $game, $request);
+        try {
+            $command = new CreateTableCommand($day, $game, $request);
 
-        $table = $this->createTableHandler->handle($command);
+            $table = $this->createTableHandler->handle($command);
 
-        $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
+            $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'create');
+            $discordNotification = ($this->notificationFactory)('create-table', $discordNotificationData);
+            $discordNotification->handle();
+
+        } catch (Exception $e) {
+            Log::error('Problem during table creation: '.$e->getMessage());
+
+            return redirect()
+                ->route('days.show', $command->day)
+                ->with([
+                    'error' => 'Une erreur est survenue lors de la création de la table.',
+                ]);
+        }
 
         return redirect()->route('days.show', $command->day);
     }
@@ -78,13 +90,25 @@ class TableController extends Controller
 
     public function update(Table $table, TableStoreRequest $request): RedirectResponse
     {
-        $command = new UpdateTableCommand($table, $request);
+        try {
+            $command = new UpdateTableCommand($table, $request);
 
-        $table = $this->updateTableHandler->handle($command);
+            $table = $this->updateTableHandler->handle($command);
 
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+            $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'update');
+            $discordNotification = ($this->notificationFactory)('update-table', $discordNotificationData);
+            $discordNotification->handle();
+
+        } catch (Exception $e) {
+            Log::error('Problem during table update: '.$e->getMessage());
+
+            return redirect()
+                ->route('days.show', $table->day)
+                ->with([
+                    'error' => 'Une erreur est survenue lors de la mise à jour de la table.',
+                ]);
+        }
 
         return redirect()->route('days.show', $command->table->day);
     }
@@ -103,7 +127,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'subscribe');
+        $discordNotification = ($this->notificationFactory)('user-subscription', $discordNotificationData);
+        $discordNotification->handle();
 
         return redirect()->back();
     }
@@ -114,20 +139,34 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'unsubscribe');
+        $discordNotification = ($this->notificationFactory)('user-unsubscription', $discordNotificationData);
+        $discordNotification->handle();
 
         return redirect()->back();
     }
 
     public function destroy(Table $table): RedirectResponse
     {
-        $table->users()->detach();
+        try {
 
-        $table->delete();
+            $table->users()->detach();
 
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+            $table->delete();
 
-        ($this->createDiscordNotificationAction)($discordNotificationData, 'delete');
+            $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+
+            $discordNotification = ($this->notificationFactory)('cancel-table', $discordNotificationData);
+            $discordNotification->handle();
+
+        } catch (Exception $e) {
+            Log::error('Problem during table cancellation: '.$e->getMessage());
+
+            return redirect()
+                ->route('days.show', $table->day)
+                ->with([
+                    'error' => 'Une erreur est survenue lors de l\'annulation de la table.',
+                ]);
+        }
 
         return redirect()->back();
     }

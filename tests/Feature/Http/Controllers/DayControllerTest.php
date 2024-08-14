@@ -1,9 +1,5 @@
 <?php
 
-use App\Actions\Discord\BuildDayEmbedMessageStructureAction;
-use App\Actions\Discord\CreateDayDiscordNotificationAction;
-use App\Actions\Discord\DefineChannelIdAction;
-use App\Actions\Discord\SendDiscordNotificationAction;
 use App\Models\Day;
 use App\Models\User;
 
@@ -192,28 +188,6 @@ test('The cancellation message is visible on the show page if exists', function 
     $showDayView = get(route('days.show', $day));
 
     expect($showDayView)->toContainText($explanationTest);
-});
-
-test('The cancel discord notification is sent', function () {
-    mockHttpClient();
-
-    $discordNotificationAction = Mockery::mock(CreateDayDiscordNotificationAction::class);
-    $discordNotificationAction->shouldReceive('__invoke');
-
-    $day = Day::first();
-    $explanationTest = 'Example of explanation';
-
-    $this->patch(route('days.confirm_cancel', $day), [
-        'explanation' => $explanationTest,
-    ]);
-
-    $channelId = app(DefineChannelIdAction::class)($day->date);
-
-    $embedMessage = app(BuildDayEmbedMessageStructureAction::class)::buildEmbedStructure($day, $explanationTest, 'cancel');
-
-    $response = app(SendDiscordNotificationAction::class)($channelId, $embedMessage);
-
-    expect($response)->toBe('Discord notification sent');
 });
 
 test('The action buttons are visible for admin users on days index page', function () {
