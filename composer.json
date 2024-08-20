@@ -20,6 +20,7 @@
         "barryvdh/laravel-debugbar": "3.9.*",
         "defstudio/pest-plugin-laravel-expectations": "2.1.*",
         "fakerphp/faker": "1.23.*",
+        "larastan/larastan": "2.9.*",
         "laravel/pint": "1.13.*",
         "laravel/sail": "1.26.*",
         "mockery/mockery": "1.6.*",
