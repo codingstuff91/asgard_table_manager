@@ -10,11 +10,11 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        $users = User::all()->count();
+        $users = User::count();
 
-        $days = Day::all()->count();
+        $days = Day::count();
 
-        $tables = Table::all()->count();
+        $tables = Table::count();
 
         $afternoonTables = Table::all()->filter(function ($value, $key) {
             $hour = explode(':', $value->start_hour)[0];
