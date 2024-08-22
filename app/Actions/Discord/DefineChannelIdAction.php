@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\App;
 
 class DefineChannelIdAction
 {
-    public function __invoke(string $date)
+    public function __invoke(string $date): int
     {
         $dayDate = Carbon::create($date);
 

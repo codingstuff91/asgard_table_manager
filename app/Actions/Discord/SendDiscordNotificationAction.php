@@ -8,9 +8,11 @@ class SendDiscordNotificationAction
 {
     public function __construct(private Client $client)
     {
+        //
     }
 
-    public function __invoke(int $channelId, array $embedMessage)
+    // @phpstan-ignore-next-line
+    public function __invoke(int $channelId, array $embedMessage): string
     {
         $this->client->post(config('discord.api_url').$channelId.'/messages', [
             'headers' => [

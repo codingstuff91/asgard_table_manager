@@ -21,6 +21,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class TableController extends Controller
 {
@@ -72,7 +73,7 @@ class TableController extends Controller
         return redirect()->route('days.show', $command->day);
     }
 
-    public function edit(Table $table)
+    public function edit(Table $table): View
     {
         if (! Gate::allows('edit_table', $table)) {
             abort(403);
