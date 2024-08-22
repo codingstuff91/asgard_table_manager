@@ -49,9 +49,9 @@ class TableController extends Controller
     {
         $game = $this->gameRepository->findOrFail($request->game_id);
 
-        try {
-            $command = new CreateTableCommand($day, $game, $request);
+        $command = new CreateTableCommand($day, $game, $request);
 
+        try {
             $table = $this->createTableHandler->handle($command);
 
             $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
