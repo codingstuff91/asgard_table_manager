@@ -3,9 +3,10 @@ includes:
 parameters:
     paths:
         - app/
-    level: 5
+    level: 6
     excludePaths:
         - app/Filament/*
         - app/Http/Controllers/Auth/*
     ignoreErrors:
         - '#Access to an undefined property#'
+        - '#return type has no value type specified in iterable type array.#'
