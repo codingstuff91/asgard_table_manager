@@ -19,7 +19,7 @@ class NotificationFactory
     public function __invoke(
         string $type,
         DiscordNotificationData $discordNotificationData
-    ) {
+    ): mixed {
         $class = __NAMESPACE__.'\\'.Str::studly($type).'Notification';
 
         return new $class($discordNotificationData, $this->defineChannelIdAction, $this->sendDiscordNotificationAction);

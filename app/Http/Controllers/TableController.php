@@ -35,7 +35,7 @@ class TableController extends Controller
         //
     }
 
-    public function create(Day $day)
+    public function create(Day $day): View
     {
         if (! TableLogic::canCreateTable($day)) {
             abort(403);

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Day extends Model
 {
@@ -32,12 +33,12 @@ class Day extends Model
         );
     }
 
-    public function tables()
+    public function tables(): HasMany
     {
         return $this->hasMany(Table::class);
     }
 
-    public function events()
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class);
     }

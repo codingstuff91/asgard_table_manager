@@ -6,7 +6,7 @@ use App\DataObjects\DiscordNotificationData;
 
 interface NotificationInterface
 {
-    public function handle();
+    public function handle(): void;
 
     public function buildMessage(DiscordNotificationData $discordNotificationData): array;
 
