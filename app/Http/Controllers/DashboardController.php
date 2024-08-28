@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Day;
 use App\Models\Table;
 use App\Models\User;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): View
     {
-        $users = User::all()->count();
+        $users = User::count();
 
-        $days = Day::all()->count();
+        $days = Day::count();
 
-        $tables = Table::all()->count();
+        $tables = Table::count();
 
         $afternoonTables = Table::all()->filter(function ($value, $key) {
             $hour = explode(':', $value->start_hour)[0];

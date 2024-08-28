@@ -10,6 +10,7 @@ use App\Notifications\Discord\NotificationFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class EventController extends Controller
 {
@@ -20,12 +21,12 @@ class EventController extends Controller
         //
     }
 
-    public function create(Request $request, Day $day)
+    public function create(Request $request, Day $day): View
     {
         return view('event.create')->with(['day' => $day->id]);
     }
 
-    public function store(EventStoreRequest $request, Day $day)
+    public function store(EventStoreRequest $request, Day $day): RedirectResponse
     {
         Event::create([
             'day_id' => $day->id,
@@ -51,12 +52,12 @@ class EventController extends Controller
         return to_route('days.show', $day);
     }
 
-    public function edit(Event $event)
+    public function edit(Event $event): View
     {
         return view('event.edit', compact('event'));
     }
 
-    public function update(Request $request, Event $event)
+    public function update(Request $request, Event $event): RedirectResponse
     {
         $event->update([
             'name' => $request->name,

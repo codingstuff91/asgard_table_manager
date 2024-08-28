@@ -6,27 +6,18 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Day extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'date',
         'explanation',
         'can_create_table',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'integer',
         'date' => 'date',
@@ -34,6 +25,8 @@ class Day extends Model
 
     /**
      * Get the french full day name
+     *
+     * @phpstan-ignore-next-line
      */
     protected function fullDayName(): Attribute
     {
@@ -42,12 +35,18 @@ class Day extends Model
         );
     }
 
-    public function tables()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Table>
+     */
+    public function tables(): HasMany
     {
         return $this->hasMany(Table::class);
     }
 
-    public function events()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Event>
+     */
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class);
     }

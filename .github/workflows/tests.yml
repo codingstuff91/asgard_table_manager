@@ -28,3 +28,6 @@ jobs:
 
       - name: Run PEST tests
         run: ./vendor/bin/pest
+
+#      - name: Run Larastan analysis
+#        run: ./vendor/bin/phpstan analyse --memory-limit=2G
