@@ -8,7 +8,5 @@ parameters:
         - app/Filament/*
         - app/Http/Controllers/Auth/*
     ignoreErrors:
-        - '#Access to an undefined property#'
         - '#return type has no value type specified in iterable type array.#'
         - '#with no value type specified in iterable type array.#'
-        - '#Parameter #1 $year of static method Carbon\Carbon::create() expects DateTimeInterface|int|null, string given.#'

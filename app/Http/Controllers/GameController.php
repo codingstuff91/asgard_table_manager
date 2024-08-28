@@ -14,6 +14,9 @@ class GameController extends Controller
         return redirect('/admin/games/create');
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public function searchByCategory(Request $request): Collection
     {
         return Game::where('category_id', $request->category)

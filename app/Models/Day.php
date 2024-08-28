@@ -25,6 +25,8 @@ class Day extends Model
 
     /**
      * Get the french full day name
+     *
+     * @phpstan-ignore-next-line
      */
     protected function fullDayName(): Attribute
     {

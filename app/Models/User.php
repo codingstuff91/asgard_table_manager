@@ -30,6 +30,9 @@ class User extends Authenticatable implements FilamentUser
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return BelongsToMany<\App\Models\Table>
+     */
     public function tables(): BelongsToMany
     {
         return $this->belongsToMany(Table::class);
