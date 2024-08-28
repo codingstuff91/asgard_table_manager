@@ -33,11 +33,17 @@ class Day extends Model
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Table>
+     */
     public function tables(): HasMany
     {
         return $this->hasMany(Table::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Event>
+     */
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);

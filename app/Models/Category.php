@@ -14,11 +14,17 @@ class Category extends Model
 
     public $timestamps = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Game>
+     */
     public function games(): HasMany
     {
         return $this->hasMany(Game::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Table>
+     */
     public function tables(): HasMany
     {
         return $this->hasMany(Table::class);

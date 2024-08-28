@@ -23,11 +23,17 @@ class Game extends Model
         'category_id' => 'integer',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<\App\Models\Table>
+     */
     public function tables(): HasMany
     {
         return $this->hasMany(Table::class);
     }
 
+    /**
+     * @return BelongsTo<\App\Models\Category, \App\Models\Game>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

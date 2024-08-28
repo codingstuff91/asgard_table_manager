@@ -13,11 +13,17 @@ class Event extends Model
 
     protected $guarded = [];
 
+    /**
+     * @return BelongsToMany<\App\Models\User>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
 
+    /**
+     * @return BelongsTo<\App\Models\Day, \App\Models\Event>
+     */
     public function day(): BelongsTo
     {
         return $this->belongsTo(Day::class);
