@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    /**
-     * Redirect to create game admin panel page
-     */
     public function create(): RedirectResponse
     {
         return redirect('/admin/games/create');
