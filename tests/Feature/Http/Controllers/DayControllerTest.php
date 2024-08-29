@@ -24,7 +24,7 @@ test('The create page is rendered correctly', function () {
 });
 
 test('The show page is rendered correctly', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     $response = get(route('days.show', $day));
 
@@ -32,7 +32,7 @@ test('The show page is rendered correctly', function () {
 });
 
 test('A day can not be created twice', function () {
-    Day::factory()->create();
+    createDay();
 
     $response = $this->post(route('days.store'), [
         'date' => now(),
@@ -60,9 +60,7 @@ test('A day is created successfully', function () {
 });
 
 test('The past days are hidden from index page', function () {
-    $pastDay = Day::factory()->create([
-        'date' => now()->sub('day', 1),
-    ]);
+    $pastDay = createPastDay();
 
     $response = get(route('days.index'));
 
@@ -72,7 +70,7 @@ test('The past days are hidden from index page', function () {
 });
 
 test('the edit warning page is rendered correctly', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     $response = get(route('days.warning', $day));
 
@@ -80,7 +78,7 @@ test('the edit warning page is rendered correctly', function () {
 });
 
 test('the warning could not be store without an explanation', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     $response = patch(route('days.confirm_warning', $day), [
         'explanation' => '',
@@ -90,7 +88,7 @@ test('the warning could not be store without an explanation', function () {
 });
 
 test('A warning message can be stored', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     $response = patch(route('days.confirm_warning', $day), [
         'explanation' => 'Example of explanation',
@@ -102,7 +100,7 @@ test('A warning message can be stored', function () {
 });
 
 test('The warning message is visible on the show page if exists', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     patch(route('days.confirm_warning', $day), [
         'explanation' => 'Example of explanation',
@@ -114,7 +112,7 @@ test('The warning message is visible on the show page if exists', function () {
 });
 
 test('The warning message is hidden when it doesnt exists', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
     $explanationTest = 'Example of explanation';
 
     $response = get(route('days.show', $day));
@@ -124,14 +122,14 @@ test('The warning message is hidden when it doesnt exists', function () {
 });
 
 test('the cancel page is rendered correctly', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
     $response = get(route('days.cancel', $day));
 
     expect($response)->toBeOk();
 });
 
 test('the day cancelation could not be executed without an explanation', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     $response = patch(route('days.confirm_cancel', $day), [
         'explanation' => '',
@@ -141,7 +139,7 @@ test('the day cancelation could not be executed without an explanation', functio
 });
 
 test('The cancelation message is stored', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
@@ -153,7 +151,7 @@ test('The cancelation message is stored', function () {
 });
 
 test('The cancelation of a day must block the ability to create table', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
@@ -165,7 +163,7 @@ test('The cancelation of a day must block the ability to create table', function
 });
 
 test('The cancellation of a day must delete every tables created', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
@@ -175,7 +173,7 @@ test('The cancellation of a day must delete every tables created', function () {
 });
 
 test('The cancellation message is visible on the show page if exists', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
@@ -202,7 +200,7 @@ test('The action buttons are hidden for non admin users on days index page', fun
 });
 
 test('The create buttons are hidden for a cancelled day', function () {
-    $day = Day::factory()->create();
+    $day = createDay();
 
     patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
