@@ -3,69 +3,77 @@
 use App\Models\Day;
 use App\Models\Event;
 use App\Models\User;
+use Tests\RequestFactories\EventRequestFactory;
+
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\post;
 
 it('can render the event create page', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
+    $day = createDay();
 
-    $day = Day::first();
     $response = $this->get(route('event.create', $day));
 
     $response->assertOk();
 });
 
 it('stores a new event', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
+    login();
+    $day = createDay();
     mockHttpClient();
 
-    $day = Day::first();
-    $response = $this->post(route('event.store', $day), [
-        'name' => 'example',
-        'description' => 'description',
-        'start_hour' => '14:00',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('example')
+        ->withDescription('description')
+        ->withStartHour('14:00')
+        ->create();
 
-    expect(['name' => 'example'])->toBeInDatabase('events')
-        ->and(['description' => 'description'])->toBeInDatabase('events')
-        ->and($response)
-        ->toBeRedirect(route('days.show', Day::first()->id));
+    $response = post(route('event.store', $day),
+        $eventAttributes
+    );
+
+    expect($response)->toBeRedirect(route('days.show', $day));
+    assertDatabaseHas('events', $eventAttributes);
 });
 
 it('can not create an event without a name', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->post(route('event.store', Day::first()->id), [
-        'name' => '',
-        'description' => 'description',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('')
+        ->withDescription('description')
+        ->withStartHour('14:00')
+        ->create();
+
+    $response = post(route('event.store', createDay()), $eventAttributes);
 
     expect($response)->toHaveInvalid('name');
 });
 
 it('can not create an event without a description', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->post(route('event.store', Day::first()->id), [
-        'name' => 'example',
-        'description' => '',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('example')
+        ->withDescription('')
+        ->withStartHour('14:00')
+        ->create();
+
+    $response = post(route('event.store', createDay()), $eventAttributes);
 
     expect($response)->toHaveInvalid('description');
 });
 
 it('can not create an event without a start_hour', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->post(route('event.store', Day::first()->id), [
-        'name' => 'example',
-        'description' => 'description',
-        'start_hour' => '',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('example')
+        ->withDescription('description')
+        ->withStartHour('')
+        ->create();
+
+    $response = $this->post(route('event.store', createDay()), $eventAttributes);
 
     expect($response)->toHaveInvalid('start_hour');
 });
