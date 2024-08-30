@@ -1,18 +1,24 @@
 <?php
 
 use App\Actions\UserSubscriptionAction;
+use App\Models\Category;
+use App\Models\Day;
+use App\Models\Game;
 use App\Models\Table;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 test('The action class does its job correctly', function () {
-    $this->seed();
+    login();
 
-    $this->actingAs(User::first());
+    $table = Table::factory()
+        ->for(Category::factory())
+        ->for(Game::factory())
+        ->for(Day::factory())
+        ->create([
+            'organizer_id' => Auth::user()->id,
+        ]);
 
-    $table = Table::first();
-    $user = User::first();
+    app(UserSubscriptionAction::class)->execute($table);
 
-    app(UserSubscriptionAction::class)->execute($table, $user);
-
-    expect($table->users->count())->toBe(2);
+    expect($table->users->count())->toBeOne();
 });
