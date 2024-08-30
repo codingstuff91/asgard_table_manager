@@ -139,15 +139,7 @@ it('Updates a table', function () {
     login();
     mockHttpClient();
 
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->has(User::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-            'start_hour' => '21:00',
-        ]);
+    $table = createTable();
 
     $response = patch(route('table.update', $table), [
         'day_id' => Day::first()->id,
@@ -169,13 +161,7 @@ it('Updates a table', function () {
 it('Subscribes a user to a table', function () {
     mockHttpClient();
 
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    $table = createTable();
 
     get(route('table.subscribe', $table));
 
@@ -185,13 +171,7 @@ it('Subscribes a user to a table', function () {
 it('Unsubscribes a user of a table', function () {
     mockHttpClient();
 
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    $table = createTable();
 
     get(route('table.unsubscribe', $table));
 
@@ -199,29 +179,17 @@ it('Unsubscribes a user of a table', function () {
 });
 
 it('Can not subscribe a user already subscribed to another table with the same start hour for the same day', function () {
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-            'start_hour' => '21:00',
-        ]);
+    mockHttpClient();
+    $day = createDay();
+    $table = createTable(day: $day, start_hour: '21:00');
 
     app(UserSubscriptionAction::class)->execute($table, Auth::user());
 
-    $anotherTableAtSameHour = Table::factory()
-        ->for(Game::factory())
-        ->for(Day::first())
-        ->for(Category::first())
-        ->create([
-            'organizer_id' => User::factory(),
-            'start_hour' => '21:00',
-        ]);
+    $anotherTableAtSameHour = createTable(day: $day, start_hour: '21:00');
 
     $response = get(route('table.subscribe', $anotherTableAtSameHour));
 
-    $response->assertRedirect(route('days.show', $table->day));
+    $response->assertRedirect(route('days.show', $anotherTableAtSameHour->day));
 
     expect($anotherTableAtSameHour->users->count())->toBe(0);
 });
@@ -241,14 +209,7 @@ test('An admin user can see the edit action button for a table he didnt created'
     loginAdmin();
     $day = createDay();
 
-    Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for($day)
-        ->create([
-            'organizer_id' => Auth::user()->id,
-            'start_hour' => '21:00',
-        ]);
+    createTable(day: $day);
 
     get(route('days.show', $day))
         ->assertOk()
@@ -256,13 +217,7 @@ test('An admin user can see the edit action button for a table he didnt created'
 });
 
 test('A user can not render the edit page for a table he didnt create', function () {
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    $table = createTable();
 
     $anotherUser = User::factory()->create();
 
@@ -274,13 +229,7 @@ test('A user can not render the edit page for a table he didnt create', function
 test('An admin user can render the edit page for a table he didnt create', function () {
     loginAdmin();
 
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    $table = createTable();
 
     get(route('table.edit', $table))->assertOk();
 });
@@ -290,13 +239,7 @@ test('A user can not see the delete action button for a table he didnt created',
 
     $anotherUser = User::factory()->create();
 
-    Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for(Day::factory())
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    createTable(day: $day);
 
     actingAs($anotherUser)
         ->get(route('days.show', $day))
@@ -308,13 +251,7 @@ test('An admin user can see the delete action button for a table he didnt create
     loginAdmin();
     $day = createDay();
 
-    Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for($day)
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    createTable(day: $day);
 
     get(route('days.show', $day))
         ->assertOk()
@@ -322,34 +259,22 @@ test('An admin user can see the delete action button for a table he didnt create
 });
 
 test('Deletes a table', function () {
-    $day = createDay();
     mockHttpClient();
 
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for($day)
-        ->create([
-            'organizer_id' => Auth::user()->id,
-        ]);
+    $table = createTable();
+
+    expect(Table::count())->toBeOne();
 
     delete(route('table.delete', $table));
 
-    expect(Table::all()->count())->toBe(0);
+    expect(Table::count())->toBe(0);
 });
 
 test('A user could not subscribe to a table if the max number of players is reached', function () {
     $day = createDay();
     mockHttpClient();
 
-    $table = Table::factory()
-        ->for(Category::factory())
-        ->for(Game::factory())
-        ->for($day)
-        ->create([
-            'organizer_id' => Auth::user()->id,
-            'players_number' => 1,
-        ]);
+    $table = createTable(day: $day, playersNumber: 1);
 
     $anotherUser = User::factory()->create();
 
@@ -364,7 +289,7 @@ test('A user could not subscribe to a table if the max number of players is reac
         ->and($table->users()->count())->toBeOne();
 });
 
-test('Table creation is not allowed if a day has been cancelled', function () {
+test('Table creation is not allowed for a cancelled day', function () {
     $day = createDay();
 
     patch(route('days.confirm_cancel', $day), [

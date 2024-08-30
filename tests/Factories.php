@@ -4,6 +4,8 @@ use App\Models\Category;
 use App\Models\Day;
 use App\Models\Event;
 use App\Models\Game;
+use App\Models\Table;
+use Illuminate\Support\Facades\Auth;
 
 function createDay(): Day
 {
@@ -32,4 +34,20 @@ function createGameWithCategory()
     return Game::factory()
         ->for($category)
         ->create();
+}
+
+function createTable(
+    Day $day = null,
+    string $start_hour = '14:00',
+    int $playersNumber = 2,
+): Table {
+    return Table::factory()
+        ->for(Category::factory())
+        ->for(Game::factory())
+        ->for($day ?? Day::factory())
+        ->create([
+            'organizer_id' => Auth::user()->id,
+            'start_hour' => $start_hour,
+            'players_number' => $playersNumber,
+        ]);
 }
