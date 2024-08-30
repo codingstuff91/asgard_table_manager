@@ -17,7 +17,7 @@ class TableRequestFactory
 
     private Category $category;
 
-    private int $players_number;
+    private ?int $players_number;
 
     private string $start_hour;
 
@@ -33,7 +33,7 @@ class TableRequestFactory
             'day_id' => $this->day->id,
             'game_id' => $this->game->id ?? null,
             'category_id' => $this->category->id,
-            'players_number' => $this->players_number,
+            'players_number' => $this->players_number ?? null,
             'start_hour' => $this->start_hour,
         ];
     }
@@ -66,7 +66,7 @@ class TableRequestFactory
         return $this;
     }
 
-    public function withPlayersNumber(int $playersNumber): self
+    public function withPlayersNumber(?int $playersNumber): self
     {
         $this->players_number = $playersNumber;
 
