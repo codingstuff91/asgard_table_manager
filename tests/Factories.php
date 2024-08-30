@@ -27,12 +27,12 @@ function createEvent(): Event
         ]);
 }
 
-function createGameWithCategory()
+function createGameWithCategory(Category $category = null): Game
 {
     $category = Category::factory()->create();
 
     return Game::factory()
-        ->for($category)
+        ->for($category ?? Category::factory()->create())
         ->create();
 }
 
