@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Day;
 use App\Models\Event;
+use App\Models\Game;
 
 function createDay(): Day
 {
@@ -21,4 +23,13 @@ function createEvent(): Event
         ->create([
             'day_id' => createDay()->id,
         ]);
+}
+
+function createGameWithCategory()
+{
+    $category = Category::factory()->create();
+
+    return Game::factory()
+        ->for($category)
+        ->create();
 }
