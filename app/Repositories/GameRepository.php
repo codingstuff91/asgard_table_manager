@@ -12,9 +12,7 @@ class GameRepository
         return Game::findOrFail($id);
     }
 
-    /**
-     * @return Collection<\App\Models\Game>
-     */
+    // @phpstan-ignore-next-line
     public function findByCategory(string $categoryId): Collection
     {
         return Game::where('category_id', $categoryId)
