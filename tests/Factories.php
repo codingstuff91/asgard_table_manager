@@ -29,8 +29,6 @@ function createEvent(): Event
 
 function createGameWithCategory(Category $category = null): Game
 {
-    $category = Category::factory()->create();
-
     return Game::factory()
         ->for($category ?? Category::factory()->create())
         ->create();
