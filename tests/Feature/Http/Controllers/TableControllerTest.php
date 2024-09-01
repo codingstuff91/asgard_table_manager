@@ -7,305 +7,292 @@ use App\Models\Game;
 use App\Models\Table;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
+use Tests\RequestFactories\TableRequestFactory;
 
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
+use function Pest\Laravel\post;
+
+beforeEach(function () {
+    login();
+});
 
 it('Display all game categories in the create view form', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    $day = createDay();
+    $category = Category::factory()->create();
 
-    $day = Day::first();
-    $response = $this->get(route('table.create', $day));
+    $response = get(route('table.create', $day));
 
     $response->assertOk();
 
-    foreach (Category::all() as $category) {
-        $response->assertSee($category->name);
-    }
+    $response->assertSee($category->name);
 });
 
 it('Creates a new table', function () {
-    $this->seed();
-
-    $this->actingAs(User::first());
-
+    $day = createDay();
+    $game = createGameWithCategory();
     mockHttpClient();
 
-    $response = $this->post(route('table.store', Day::first()->id), [
-        'organizer_id' => User::first()->id,
-        'day_id' => Day::first()->id,
-        'game_id' => Game::first()->id,
-        'category_id' => Category::first()->id,
-        'players_number' => 5,
-        'start_hour' => '21:00',
-    ]);
+    $tableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame($game)
+        ->withCategory($game->category)
+        ->withPlayersNumber(5)
+        ->withStartHour('21:00')
+        ->create();
+
+    $response = post(route('table.store', $day), $tableAttributes);
 
     expect($response)
-        ->toBeRedirect(route('days.show', Day::first()->id))
-        ->and(Table::count())->toBe(2);
-});
+        ->toBeRedirect(route('days.show', $day))
+        ->and(Table::count())->toBeOne();
 
-it('Can not create the same table twice', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
-    mockHttpClient();
-
-    $day = Day::first();
-
-    // Try to create a new table once
-    $response = $this->post(route('table.store', $day), [
-        'organizer_id' => User::first()->id,
-        'day_id' => Day::first()->id,
-        'game_id' => Game::first()->id,
-        'category_id' => Category::first()->id,
-        'players_number' => 5,
-        'start_hour' => '21:00',
-    ]);
-
-    expect(Table::count())->toBe(2)
-        ->and($response)
-        ->toBeRedirect(route('days.show', Day::first()->id))
-        ->toHaveSession('error');
-})->skip();
-
-it('Updates a table', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
-    mockHttpClient();
-
-    $response = $this->patch(route('table.update', Table::first()->id), [
-        'day_id' => Day::first()->id,
-        'game_id' => Game::first()->id,
-        'category_id' => Category::first()->id,
-        'players_number' => 5,
-        'start_hour' => '21:00',
-    ]);
-
-    $tableUpdated = Table::first();
-
-    expect($tableUpdated->game_id)->toBe('1')
-        ->and($tableUpdated->players_number)->toBe(5)
-        ->and($tableUpdated->start_hour)->toBe('21:00')
-        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
-
-});
-
-it('Can not create a table without the number of players', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
-    $response = $this->post(route('table.store', Day::first()->id), [
-        'organizer_id' => User::first()->id,
-        'day_id' => Day::first()->id,
-        'game_id' => Game::first()->id,
-        'category_id' => Category::first()->id,
-        'start_hour' => '21:00',
-    ]);
-
-    expect($response)->toHaveInvalid('players_number');
+    assertDatabaseHas('tables', $tableAttributes);
 });
 
 it('Can not create a table without a start hour', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    $day = createDay();
+    $game = createGameWithCategory();
 
-    $response = $this->post(route('table.store', Day::first()->id), [
-        'organizer_id' => User::first()->id,
-        'day_id' => Day::first()->id,
-        'game_id' => Game::first()->id,
-        'category_id' => Category::first()->id,
-        'players_number' => 5,
-    ]);
+    $tableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame($game)
+        ->withCategory($game->category)
+        ->withPlayersNumber(5)
+        ->withStartHour('')
+        ->create();
+
+    $response = post(route('table.store', Day::first()->id), $tableAttributes);
 
     expect($response)->toHaveInvalid('start_hour');
 });
 
 it('Can not create a table without a game', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    $day = createDay();
+    $game = createGameWithCategory();
 
-    $response = $this->post(route('table.store', Day::first()->id), [
-        'organizer_id' => User::first()->id,
-        'day_id' => Day::first()->id,
-        'players_number' => 5,
-        'start_hour' => '21:00',
-    ]);
+    $tableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame(null)
+        ->withCategory($game->category)
+        ->withPlayersNumber(5)
+        ->withStartHour('')
+        ->create();
+
+    $response = $this->post(route('table.store', $day->id), $tableAttributes);
 
     expect($response)->toHaveInvalid('game_id');
 });
 
-it('Subscribes a user to a table', function () {
-    $this->seed();
+it('Can not create a table without the number of players', function () {
+    $day = createDay();
+    $game = createGameWithCategory();
+
+    $tableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame($game)
+        ->withCategory($game->category)
+        ->withPlayersNumber(null)
+        ->withStartHour('14:00')
+        ->create();
+
+    $response = $this->post(route('table.store', $day->id), $tableAttributes);
+
+    expect($response)->toHaveInvalid('players_number');
+});
+
+it('Can not create the same table twice', function () {
     login();
+    $day = createDay();
+    $game = createGameWithCategory();
+    mockHttpClient();
 
-    expect(Table::first()->users->count())->toBe(1);
+    $tableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame($game)
+        ->withCategory($game->category)
+        ->withPlayersNumber(5)
+        ->withStartHour('21:00')
+        ->create();
 
-    $this->get(route('table.subscribe', Table::first()));
+    // Create a new table
+    post(route('table.store', $day), $tableAttributes);
 
-    expect(Table::first()->users->count())->toBe(2);
+    // Try to create the same table twice
+    $response = post(route('table.store', $day), $tableAttributes);
+
+    expect(Table::count())->toBeOne()
+        ->and($response)
+        ->toBeRedirect(route('days.show', $day->id))
+        ->toHaveSession('error');
+});
+
+it('Updates a table', function () {
+    login();
+    mockHttpClient();
+
+    $table = createTable();
+
+    $response = patch(route('table.update', $table), [
+        'day_id' => Day::first()->id,
+        'game_id' => Game::first()->id,
+        'category_id' => Category::first()->id,
+        'players_number' => 3,
+        'start_hour' => '15:00',
+    ]);
+
+    $tableUpdated = Table::first();
+
+    expect($tableUpdated->game_id)->toBe('1')
+        ->and($tableUpdated->players_number)->toBe(3)
+        ->and($tableUpdated->start_hour)->toBe('15:00')
+        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
+
+});
+
+it('Subscribes a user to a table', function () {
+    mockHttpClient();
+
+    $table = createTable();
+
+    get(route('table.subscribe', $table));
+
+    expect($table->users->count())->toBeOne();
 });
 
 it('Unsubscribes a user of a table', function () {
-    $this->seed();
-    login();
+    mockHttpClient();
 
-    $table = Table::first();
+    $table = createTable();
 
-    expect(Table::first()->users()->count())->toBe(1);
+    get(route('table.unsubscribe', $table));
 
-    $this->get(route('table.unsubscribe', Table::first()));
-
-    expect(Table::first()->users()->count())->toBe(1);
+    expect($table->users()->count())->toBe(0);
 });
 
 it('Can not subscribe a user already subscribed to another table with the same start hour for the same day', function () {
-    $this->seed();
-    login();
+    mockHttpClient();
+    $day = createDay();
+    $table = createTable(day: $day, start_hour: '21:00');
 
-    app(UserSubscriptionAction::class)->execute(Table::first(), Auth::user());
+    app(UserSubscriptionAction::class)->execute($table, Auth::user());
 
-    $anotherTableAtSameHour = Table::factory()
-        ->for(Game::factory())
-        ->for(Day::first())
-        ->for(Category::first())
-        ->create([
-            'organizer_id' => User::factory(),
-            'start_hour' => '21:00',
-        ]);
+    $anotherTableAtSameHour = createTable(day: $day, start_hour: '21:00');
 
     $response = get(route('table.subscribe', $anotherTableAtSameHour));
 
-    $response->assertRedirect(route('days.show', Table::first()->day));
+    $response->assertRedirect(route('days.show', $anotherTableAtSameHour->day));
 
     expect($anotherTableAtSameHour->users->count())->toBe(0);
 });
 
 test('A user can not see the edit action button for a table he didnt created', function () {
-    $this->seed();
+    $day = createDay();
 
-    $user = User::factory()->create();
+    $anotherUser = User::factory()->create();
 
-    $this->actingAs($user)
-        ->get(route('days.show', Day::first()->id))
+    actingAs($anotherUser)
+        ->get(route('days.show', $day))
         ->assertOk()
         ->assertDontSee('img/edit.png');
 });
 
 test('An admin user can see the edit action button for a table he didnt created', function () {
-    $this->seed();
+    loginAdmin();
+    $day = createDay();
 
-    $adminUser = User::factory()->create([
-        'admin' => true,
-    ]);
+    createTable(day: $day);
 
-    $this->actingAs($adminUser);
-
-    $response = $this->get(route('days.show', Day::first()->id));
-
-    $response
+    get(route('days.show', $day))
         ->assertOk()
         ->assertSee('img/edit.png');
 });
 
 test('A user can not render the edit page for a table he didnt create', function () {
-    $this->seed();
+    $table = createTable();
 
     $anotherUser = User::factory()->create();
 
-    $table = Table::first();
-
-    $this
-        ->actingAs($anotherUser)
+    actingAs($anotherUser)
         ->get(route('table.edit', $table))
         ->assertForbidden();
 });
 
 test('An admin user can render the edit page for a table he didnt create', function () {
-    $this->seed();
+    loginAdmin();
 
-    $adminUser = User::factory()->create([
-        'admin' => true,
-    ]);
+    $table = createTable();
 
-    $table = Table::first();
-
-    $this
-        ->actingAs($adminUser)
-        ->get(route('table.edit', $table))
-        ->assertOk();
+    get(route('table.edit', $table))->assertOk();
 });
 
 test('A user can not see the delete action button for a table he didnt created', function () {
-    $this->seed();
+    $day = createDay();
 
-    $user = User::factory()->create();
+    $anotherUser = User::factory()->create();
 
-    $this
-        ->actingAs($user)
-        ->get(route('days.show', Day::first()->id))
+    createTable(day: $day);
+
+    actingAs($anotherUser)
+        ->get(route('days.show', $day))
         ->assertOk()
         ->assertDontSee('img/delete.png');
 });
 
 test('An admin user can see the delete action button for a table he didnt created', function () {
-    $this->seed();
+    loginAdmin();
+    $day = createDay();
 
-    $this
-        ->actingAs(User::first())
-        ->get(route('days.show', Day::first()->id))
+    createTable(day: $day);
+
+    get(route('days.show', $day))
         ->assertOk()
         ->assertSee('img/delete.png');
 });
 
 test('Deletes a table', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
     mockHttpClient();
 
-    expect(Table::all()->count())->toBe(1);
+    $table = createTable();
 
-    $this->delete(route('table.delete', Table::first()));
+    expect(Table::count())->toBeOne();
 
-    expect(Table::all()->count())->toBe(0);
+    delete(route('table.delete', $table));
+
+    expect(Table::count())->toBe(0);
 });
 
 test('A user could not subscribe to a table if the max number of players is reached', function () {
-    Event::fake();
+    $day = createDay();
+    mockHttpClient();
 
-    $this->seed();
+    $table = createTable(day: $day, playersNumber: 1);
 
-    $user = User::first();
     $anotherUser = User::factory()->create();
 
-    $table = Table::first();
-    $day = Day::first();
-
-    $this
-        ->actingAs($user)
-        ->get(route('table.subscribe', [$table, $user]));
-
-    expect($table->users()->count())->toBe(2);
+    get(route('table.subscribe', $table));
 
     // The user can not subscribe to a table and is redirected to the correct day table with an error message
-    $response = $this
-        ->actingAs($anotherUser)
-        ->get(route('table.subscribe', [$table, $anotherUser]));
+    $response = actingAs($anotherUser)
+        ->get(route('table.subscribe', $table));
 
-    expect($response)->toBeRedirect(route('days.show', [$day]));
+    expect($response)
+        ->toBeRedirect(route('days.show', $day))
+        ->and($table->users()->count())->toBeOne();
 });
 
-test('Table creation is not allowed if a day has been cancelled', function () {
-    $this->seed();
-    actingAs(User::first());
+test('Table creation is not allowed for a cancelled day', function () {
+    $day = createDay();
 
-    $day = Day::first();
-
-    $this->patch(route('days.confirm_cancel', $day), [
+    patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
     ]);
 

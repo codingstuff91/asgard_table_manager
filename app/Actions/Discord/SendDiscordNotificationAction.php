@@ -6,8 +6,9 @@ use GuzzleHttp\Client;
 
 class SendDiscordNotificationAction
 {
-    public function __construct(private Client $client)
-    {
+    public function __construct(
+        private Client $client
+    ) {
         //
     }
 

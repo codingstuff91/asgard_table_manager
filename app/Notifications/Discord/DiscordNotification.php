@@ -12,15 +12,13 @@ abstract class DiscordNotification implements NotificationInterface
 
     public function __construct(
         public DiscordNotificationData $discordNotificationData,
-        public DefineChannelIdAction $defineChannelIdAction,
-        public SendDiscordNotificationAction $sendDiscordNotificationAction,
     ) {
         //
     }
 
     public function handle(): void
     {
-        $this->channelId = ($this->defineChannelIdAction)($this->discordNotificationData->day->date);
+        $this->channelId = app(DefineChannelIdAction::class)($this->discordNotificationData->day->date);
 
         $notificationContent = $this->buildMessage($this->discordNotificationData);
 
@@ -31,6 +29,6 @@ abstract class DiscordNotification implements NotificationInterface
 
     public function send(array $message): void
     {
-        ($this->sendDiscordNotificationAction)($this->channelId, $message);
+        app(sendDiscordNotificationAction::class)($this->channelId, $message);
     }
 }

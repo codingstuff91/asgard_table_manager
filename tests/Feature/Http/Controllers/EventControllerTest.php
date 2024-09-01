@@ -1,137 +1,139 @@
 <?php
 
-use App\Models\Day;
 use App\Models\Event;
-use App\Models\User;
+use Tests\RequestFactories\EventRequestFactory;
+
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\delete;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
+use function Pest\Laravel\put;
 
 it('can render the event create page', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
+    $day = createDay();
 
-    $day = Day::first();
     $response = $this->get(route('event.create', $day));
 
     $response->assertOk();
 });
 
 it('stores a new event', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
+    login();
+    $day = createDay();
     mockHttpClient();
 
-    $day = Day::first();
-    $response = $this->post(route('event.store', $day), [
-        'name' => 'example',
-        'description' => 'description',
-        'start_hour' => '14:00',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('example')
+        ->withDescription('description')
+        ->withStartHour('14:00')
+        ->create();
 
-    expect(['name' => 'example'])->toBeInDatabase('events')
-        ->and(['description' => 'description'])->toBeInDatabase('events')
-        ->and($response)
-        ->toBeRedirect(route('days.show', Day::first()->id));
+    $response = post(route('event.store', $day),
+        $eventAttributes
+    );
+
+    expect($response)->toBeRedirect(route('days.show', $day));
+    assertDatabaseHas('events', $eventAttributes);
 });
 
 it('can not create an event without a name', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->post(route('event.store', Day::first()->id), [
-        'name' => '',
-        'description' => 'description',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('')
+        ->withDescription('description')
+        ->withStartHour('14:00')
+        ->create();
+
+    $response = post(route('event.store', createDay()), $eventAttributes);
 
     expect($response)->toHaveInvalid('name');
 });
 
 it('can not create an event without a description', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->post(route('event.store', Day::first()->id), [
-        'name' => 'example',
-        'description' => '',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('example')
+        ->withDescription('')
+        ->withStartHour('14:00')
+        ->create();
+
+    $response = post(route('event.store', createDay()), $eventAttributes);
 
     expect($response)->toHaveInvalid('description');
 });
 
 it('can not create an event without a start_hour', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->post(route('event.store', Day::first()->id), [
-        'name' => 'example',
-        'description' => 'description',
-        'start_hour' => '',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('example')
+        ->withDescription('description')
+        ->withStartHour('')
+        ->create();
+
+    $response = $this->post(route('event.store', createDay()), $eventAttributes);
 
     expect($response)->toHaveInvalid('start_hour');
 });
 
 it('can render the event edit page', function () {
-    $this->seed();
-    $this->actingAs(User::first());
+    login();
 
-    $response = $this->get(route('event.edit', Event::first()));
+    $response = $this->get(route('event.edit', createEvent()));
 
     $response->assertOk();
 });
 
 it('can update an event successfully', function () {
-    $this->seed();
-    $this->actingAs(User::first());
-
     mockHttpClient();
+    login();
 
-    $response = $this->put(route('event.update', Event::first()), [
-        'name' => 'edited',
-        'description' => 'description',
-        'start_hour' => '21:00',
-    ]);
+    $eventAttributes = EventRequestFactory::new()
+        ->withName('edited name')
+        ->withDescription('edited description')
+        ->withStartHour('21:00')
+        ->create();
 
-    $eventUpdated = Event::first();
+    $event = createEvent();
 
-    expect($eventUpdated->name)->toBe('edited')
-        ->and($eventUpdated->description)->toBe('description')
-        ->and($eventUpdated->start_hour)->toBe('21:00')
-        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
+    $response = put(route('event.update', $event), $eventAttributes);
+    expect($response)->toBeRedirect(route('days.show', $event->day->id));
 
+    assertDatabaseHas('events', $eventAttributes);
 });
 
 it('can subscribe a user to an event', function () {
-    $this->seed();
     login();
+    $event = createEvent();
 
-    expect(Event::first()->users->count())->toBe(1);
+    get(route('event.subscribe', $event));
 
-    $this->get(route('event.subscribe', Event::first()));
-
-    expect(Event::first()->users->count())->toBe(2);
+    expect($event->users->count())->toBeOne();
 });
 
 it('can unsubscribe a user of an event', function () {
-    $this->seed();
     login();
+    $event = createEvent();
 
-    $event = Event::first();
+    get(route('event.subscribe', $event));
+    expect($event->users->count())->toBeOne();
 
-    expect(Event::first()->users()->count())->toBe(1);
-
-    $this->get(route('event.unsubscribe', Event::first()));
-
-    expect(Event::first()->users()->count())->toBe(1);
+    get(route('event.unsubscribe', $event));
+    expect($event->refresh()->users->count())->toBe(0);
 });
 
 it('deletes an event', function () {
-    $this->seed();
     login();
-
     mockHttpClient();
+    $event = createEvent();
 
-    $response = $this->delete(route('event.destroy', Event::first()));
+    $response = delete(route('event.destroy', $event));
 
-    expect(Event::count())->toBe(0)
-        ->and($response)->toBeRedirect(route('days.show', Day::first()->id));
+    expect(Event::count())
+        ->toBe(0)
+        ->and($response)
+        ->toBeRedirect(route('days.show', $event->day));
 });
