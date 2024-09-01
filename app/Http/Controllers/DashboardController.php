@@ -2,31 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Table\CountTablesForTimeSlotAction;
 use App\Models\Day;
 use App\Models\Table;
 use App\Models\User;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke()
+    public function __construct(
+        public CountTablesForTimeSlotAction $countTablesForTimeSlotAction,
+    ) {
+        //
+    }
+
+    public function __invoke(): View
     {
-        $users = User::all()->count();
+        $users = User::count();
+        $days = Day::count();
+        $tables = Table::count();
 
-        $days = Day::all()->count();
+        $afternoonTables = ($this->countTablesForTimeSlotAction)(Table::all(), 13, 19);
 
-        $tables = Table::all()->count();
-
-        $afternoonTables = Table::all()->filter(function ($value, $key) {
-            $hour = explode(':', $value->start_hour)[0];
-
-            return $hour >= 13 && $hour <= 19;
-        })->count();
-
-        $eveningTables = Table::all()->filter(function ($value, $key) {
-            $hour = explode(':', $value->start_hour)[0];
-
-            return $hour > 19 && $hour < 23;
-        })->count();
+        $eveningTables = ($this->countTablesForTimeSlotAction)(Table::all(), 19, 23);
 
         return view('dashboard', compact('users', 'days', 'tables', 'afternoonTables', 'eveningTables'));
     }

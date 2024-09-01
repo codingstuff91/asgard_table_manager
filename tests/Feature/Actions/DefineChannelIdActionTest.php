@@ -2,7 +2,7 @@
 
 use App\Actions\Discord\DefineChannelIdAction;
 
-test('The correct channel ID is returned according to the day of a date', function (string $date, int $discordChannel) {
+test('Define channel ID according to the day of a date', function (string $date, int $discordChannel) {
     $channelId = app(DefineChannelIdAction::class)($date);
 
     expect($channelId)->toBe($discordChannel);

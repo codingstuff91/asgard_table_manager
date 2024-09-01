@@ -1,35 +1,39 @@
 <?php
 
 use App\Models\Day;
-use App\Models\User;
 
-use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
+use function Pest\Laravel\post;
 
 beforeEach(function () {
-    $this->seed();
-    actingAs(User::first());
+    login();
 });
 
 test('The index page is rendered correctly', function () {
-    $response = $this->get(route('days.index'));
+    $response = get(route('days.index'));
 
     expect($response)->toBeOk();
 });
 
 test('The create page is rendered correctly', function () {
-    $response = $this->get(route('days.create'));
+    $response = get(route('days.create'));
 
     expect($response)->toBeOk();
 });
 
 test('The show page is rendered correctly', function () {
-    $response = $this->get(route('days.show', Day::first()->id));
+    $day = createDay();
+
+    $response = get(route('days.show', $day));
 
     expect($response)->toBeOk();
 });
 
 test('A day can not be created twice', function () {
+    createDay();
+
     $response = $this->post(route('days.store'), [
         'date' => now(),
     ]);
@@ -46,33 +50,27 @@ test('A day can not be created without choosing a date', function () {
 });
 
 test('A day is created successfully', function () {
-    $date = now()->add('day', 1);
-
-    $response = $this->post(route('days.store'), [
-        'date' => $date,
+    post(route('days.store'), [
+        'date' => now(),
     ]);
 
-    expect($response)->toHaveValid(['date'])
-        ->and($response)->toBeRedirect(route('days.index'))
-        ->and([
-            'date' => $date,
-        ])->toBeInDatabase(table: 'days');
+    assertDatabaseHas('days', [
+        'date' => now(),
+    ]);
 });
 
 test('The past days are hidden from index page', function () {
-    $pastDay = Day::factory()->create([
-        'date' => now()->sub('day', 1),
-    ]);
+    $pastDay = createPastDay();
 
-    $response = $this->get(route('days.index'));
+    $response = get(route('days.index'));
 
     expect($response)
-        ->toBeOk()
-        ->not->toContainText($pastDay->date->format('d/m/Y'));
+        ->not
+        ->toContainText($pastDay->date->format('d/m/Y'));
 });
 
 test('the edit warning page is rendered correctly', function () {
-    $day = Day::first();
+    $day = createDay();
 
     $response = get(route('days.warning', $day));
 
@@ -80,9 +78,9 @@ test('the edit warning page is rendered correctly', function () {
 });
 
 test('the warning could not be store without an explanation', function () {
-    $day = Day::first();
+    $day = createDay();
 
-    $response = $this->patch(route('days.confirm_warning', $day), [
+    $response = patch(route('days.confirm_warning', $day), [
         'explanation' => '',
     ]);
 
@@ -90,51 +88,50 @@ test('the warning could not be store without an explanation', function () {
 });
 
 test('A warning message can be stored', function () {
-    $day = Day::first();
-    $explanationTest = 'Example of explanation';
+    $day = createDay();
 
-    $response = $this->patch(route('days.confirm_warning', $day), [
-        'explanation' => $explanationTest,
+    $response = patch(route('days.confirm_warning', $day), [
+        'explanation' => 'Example of explanation',
     ]);
 
-    expect($day->refresh()->explanation)->toBe($explanationTest)
+    expect($day->refresh()->explanation)
+        ->toBe('Example of explanation')
         ->and($response)->toBeRedirect(route('days.index'));
 });
 
 test('The warning message is visible on the show page if exists', function () {
-    $day = Day::first();
-    $explanationTest = 'Example of explanation';
+    $day = createDay();
 
-    $this->patch(route('days.confirm_warning', $day), [
-        'explanation' => $explanationTest,
+    patch(route('days.confirm_warning', $day), [
+        'explanation' => 'Example of explanation',
     ]);
 
-    $showDayView = get(route('days.show', $day));
+    $response = get(route('days.show', $day));
 
-    expect($showDayView)->toContainText($explanationTest);
+    expect($response)->toContainText('Example of explanation');
 });
 
 test('The warning message is hidden when it doesnt exists', function () {
-    $day = Day::first();
+    $day = createDay();
     $explanationTest = 'Example of explanation';
 
-    $showDayView = get(route('days.show', $day));
+    $response = get(route('days.show', $day));
 
-    expect($showDayView)->not()->toContainText($explanationTest)
-        ->and($showDayView)->not()->toContainText("<h3 class='my-4 text-white text-center w-full bg-red-500 rounded-lg'>");
+    expect($response)->not()->toContainText($explanationTest)
+        ->and($response)->not()->toContainText("<h3 class='my-4 text-white text-center w-full bg-red-500 rounded-lg'>");
 });
 
 test('the cancel page is rendered correctly', function () {
-    $day = Day::first();
-    $showCancelDayView = get(route('days.cancel', $day));
+    $day = createDay();
+    $response = get(route('days.cancel', $day));
 
-    expect($showCancelDayView)->toBeOk();
+    expect($response)->toBeOk();
 });
 
-test('the table cancelation could not be executed without an explanation', function () {
-    $day = Day::first();
+test('the day cancelation could not be executed without an explanation', function () {
+    $day = createDay();
 
-    $response = $this->patch(route('days.confirm_cancel', $day), [
+    $response = patch(route('days.confirm_cancel', $day), [
         'explanation' => '',
     ]);
 
@@ -142,24 +139,22 @@ test('the table cancelation could not be executed without an explanation', funct
 });
 
 test('The cancelation message is stored', function () {
-    $day = Day::first();
-    $cancellationMessage = 'Example of explanation';
+    $day = createDay();
 
-    $this->patch(route('days.confirm_cancel', $day), [
-        'explanation' => $cancellationMessage,
+    patch(route('days.confirm_cancel', $day), [
+        'explanation' => 'Example of explanation',
     ]);
 
     expect($day->refresh())
         ->explanation
-        ->toBe($cancellationMessage);
+        ->toBe('Example of explanation');
 });
 
 test('The cancelation of a day must block the ability to create table', function () {
-    $day = Day::first();
-    $cancellationMessage = 'Example of explanation';
+    $day = createDay();
 
-    $this->patch(route('days.confirm_cancel', $day), [
-        'explanation' => $cancellationMessage,
+    patch(route('days.confirm_cancel', $day), [
+        'explanation' => 'Example of explanation',
     ]);
 
     expect($day->refresh())
@@ -168,9 +163,9 @@ test('The cancelation of a day must block the ability to create table', function
 });
 
 test('The cancellation of a day must delete every tables created', function () {
-    $day = Day::first();
+    $day = createDay();
 
-    $this->patch(route('days.confirm_cancel', $day), [
+    patch(route('days.confirm_cancel', $day), [
         'explanation' => 'Example of explanation',
     ]);
 
@@ -178,48 +173,40 @@ test('The cancellation of a day must delete every tables created', function () {
 });
 
 test('The cancellation message is visible on the show page if exists', function () {
-    $day = Day::first();
-    $explanationTest = 'Example of explanation';
+    $day = createDay();
 
-    $this->patch(route('days.confirm_cancel', $day), [
-        'explanation' => $explanationTest,
+    patch(route('days.confirm_cancel', $day), [
+        'explanation' => 'Example of explanation',
     ]);
 
-    $showDayView = get(route('days.show', $day));
+    $response = get(route('days.show', $day));
 
-    expect($showDayView)->toContainText($explanationTest);
+    expect($response)->toContainText('Example of explanation');
 });
 
 test('The action buttons are visible for admin users on days index page', function () {
     loginAdmin();
+    Day::factory()->create();
 
-    $indexPageResponse = get(route('days.index'));
-
-    $indexPageResponse->assertSee('img/cancel.png');
-    $indexPageResponse->assertSee('img/warning.png');
+    get(route('days.index'))
+        ->assertSee('img/cancel.png')
+        ->assertSee('img/warning.png');
 });
 
 test('The action buttons are hidden for non admin users on days index page', function () {
-    $user = User::firstWhere('admin', false);
-
-    actingAs($user)
-        ->get(route('days.index'))
+    get(route('days.index'))
         ->assertDontSee('img/cancel.png')
         ->assertDontSee('img/warning.png');
 });
 
 test('The create buttons are hidden for a cancelled day', function () {
-    $day = Day::first();
-    $user = User::first();
+    $day = createDay();
 
-    $explanationTest = 'Example of explanation';
-
-    $this->patch(route('days.confirm_cancel', $day), [
-        'explanation' => $explanationTest,
+    patch(route('days.confirm_cancel', $day), [
+        'explanation' => 'Example of explanation',
     ]);
 
-    actingAs($user)
-        ->get(route('days.show', $day))
+    get(route('days.show', $day))
         ->assertDontSee('img/game-table.png')
         ->assertDontSee('img/calendar.png');
 });

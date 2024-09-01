@@ -16,6 +16,9 @@ class DiscordNotificationData
     ) {
     }
 
+    /**
+     * @param  array<mixed>  $extra
+     */
     public static function make(
         ?Game $game,
         ?Table $table,

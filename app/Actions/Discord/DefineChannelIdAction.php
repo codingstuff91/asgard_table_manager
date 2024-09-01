@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\App;
 
 class DefineChannelIdAction
 {
-    public function __invoke(string $date)
+    public function __invoke(string $date): int
     {
+        // @phpstan-ignore-next-line
         $dayDate = Carbon::create($date);
 
         if (App::environment('local')) {

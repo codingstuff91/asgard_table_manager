@@ -4,23 +4,16 @@ namespace App\Handlers;
 
 use App\Commands\UpdateTableCommand;
 use App\DataObjects\TableData;
-use Exception;
-use Illuminate\Support\Facades\Log;
+use App\Models\Table;
 
 class UpdateTableHandler
 {
-    public function handle(UpdateTableCommand $command)
+    public function handle(UpdateTableCommand $command): Table
     {
-        try {
-            $tableAttributes = TableData::fromRequest($command->table->day, $command->request);
+        $tableAttributes = TableData::fromRequest($command->table->day, $command->request);
 
-            $command->table->update($tableAttributes->toArray());
+        $command->table->update($tableAttributes->toArray());
 
-            return $command->table;
-        } catch (Exception $e) {
-            Log::error('Error updating table: '.$e->getMessage());
-
-            return redirect()->route('days.show', $command->table->day)->with(['error' => 'Une erreur est survenue lors de la mise à jour de la table.']);
-        }
+        return $command->table;
     }
 }

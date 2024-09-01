@@ -72,17 +72,14 @@ class DayController extends Controller
         return view('day.show', compact('tables', 'day', 'tablesCountPerCategory', 'events'));
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(storeDayRequest $request)
+    public function store(storeDayRequest $request): RedirectResponse
     {
         $day = Day::create($request->all());
 
         return redirect()->route('days.index');
     }
 
-    public function edit_warning(Day $day)
+    public function edit_warning(Day $day): View
     {
         return view('day.warning', compact('day'));
     }
@@ -96,7 +93,7 @@ class DayController extends Controller
         return to_route('days.index');
     }
 
-    public function edit_cancel(Day $day)
+    public function edit_cancel(Day $day): View
     {
         return view('day.cancel', compact('day'));
     }

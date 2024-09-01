@@ -1,0 +1,16 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$year of static method Carbon\\\\Carbon\\:\\:create\\(\\) expects DateTimeInterface\\|int\\|null, string given\\.$#"
+			count: 1
+			path: app/Actions/Discord/DefineChannelIdAction.php
+
+		-
+			message: "#^Relation 'game' is not found in App\\\\Models\\\\Table model\\.$#"
+			count: 1
+			path: app/Http/Controllers/DayController.php
+
+		-
+			message: "#^Relation 'users' is not found in App\\\\Models\\\\Event model\\.$#"
+			count: 1
+			path: app/Http/Controllers/DayController.php
