@@ -2,7 +2,6 @@ name: PHPMetrics Analysis
 
 on:
   push:
-  pull_request:
 
 jobs:
   phpmetrics-analysis:
@@ -28,7 +27,7 @@ jobs:
       - name: Run PHPMetrics
         run: |
           composer require phpmetrics/phpmetrics --dev
-          vendor/bin/phpmetrics --report-html=phpmetrics-report ./src
+          vendor/bin/phpmetrics --report-html=phpmetrics-report ./app
 
       # Sauvegarde des rapports générés par PHPMetrics
       - name: Upload PHPMetrics report
