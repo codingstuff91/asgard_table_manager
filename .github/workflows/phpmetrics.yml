@@ -2,24 +2,22 @@ name: PHPMetrics Analysis
 
 on:
   push:
-
+    branches:
+      - main
 jobs:
   phpmetrics-analysis:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout du repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Configuration de PHP
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Choisir la version de PHP souhaitée
+          php-version: '8.1'
           tools: composer
 
-      # Installation des dépendances Composer (si nécessaire)
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist
 
