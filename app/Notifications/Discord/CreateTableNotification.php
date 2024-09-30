@@ -49,8 +49,12 @@ class CreateTableNotification extends DiscordNotification
     {
         $messageCreationStrategy = app(CreateMessageAndThread::class);
 
-        app(SendDiscordNotificationAction::class)($messageCreationStrategy, $this->channelId, $this->message,
-            $this->discordNotificationData->table);
+        app(SendDiscordNotificationAction::class)(
+            $messageCreationStrategy,
+            $this->channelId,
+            $this->message,
+            $this->discordNotificationData->table
+        );
     }
 
     private static function setEmbedDescription(DiscordNotificationData $discordNotificationData): string
