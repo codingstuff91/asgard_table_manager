@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Auth;
 
 class CreateTableNotification extends DiscordNotification
 {
-    public function buildMessage(DiscordNotificationData $discordNotificationData): self
+    public function buildMessage(): self
     {
         $this->message = [
             'content' => EmbedMessageContent::CREATED->value,
             'embeds' => [
                 [
-                    'title' => 'Table de : '.$discordNotificationData->game->name,
-                    'description' => self::setEmbedDescription($discordNotificationData),
+                    'title' => 'Table de : '.$this->discordNotificationData->game->name,
+                    'description' => self::setEmbedDescription($this->discordNotificationData),
                     'author' => [
                         'name' => 'Créateur : '.Auth::user()->name,
                     ],
@@ -26,17 +26,17 @@ class CreateTableNotification extends DiscordNotification
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
                             'inline' => true,
                         ],
                         [
                             'name' => 'Heure',
-                            'value' => $discordNotificationData->table->start_hour,
+                            'value' => $this->discordNotificationData->table->start_hour,
                             'inline' => true,
                         ],
                     ],
                     'footer' => [
-                        'text' => $discordNotificationData->table->description,
+                        'text' => $this->discordNotificationData->table->description,
                     ],
                 ],
             ],

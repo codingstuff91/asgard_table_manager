@@ -20,19 +20,19 @@ abstract class DiscordNotification implements NotificationInterface
     public function handle(): void
     {
         $this
-            ->defineChannelId($this->discordNotificationData)
-            ->buildMessage($this->discordNotificationData)
+            ->defineChannelId()
+            ->buildMessage()
             ->send();
     }
 
-    public function defineChannelId(DiscordNotificationData $discordNotificationData): self
+    public function defineChannelId(): self
     {
         $this->channelId = app(DefineChannelIdAction::class)($this->discordNotificationData->day->date);
 
         return $this;
     }
 
-    abstract public function buildMessage(DiscordNotificationData $discordNotificationData): self;
+    abstract public function buildMessage(): self;
 
     abstract public function send(): void;
 }
