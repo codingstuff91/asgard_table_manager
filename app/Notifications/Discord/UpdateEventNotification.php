@@ -2,18 +2,19 @@
 
 namespace App\Notifications\Discord;
 
-use App\DataObjects\DiscordNotificationData;
+use App\Actions\Discord\SendDiscordNotificationAction;
 use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
+use App\Notifications\Discord\Strategies\CreateMessage;
 use Illuminate\Support\Facades\Auth;
 
 class UpdateEventNotification extends DiscordNotification
 {
-    public function buildMessage(DiscordNotificationData $discordNotificationData): array
+    public function buildMessage(): self
     {
-        $eventAttributes = $discordNotificationData->extra;
+        $eventAttributes = $this->discordNotificationData->extra;
 
-        return [
+        $this->message = [
             'content' => EmbedMessageContent::EVENT_UPDATED->value,
             'embeds' => [
                 [
@@ -25,7 +26,7 @@ class UpdateEventNotification extends DiscordNotification
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
                             'inline' => true,
                         ],
                         [
@@ -40,5 +41,19 @@ class UpdateEventNotification extends DiscordNotification
                 ],
             ],
         ];
+
+        return $this;
+    }
+
+    public function send(): void
+    {
+        $messageCreationStrategy = app(CreateMessage::class);
+
+        app(SendDiscordNotificationAction::class)(
+            $messageCreationStrategy,
+            config('discord.event_channel_test'),
+            $this->message,
+            null,
+        );
     }
 }
