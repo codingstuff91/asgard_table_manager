@@ -6,6 +6,7 @@ use App\Contracts\MessageCreationStrategy;
 use App\Logic\TableLogic;
 use App\Models\Table;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class CreateMessageAndThread implements MessageCreationStrategy
 {
@@ -15,6 +16,9 @@ class CreateMessageAndThread implements MessageCreationStrategy
         //
     }
 
+    /**
+     * @throws \Exception
+     */
     public function handle(int $channelId, array $embedMessage, Table $table): string
     {
         $messageId = $this->sendMessage($channelId, $embedMessage);
@@ -26,38 +30,52 @@ class CreateMessageAndThread implements MessageCreationStrategy
 
     public function sendMessage(int $channelId, array $embedMessage): int
     {
-        $messageResponse = $this->client->post(config('discord.api_url').$channelId.'/messages', [
-            'headers' => [
-                'Authorization' => config('discord.bot_token'),
-                'Content-Type' => 'application/json',
-            ],
-            'json' => $embedMessage,
-        ]);
+        try {
+            $messageResponse = $this->client->post(config('discord.api_url').$channelId.'/messages', [
+                'headers' => $this->getHeaders(),
+                'json' => $embedMessage,
+            ]);
 
-        $messageData = json_decode($messageResponse->getBody(), true);
-
-        return $messageData['id'];
+            return $this->handleResponse($messageResponse);
+        } catch (GuzzleException $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function createThread(int $channelId, int $messageId): string
     {
-        $params = [
-            'name' => 'Test fil de table',
-            'auto_archive_duration' => 10080,
+        try {
+            $params = [
+                'name' => 'Inscriptions & mises à jour',
+                'auto_archive_duration' => 10080,
+            ];
+
+            $threadResponse = $this->client->post(config('discord.api_url').$channelId.'/messages/'.$messageId.'/threads',
+                [
+                    'headers' => $this->getHeaders(),
+                    'json' => $params,
+                ]);
+
+            return $this->handleResponse($threadResponse);
+
+        } catch (GuzzleException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    private function getHeaders(): array
+    {
+        return [
+            'Authorization' => config('discord.bot_token'),
+            'Content-Type' => 'application/json',
         ];
+    }
 
-        $threadResponse = $this->client->post(config('discord.api_url').$channelId.'/messages/'.$messageId.'/threads',
-            [
-                'headers' => [
-                    'Authorization' => config('discord.bot_token'),
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $params,
-            ]);
+    private function handleResponse($response): string
+    {
+        $responseData = json_decode($response->getBody(), true);
 
-        $threadData = json_decode($threadResponse->getBody(), true);
-
-        return $threadData['id'];
+        return $responseData['id'];
     }
 
     private function saveThreadIdOnTable(int $threadId, Table $table): string
