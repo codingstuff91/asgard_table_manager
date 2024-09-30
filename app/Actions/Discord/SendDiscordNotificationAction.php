@@ -3,6 +3,7 @@
 namespace App\Actions\Discord;
 
 use App\Contracts\MessageCreationStrategy;
+use App\Models\Table;
 
 class SendDiscordNotificationAction
 {
@@ -11,8 +12,9 @@ class SendDiscordNotificationAction
         MessageCreationStrategy $messageStrategy,
         int $channelId,
         array $embedMessage,
+        Table $table
     ): string {
 
-        return $messageStrategy->handle($channelId, $embedMessage);
+        return $messageStrategy->handle($channelId, $embedMessage, $table);
     }
 }

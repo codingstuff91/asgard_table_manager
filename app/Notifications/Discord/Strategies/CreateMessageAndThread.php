@@ -3,6 +3,8 @@
 namespace App\Notifications\Discord\Strategies;
 
 use App\Contracts\MessageCreationStrategy;
+use App\Logic\TableLogic;
+use App\Models\Table;
 use GuzzleHttp\Client;
 
 class CreateMessageAndThread implements MessageCreationStrategy
@@ -13,13 +15,13 @@ class CreateMessageAndThread implements MessageCreationStrategy
         //
     }
 
-    public function handle(int $channelId, array $embedMessage): string
+    public function handle(int $channelId, array $embedMessage, Table $table): string
     {
         $messageId = $this->sendMessage($channelId, $embedMessage);
 
         $threadId = $this->createThread($channelId, $messageId);
 
-        return $this->saveThreadIdOnTable($threadId);
+        return $this->saveThreadIdOnTable($threadId, $table);
     }
 
     public function sendMessage(int $channelId, array $embedMessage): int
@@ -58,8 +60,10 @@ class CreateMessageAndThread implements MessageCreationStrategy
         return $threadData['id'];
     }
 
-    private function saveThreadIdOnTable(int $threadId): string
+    private function saveThreadIdOnTable(int $threadId, Table $table): string
     {
+        //TableLogic::saveThreadId($threadId, $table);
+
         return 'Discord notification and thread created';
     }
 }
