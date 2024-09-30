@@ -2,23 +2,24 @@
 
 namespace App\Notifications\Discord;
 
-use App\DataObjects\DiscordNotificationData;
+use App\Actions\Discord\SendDiscordNotificationAction;
 use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
+use App\Notifications\Discord\Strategies\CreateMessage;
 use Illuminate\Support\Facades\Auth;
 
 class CreateEventNotification extends DiscordNotification
 {
-    public function buildMessage(DiscordNotificationData $discordNotificationData): array
+    public function buildMessage(): self
     {
-        $eventAttributes = $discordNotificationData->extra;
+        $eventAttributes = $this->discordNotificationData->extra;
 
-        return [
+        $this->message = [
             'content' => EmbedMessageContent::EVENT_CREATED->value,
             'embeds' => [
                 [
                     'title' => $eventAttributes['name'],
-                    'description' => self::setMessageDescription($discordNotificationData->day->id),
+                    'description' => self::setMessageDescription($this->discordNotificationData->day->id),
                     'author' => [
                         'name' => 'Créateur : '.Auth::user()->name,
                     ],
@@ -26,7 +27,7 @@ class CreateEventNotification extends DiscordNotification
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
                             'inline' => true,
                         ],
                         [
@@ -41,10 +42,24 @@ class CreateEventNotification extends DiscordNotification
                 ],
             ],
         ];
+
+        return $this;
     }
 
     private static function setMessageDescription(int $dayId): string
     {
         return 'Plus d\'informations sur '.config('app.url').'/days/'.$dayId;
+    }
+
+    public function send(): void
+    {
+        $messageCreationStrategy = app(CreateMessage::class);
+
+        app(SendDiscordNotificationAction::class)(
+            $messageCreationStrategy,
+            config('discord.event_channel_test'),
+            $this->message,
+            null,
+        );
     }
 }

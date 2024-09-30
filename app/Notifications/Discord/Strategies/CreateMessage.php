@@ -15,7 +15,7 @@ class CreateMessage implements MessageCreationStrategy
         //
     }
 
-    public function handle(int $channelId, array $embedMessage, Table $table): string
+    public function handle(int $channelId, array $embedMessage, ?Table $table): string
     {
         try {
             $this->client->post(config('discord.api_url').$channelId.'/messages', [

@@ -12,7 +12,7 @@ class SendDiscordNotificationAction
         MessageCreationStrategy $messageStrategy,
         int $channelId,
         array $embedMessage,
-        Table $table
+        ?Table $table
     ): string {
 
         return $messageStrategy->handle($channelId, $embedMessage, $table);
