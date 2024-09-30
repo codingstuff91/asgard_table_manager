@@ -62,7 +62,7 @@ class CreateMessageAndThread implements MessageCreationStrategy
 
     private function saveThreadIdOnTable(int $threadId, Table $table): string
     {
-        //TableLogic::saveThreadId($threadId, $table);
+        TableLogic::saveThreadId($threadId, $table);
 
         return 'Discord notification and thread created';
     }

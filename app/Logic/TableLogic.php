@@ -23,4 +23,11 @@ class TableLogic
     {
         return $day->can_create_table;
     }
+
+    public static function saveThreadId(int $threadId, Table $table): void
+    {
+        $table->discord_thread_id = $threadId;
+
+        $table->save();
+    }
 }
