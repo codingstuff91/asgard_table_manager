@@ -8,7 +8,9 @@ interface NotificationInterface
 {
     public function handle(): void;
 
-    public function buildMessage(DiscordNotificationData $discordNotificationData): array;
+    public function defineChannelId(DiscordNotificationData $discordNotificationData): self;
 
-    public function send(array $message): void;
+    public function buildMessage(DiscordNotificationData $discordNotificationData): self;
+
+    public function send(): void;
 }
