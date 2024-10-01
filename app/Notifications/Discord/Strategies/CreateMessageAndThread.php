@@ -16,6 +16,13 @@ class CreateMessageAndThread implements MessageCreationStrategy
         //
     }
 
+    /**
+     * First a message is created in discord
+     * After that, a thread is created, using the created message id
+     * Then the id of the thread is linked to the new table into the discord_thread_id column
+     *
+     * @throws \Exception
+     */
     public function handle(int $channelId, array $embedMessage, ?Table $table): string
     {
         $messageId = $this->sendMessage($channelId, $embedMessage);
