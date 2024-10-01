@@ -43,7 +43,7 @@ class CancelEventNotification extends DiscordNotification
 
         app(SendDiscordNotificationAction::class)(
             $messageCreationStrategy,
-            config('discord.event_channel_test'),
+            config('discord.event_channel'),
             $this->message,
             null,
         );
