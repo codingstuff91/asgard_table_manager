@@ -60,7 +60,6 @@ class TableController extends Controller
             $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'create-table',
                 discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
-
         } catch (Exception $e) {
             Log::error('Problem during table creation: '.$e->getMessage());
 
