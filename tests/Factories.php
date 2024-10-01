@@ -27,7 +27,7 @@ function createEvent(): Event
         ]);
 }
 
-function createGameWithCategory(Category $category = null): Game
+function createGameWithCategory(?Category $category = null): Game
 {
     return Game::factory()
         ->for($category ?? Category::factory()->create())
@@ -35,7 +35,7 @@ function createGameWithCategory(Category $category = null): Game
 }
 
 function createTable(
-    Day $day = null,
+    ?Day $day = null,
     string $start_hour = '14:00',
     int $playersNumber = 2,
 ): Table {
