@@ -57,7 +57,8 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-            $discordNotification = ($this->notificationFactory)('create-table', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'create-table',
+                discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
 
         } catch (Exception $e) {
@@ -98,7 +99,8 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-            $discordNotification = ($this->notificationFactory)('update-table', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'update-table',
+                discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
 
         } catch (Exception $e) {
@@ -156,7 +158,8 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-            $discordNotification = ($this->notificationFactory)('cancel-table', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'cancel-table',
+                discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
 
         } catch (Exception $e) {
