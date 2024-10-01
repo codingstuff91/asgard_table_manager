@@ -57,9 +57,10 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($game, $table, $day);
 
-            $discordNotification = ($this->notificationFactory)('create-table', $discordNotificationData);
-            $discordNotification->handle();
+            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'create-table',
+                discordNotificationData: $discordNotificationData);
 
+            $discordNotification->handle();
         } catch (Exception $e) {
             Log::error('Problem during table creation: '.$e->getMessage());
 
@@ -98,7 +99,8 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-            $discordNotification = ($this->notificationFactory)('update-table', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'update-table',
+                discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
 
         } catch (Exception $e) {
@@ -128,7 +130,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        $discordNotification = ($this->notificationFactory)('user-subscription', $discordNotificationData);
+        $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-subscription',
+            discordNotificationData: $discordNotificationData);
         $discordNotification->handle();
 
         return redirect()->back();
@@ -140,7 +143,8 @@ class TableController extends Controller
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-        $discordNotification = ($this->notificationFactory)('user-unsubscription', $discordNotificationData);
+        $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-unsubscription',
+            discordNotificationData: $discordNotificationData);
         $discordNotification->handle();
 
         return redirect()->back();
@@ -156,7 +160,8 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-            $discordNotification = ($this->notificationFactory)('cancel-table', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'cancel-table',
+                discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
 
         } catch (Exception $e) {

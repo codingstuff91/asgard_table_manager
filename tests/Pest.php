@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\User;
+use App\Notifications\Discord\Strategies\CreateMessageAndThread;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Feature\Mocks\CreateMessageAndThreadDummy;
 use Tests\TestCase;
 
 use function Pest\Laravel\actingAs;
@@ -45,12 +47,12 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
-function login(User $user = null): void
+function login(?User $user = null): void
 {
     actingAs($user ?? User::factory()->create());
 }
 
-function loginAdmin(User $user = null): void
+function loginAdmin(?User $user = null): void
 {
     actingAs($user ?? User::factory()->admin()->create());
 }
@@ -61,4 +63,11 @@ function mockHttpClient(): void
     $guzzleMock->shouldReceive('post');
 
     app()->instance(Client::class, $guzzleMock);
+}
+
+function mockCreateMessageAndThreadStrategy(): void
+{
+    $strategyDummy = app(CreateMessageAndThreadDummy::class);
+
+    app()->instance(CreateMessageAndThread::class, $strategyDummy);
 }

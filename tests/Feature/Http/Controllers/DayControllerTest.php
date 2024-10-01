@@ -8,6 +8,7 @@ use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
 
 beforeEach(function () {
+    mockHttpClient();
     login();
 });
 

@@ -2,13 +2,13 @@
 
 namespace App\Notifications\Discord;
 
-use App\DataObjects\DiscordNotificationData;
-
 interface NotificationInterface
 {
     public function handle(): void;
 
-    public function buildMessage(DiscordNotificationData $discordNotificationData): array;
+    public function defineChannelId(): self;
 
-    public function send(array $message): void;
+    public function buildMessage(): self;
+
+    public function send(): void;
 }

@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Notifications\Discord;
+namespace App\Notifications\Discord\Event;
 
+use App\Actions\Discord\SendDiscordNotificationAction;
 use App\DataObjects\DiscordNotificationData;
 use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
+use App\Notifications\Discord\DiscordNotification;
+use App\Notifications\Discord\Strategies\CreateMessage;
 use Illuminate\Support\Facades\Auth;
 
 class CancelEventNotification extends DiscordNotification
 {
-    public function buildMessage(DiscordNotificationData $discordNotificationData): array
+    public function buildMessage(): self
     {
-        return [
+        $this->message = [
             'content' => EmbedMessageContent::EVENT_CANCELLED->value,
             'embeds' => [
                 [
-                    'title' => self::setMessageTitle($discordNotificationData),
+                    'title' => self::setMessageTitle($this->discordNotificationData),
                     'color' => EmbedColor::DELETED->value,
                     'author' => [
                         'name' => 'Annulée par : '.Auth::user()->name,
@@ -23,6 +26,8 @@ class CancelEventNotification extends DiscordNotification
                 ],
             ],
         ];
+
+        return $this;
     }
 
     private static function setMessageTitle(DiscordNotificationData $discordNotificationData): string
@@ -30,5 +35,17 @@ class CancelEventNotification extends DiscordNotification
         $eventAttributes = $discordNotificationData->extra;
 
         return 'L\'évènement '.$eventAttributes['name'].' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$eventAttributes['start_hour'].' est annulé.';
+    }
+
+    public function send(): void
+    {
+        $messageCreationStrategy = app(CreateMessage::class);
+
+        app(SendDiscordNotificationAction::class)(
+            $messageCreationStrategy,
+            config('discord.event_channel'),
+            $this->message,
+            null,
+        );
     }
 }
