@@ -14,7 +14,7 @@ class CreateMessageIntoThread implements MessageCreationStrategy
         //
     }
 
-    public function handle(int $channelId, array $embedMessage, Table $table): string
+    public function handle(int $channelId, array $embedMessage, ?Table $table): string
     {
         $threadId = $table->discord_thread_id;
 

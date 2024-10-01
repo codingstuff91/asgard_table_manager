@@ -16,10 +16,7 @@ class CreateMessageAndThread implements MessageCreationStrategy
         //
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function handle(int $channelId, array $embedMessage, Table $table): string
+    public function handle(int $channelId, array $embedMessage, ?Table $table): string
     {
         $messageId = $this->sendMessage($channelId, $embedMessage);
 
