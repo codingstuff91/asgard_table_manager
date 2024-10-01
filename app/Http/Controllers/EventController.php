@@ -46,7 +46,8 @@ class EventController extends Controller
             ]
         );
 
-        $discordNotification = ($this->notificationFactory)('create-event', $discordNotificationData);
+        $discordNotification = ($this->notificationFactory)(entity: 'event', type: 'create-event',
+            discordNotificationData: $discordNotificationData);
         $discordNotification->handle();
 
         return to_route('days.show', $day);
