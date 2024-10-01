@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Notifications\Discord;
+namespace App\Notifications\Discord\Day;
 
 use App\Actions\Discord\SendDiscordNotificationAction;
 use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
+use App\Notifications\Discord\DiscordNotification;
 use App\Notifications\Discord\Strategies\CreateMessage;
 use Illuminate\Support\Facades\Auth;
 

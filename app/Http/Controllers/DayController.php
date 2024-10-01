@@ -114,7 +114,8 @@ class DayController extends Controller
                 extra: ['explanation' => $request->explanation]
             );
 
-            $discordNotification = ($this->notificationFactory)('cancel-day', $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(entity: 'day', type: 'cancel-day',
+                discordNotificationData: $discordNotificationData);
             $discordNotification->handle();
         } catch (Exception $e) {
             Log::error('Problem during day cancellation update: '.$e->getMessage());
