@@ -77,7 +77,8 @@ class EventController extends Controller
             ]
         );
 
-        $discordNotification = ($this->notificationFactory)('update-event', $discordNotificationData);
+        $discordNotification = ($this->notificationFactory)(entity: 'event', type: 'update-event',
+            discordNotificationData: $discordNotificationData);
         $discordNotification->handle();
 
         return to_route('days.show', $event->day_id);
@@ -112,7 +113,8 @@ class EventController extends Controller
             ]
         );
 
-        $discordNotification = ($this->notificationFactory)('cancel-event', $discordNotificationData);
+        $discordNotification = ($this->notificationFactory)(entity: 'event', type: 'cancel-event',
+            discordNotificationData: $discordNotificationData);
         $discordNotification->handle();
 
         return to_route('days.show', $event->day_id);
