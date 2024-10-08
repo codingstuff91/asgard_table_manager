@@ -9,6 +9,7 @@ abstract class DiscordNotification implements NotificationInterface
 {
     protected int $channelId;
 
+    // @phpstan-ignore-next-line
     protected array $message;
 
     public function __construct(
