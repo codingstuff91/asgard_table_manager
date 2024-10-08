@@ -118,10 +118,6 @@ class TableController extends Controller
 
     public function subscribe(Table $table): RedirectResponse
     {
-        if ($table->users()->count() === $table->players_number) {
-            return redirect()->route('days.show', $table->day)->with(['error' => 'Nombre maximum de joueurs atteint']);
-        }
-
         if (app(UserLogic::class)->hasSubscribedToAnotherTableWithTheSameStartHour($table->day, $table)) {
             return redirect()->route('days.show', $table->day)->with(['error' => 'Vous êtes déjà inscrit à une autre table à la même heure ce jour là']);
         }
