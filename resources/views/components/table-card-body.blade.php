@@ -12,14 +12,19 @@
     </div>
     <div class="pr-2">
         @if (collect($table->users)->pluck('name')->doesntContain(Auth::user()->name))
-            <button>
-                <a
-                    href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}"
-                    onclick="return confirm('Etes-vous certain de vouloir vous inscrire ?')"
-                >
-                    <img src="{{ asset('img/add-user.png')}}" class="w-8 h-8">
-                </a>
-            </button>
+            {{-- If the table is full, replace the cta button image by a stop icon--}}
+            @if($table->users->count() === $table->players_number)
+                <img src="{{ asset('img/stop.png')}}" class="h-12">
+            @else
+                <button>
+                    <a
+                        href="{{ route('table.subscribe', [$table->id, Auth::user()->id]) }}"
+                        onclick="return confirm('Etes-vous certain de vouloir vous inscrire ?')"
+                    >
+                        <img src="{{ asset('img/add-user.png')}}" class="w-8 h-8">
+                    </a>
+                </button>
+            @endif
         @endif
 
         @if (collect($table->users)->pluck('name')->contains(Auth::user()->name))
