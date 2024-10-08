@@ -1,16 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$year of static method Carbon\\\\Carbon\\:\\:create\\(\\) expects DateTimeInterface\\|int\\|null, string given\\.$#"
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$start_hour\\.$#"
 			count: 1
-			path: app/Actions/Discord/DefineChannelIdAction.php
+			path: app/Actions/Table/CountTablesForTimeSlotAction.php
 
 		-
-			message: "#^Relation 'game' is not found in App\\\\Models\\\\Table model\\.$#"
+			message: "#^Method App\\\\Actions\\\\Table\\\\CountTablesForTimeSlotAction\\:\\:__invoke\\(\\) has parameter \\$tables with generic class Illuminate\\\\Database\\\\Eloquent\\\\Collection but does not specify its types\\: TKey, TModel$#"
 			count: 1
-			path: app/Http/Controllers/DayController.php
-
-		-
-			message: "#^Relation 'users' is not found in App\\\\Models\\\\Event model\\.$#"
-			count: 1
-			path: app/Http/Controllers/DayController.php
+			path: app/Actions/Table/CountTablesForTimeSlotAction.php

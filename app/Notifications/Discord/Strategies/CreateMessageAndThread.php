@@ -7,6 +7,7 @@ use App\Logic\TableLogic;
 use App\Models\Table;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 class CreateMessageAndThread implements MessageCreationStrategy
 {
@@ -46,7 +47,7 @@ class CreateMessageAndThread implements MessageCreationStrategy
         }
     }
 
-    public function createThread(int $channelId, int $messageId): string
+    public function createThread(int $channelId, int $messageId): int
     {
         try {
             $params = [
@@ -75,11 +76,11 @@ class CreateMessageAndThread implements MessageCreationStrategy
         ];
     }
 
-    private function handleResponse($response): string
+    private function handleResponse(ResponseInterface $response): int
     {
         $responseData = json_decode($response->getBody(), true);
 
-        return $responseData['id'];
+        return (int) $responseData['id'];
     }
 
     private function saveThreadIdOnTable(int $threadId, Table $table): string
