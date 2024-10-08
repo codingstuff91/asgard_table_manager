@@ -1,5 +1,6 @@
 includes:
     - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
 parameters:
     paths:
         - app/
@@ -10,3 +11,4 @@ parameters:
     ignoreErrors:
         - '#return type has no value type specified in iterable type array.#'
         - '#with no value type specified in iterable type array.#'
+
