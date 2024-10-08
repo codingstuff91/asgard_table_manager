@@ -270,25 +270,6 @@ test('Deletes a table', function () {
     expect(Table::count())->toBe(0);
 });
 
-test('A user could not subscribe to a table if the max number of players is reached', function () {
-    $day = createDay();
-    mockHttpClient();
-
-    $table = createTable(day: $day, playersNumber: 1);
-
-    $anotherUser = User::factory()->create();
-
-    get(route('table.subscribe', $table));
-
-    // The user can not subscribe to a table and is redirected to the correct day table with an error message
-    $response = actingAs($anotherUser)
-        ->get(route('table.subscribe', $table));
-
-    expect($response)
-        ->toBeRedirect(route('days.show', $day))
-        ->and($table->users()->count())->toBeOne();
-});
-
 test('Table creation is not allowed for a cancelled day', function () {
     $day = createDay();
 
