@@ -61,7 +61,7 @@ class CreateTableNotification extends DiscordNotification
 
     private static function setEmbedDescription(DiscordNotificationData $discordNotificationData): string
     {
-        return 'Plus d\'informations sur '.config('app.url').'/days/'.$discordNotificationData->day->id;
+        return 'Pour s\'inscrire, cliquez ici : '.config('app.url').'/days/'.$discordNotificationData->day->id;
     }
 
     private function setObjectMessage(string $gameCategory): string
