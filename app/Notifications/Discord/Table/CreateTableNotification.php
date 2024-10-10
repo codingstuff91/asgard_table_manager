@@ -73,9 +73,4 @@ class CreateTableNotification extends DiscordNotification
     {
         return config('app.url').'/days/'.$discordNotificationData->day->id;
     }
-
-    private function setObjectMessage(string $gameCategory): string
-    {
-        return "Nouvelle table de $gameCategory";
-    }
 }
