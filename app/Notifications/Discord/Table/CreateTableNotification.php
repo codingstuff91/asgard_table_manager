@@ -5,6 +5,7 @@ namespace App\Notifications\Discord\Table;
 use App\Actions\Discord\SendDiscordNotificationAction;
 use App\DataObjects\DiscordNotificationData;
 use App\Enums\EmbedColor;
+use App\Enums\EmbedMessageContent;
 use App\Notifications\Discord\DiscordNotification;
 use App\Notifications\Discord\Strategies\CreateMessageAndThread;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class CreateTableNotification extends DiscordNotification
     public function buildMessage(): self
     {
         $this->message = [
-            'content' => $this->setObjectMessage($this->discordNotificationData->game->category->name),
+            'content' => EmbedMessageContent::CREATED->value,
             'embeds' => [
                 [
                     'title' => 'Jeu proposé : '.$this->discordNotificationData->game->name,
@@ -24,6 +25,11 @@ class CreateTableNotification extends DiscordNotification
                     ],
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
+                        [
+                            'name' => 'Catégorie',
+                            'value' => $this->discordNotificationData->game->category->name,
+                            'inline' => false,
+                        ],
                         [
                             'name' => 'Date',
                             'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
