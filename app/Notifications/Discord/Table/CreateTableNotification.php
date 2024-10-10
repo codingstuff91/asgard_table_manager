@@ -18,11 +18,10 @@ class CreateTableNotification extends DiscordNotification
             'content' => EmbedMessageContent::CREATED->value,
             'embeds' => [
                 [
-                    'title' => 'Jeu proposé : '.$this->discordNotificationData->game->name,
-                    'description' => $this->setEmbedDescription($this->discordNotificationData),
                     'author' => [
                         'name' => 'Organisateur : '.Auth::user()->name,
                     ],
+                    'title' => 'Jeu proposé : '.$this->discordNotificationData->game->name,
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
                         [
@@ -43,6 +42,11 @@ class CreateTableNotification extends DiscordNotification
                         [
                             'name' => 'Description',
                             'value' => $this->discordNotificationData->table->description,
+                            'inline' => false,
+                        ],
+                        [
+                            'name' => 'Lien Inscription',
+                            'value' => '[Cliquez ici]('.$this->setEmbedDescription($this->discordNotificationData).')',
                             'inline' => false,
                         ],
                     ],
@@ -67,7 +71,7 @@ class CreateTableNotification extends DiscordNotification
 
     private static function setEmbedDescription(DiscordNotificationData $discordNotificationData): string
     {
-        return 'Pour s\'inscrire, cliquez ici : '.config('app.url').'/days/'.$discordNotificationData->day->id;
+        return config('app.url').'/days/'.$discordNotificationData->day->id;
     }
 
     private function setObjectMessage(string $gameCategory): string
