@@ -18,13 +18,17 @@ class CreateTableNotification extends DiscordNotification
             'content' => EmbedMessageContent::CREATED->value,
             'embeds' => [
                 [
-                    'title' => 'Table de : '.$this->discordNotificationData->game->name,
-                    'description' => self::setEmbedDescription($this->discordNotificationData),
                     'author' => [
-                        'name' => 'Créateur : '.Auth::user()->name,
+                        'name' => 'Organisateur : '.Auth::user()->name,
                     ],
+                    'title' => 'Jeu proposé : '.$this->discordNotificationData->game->name,
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
+                        [
+                            'name' => 'Catégorie',
+                            'value' => $this->discordNotificationData->game->category->name,
+                            'inline' => false,
+                        ],
                         [
                             'name' => 'Date',
                             'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
@@ -35,9 +39,16 @@ class CreateTableNotification extends DiscordNotification
                             'value' => $this->discordNotificationData->table->start_hour,
                             'inline' => true,
                         ],
-                    ],
-                    'footer' => [
-                        'text' => $this->discordNotificationData->table->description,
+                        [
+                            'name' => 'Description',
+                            'value' => $this->discordNotificationData->table->description,
+                            'inline' => false,
+                        ],
+                        [
+                            'name' => 'Lien Inscription',
+                            'value' => '[Cliquez ici]('.$this->setEmbedDescription($this->discordNotificationData).')',
+                            'inline' => false,
+                        ],
                     ],
                 ],
             ],
@@ -60,6 +71,6 @@ class CreateTableNotification extends DiscordNotification
 
     private static function setEmbedDescription(DiscordNotificationData $discordNotificationData): string
     {
-        return 'Plus d\'informations sur '.config('app.url').'/days/'.$discordNotificationData->day->id;
+        return config('app.url').'/days/'.$discordNotificationData->day->id;
     }
 }

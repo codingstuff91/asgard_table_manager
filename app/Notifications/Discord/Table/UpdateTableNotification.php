@@ -3,11 +3,11 @@
 namespace App\Notifications\Discord\Table;
 
 use App\Actions\Discord\SendDiscordNotificationAction;
+use App\DataObjects\DiscordNotificationData;
 use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
 use App\Notifications\Discord\DiscordNotification;
 use App\Notifications\Discord\Strategies\CreateMessageIntoThread;
-use Illuminate\Support\Facades\Auth;
 
 class UpdateTableNotification extends DiscordNotification
 {
@@ -17,26 +17,23 @@ class UpdateTableNotification extends DiscordNotification
             'content' => EmbedMessageContent::UPDATED->value,
             'embeds' => [
                 [
-                    'title' => 'Table de : '.$this->discordNotificationData->game->name,
-                    'description' => self::setEmbedDescription($this->discordNotificationData->day->id),
-                    'author' => [
-                        'name' => 'Créateur : '.Auth::user()->name,
-                    ],
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
-                        [
-                            'name' => 'Date',
-                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
-                            'inline' => true,
-                        ],
                         [
                             'name' => 'Heure',
                             'value' => $this->discordNotificationData->table->start_hour,
                             'inline' => true,
                         ],
-                    ],
-                    'footer' => [
-                        'text' => $this->discordNotificationData->table->description,
+                        [
+                            'name' => 'Description',
+                            'value' => $this->discordNotificationData->table->description,
+                            'inline' => false,
+                        ],
+                        [
+                            'name' => 'Lien Inscription',
+                            'value' => '[Cliquez ici]('.$this->setExternalLink($this->discordNotificationData).')',
+                            'inline' => false,
+                        ],
                     ],
                 ],
             ],
@@ -45,9 +42,9 @@ class UpdateTableNotification extends DiscordNotification
         return $this;
     }
 
-    private static function setEmbedDescription(int $dayId): string
+    private static function setExternalLink(DiscordNotificationData $discordNotificationData): string
     {
-        return 'Plus d\'informations sur '.config('app.url').'/days/'.$dayId;
+        return config('app.url').'/days/'.$discordNotificationData->day->id;
     }
 
     public function send(): void
