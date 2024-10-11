@@ -122,6 +122,11 @@ class TableController extends Controller
             return redirect()->route('days.show', $table->day)->with(['error' => 'Vous êtes déjà inscrit à une autre table à la même heure ce jour là']);
         }
 
+        if (app(UserLogic::class)->isAlreadySubscribedToATable($table)) {
+            return redirect()->route('days.show',
+                $table->day)->with(['error' => 'Vous êtes déjà inscrit à cette table']);
+        }
+
         $table->users()->attach(Auth::user());
 
         $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
