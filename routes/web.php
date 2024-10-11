@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,9 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::post('table/{day}/create', [TableController::class, 'store'])->name('table.store');
     Route::get('table/{table}/edit', [TableController::class, 'edit'])->name('table.edit');
     Route::patch('table/{table}', [TableController::class, 'update'])->name('table.update');
-    Route::get('table/{table}/subscribe', [TableController::class, 'subscribe'])->name('table.subscribe');
-    Route::get('table/{table}/unsubscribe', [TableController::class, 'unSubscribe'])->name('table.unsubscribe');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
+
+    /** User routes */
+    Route::get('table/{table}/subscribe', [UserController::class, 'subscribe'])->name('table.subscribe');
+    Route::get('table/{table}/unsubscribe', [UserController::class, 'unSubscribe'])->name('table.unsubscribe');
 
     /** Events routes */
     Route::get('event/{day}/create', [EventController::class, 'create'])->name('event.create');
