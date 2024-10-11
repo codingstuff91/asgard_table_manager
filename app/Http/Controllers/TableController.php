@@ -123,8 +123,11 @@ class TableController extends Controller
         }
 
         if (app(UserLogic::class)->isAlreadySubscribedToATable($table)) {
-            return redirect()->route('days.show',
-                $table->day)->with(['error' => 'Vous êtes déjà inscrit à cette table']);
+            return redirect()
+                ->route('days.show', $table->day)
+                ->with([
+                    'error' => 'Vous êtes déjà inscrit à cette table',
+                ]);
         }
 
         $table->users()->attach(Auth::user());
