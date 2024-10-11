@@ -41,7 +41,7 @@ class CreateTableNotification extends DiscordNotification
                         ],
                         [
                             'name' => 'Description',
-                            'value' => $this->discordNotificationData->table->description,
+                            'value' => $this->discordNotificationData->table->description ?? 'Aucune description fournie',
                             'inline' => false,
                         ],
                         [

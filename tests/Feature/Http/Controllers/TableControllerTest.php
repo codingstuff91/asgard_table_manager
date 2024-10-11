@@ -194,6 +194,19 @@ it('Can not subscribe a user already subscribed to another table with the same s
     expect($anotherTableAtSameHour->users->count())->toBe(0);
 });
 
+it('Can not subscribe a user twice or more for the same table', function () {
+    $day = createDay();
+    $table = createTable(day: $day, start_hour: '21:00');
+
+    app(UserSubscriptionAction::class)->execute($table, Auth::user());
+
+    $response = get(route('table.subscribe', $table));
+
+    expect($response)
+        ->toBeRedirect(route('days.show', $day))
+        ->toHaveSession('error');
+});
+
 test('A user can not see the edit action button for a table he didnt created', function () {
     $day = createDay();
 

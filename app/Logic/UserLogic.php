@@ -27,4 +27,15 @@ class UserLogic
 
         return false;
     }
+
+    public function isAlreadySubscribedToATable(Table $table): bool
+    {
+        $user = Auth::user();
+
+        if ($table->users->contains(Auth::user()->id)) {
+            return true;
+        }
+
+        return false;
+    }
 }
