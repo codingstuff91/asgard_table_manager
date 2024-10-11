@@ -4,7 +4,7 @@ use App\Models\User;
 use App\Notifications\Discord\Strategies\CreateMessageAndThread;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Feature\Mocks\CreateMessageAndThreadDummy;
+use Tests\Mocks\CreateMessageAndThreadFake;
 use Tests\TestCase;
 
 use function Pest\Laravel\actingAs;
@@ -67,7 +67,7 @@ function mockHttpClient(): void
 
 function mockCreateMessageAndThreadStrategy(): void
 {
-    $strategyDummy = app(CreateMessageAndThreadDummy::class);
+    $strategyFake = app(CreateMessageAndThreadFake::class);
 
-    app()->instance(CreateMessageAndThread::class, $strategyDummy);
+    app()->instance(CreateMessageAndThread::class, $strategyFake);
 }
