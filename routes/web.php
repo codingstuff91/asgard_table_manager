@@ -38,9 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('table/{table}', [TableController::class, 'update'])->name('table.update');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
 
-    /** User routes */
+    /** Subscribing routes */
     Route::get('table/{table}/subscribe', [UserController::class, 'subscribe'])->name('table.subscribe');
     Route::get('table/{table}/unsubscribe', [UserController::class, 'unSubscribe'])->name('table.unsubscribe');
+    Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
+    Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');
 
     /** Events routes */
     Route::get('event/{day}/create', [EventController::class, 'create'])->name('event.create');
@@ -48,8 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('event/{event}/edit', [EventController::class, 'edit'])->name('event.edit');
     Route::put('event/{event}', [EventController::class, 'update'])->name('event.update');
     Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.delete');
-    Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
-    Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');
+
     Route::delete('event/{event}', [EventController::class, 'destroy'])->name('event.destroy');
 });
 
