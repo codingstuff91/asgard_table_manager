@@ -46,7 +46,7 @@ it('Creates a new table', function () {
 
     expect($response)
         ->toBeRedirect(route('days.show', $day))
-        ->and(Table::count())->toBeOne();
+        ->and(Table::count())->toBe(1);
 
     assertDatabaseHas('tables', $tableAttributes);
 });
@@ -126,7 +126,7 @@ it('Can not create the same table twice', function () {
     // Try to create the same table twice
     $response = post(route('table.store', $day), $tableAttributes);
 
-    expect(Table::count())->toBeOne()
+    expect(Table::count())->toBe(1)
         ->and($response)
         ->toBeRedirect(route('days.show', $day->id))
         ->toHaveSession('error');
@@ -160,7 +160,7 @@ test('Deletes a table', function () {
 
     $table = createTable();
 
-    expect(Table::count())->toBeOne();
+    expect(Table::count())->toBe(1);
 
     delete(route('table.delete', $table));
 

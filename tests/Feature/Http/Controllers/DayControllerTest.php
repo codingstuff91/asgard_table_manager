@@ -51,12 +51,14 @@ test('A day can not be created without choosing a date', function () {
 });
 
 test('A day is created successfully', function () {
+    $date = now();
+
     post(route('days.store'), [
-        'date' => now(),
+        'date' => $date,
     ]);
 
     assertDatabaseHas('days', [
-        'date' => now(),
+        'date' => $date,
     ]);
 });
 

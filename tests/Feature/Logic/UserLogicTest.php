@@ -17,7 +17,7 @@ test('it should return true if an user is subscribed to a table with the same st
         ->hasSubscribedToAnotherTableWithTheSameStartHour($day, $anotherTableAtSameHour);
 
     expect($table->users->count())
-        ->toBeOne()
+        ->toBe(1)
         ->and($hasAlreadySubscribed)
         ->toBeTrue();
 });

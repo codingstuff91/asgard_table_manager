@@ -16,7 +16,7 @@ it('Subscribes a user to a table', function () {
 
     get(route('table.subscribe', $table));
 
-    expect($table->users->count())->toBeOne();
+    expect($table->users->count())->toBe(1);
 });
 
 it('Unsubscribes a user of a table', function () {
