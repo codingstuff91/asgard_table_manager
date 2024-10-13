@@ -5,8 +5,8 @@ use App\Http\Controllers\DayController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubscribingController;
 use App\Http\Controllers\TableController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -39,10 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
 
     /** Subscribing routes */
-    Route::get('table/{table}/subscribe', [UserController::class, 'subscribe'])->name('table.subscribe');
-    Route::get('table/{table}/unsubscribe', [UserController::class, 'unSubscribe'])->name('table.unsubscribe');
-    Route::get('event/{event}/subscribe', [EventController::class, 'subscribe'])->name('event.subscribe');
-    Route::get('event/{event}/unsubscribe', [EventController::class, 'unSubscribe'])->name('event.unsubscribe');
+    Route::get('table/{table}/subscribe', [SubscribingController::class, 'tableSubscribe'])->name('table.subscribe');
+    Route::get('table/{table}/unsubscribe',
+        [SubscribingController::class, 'tableUnsubscribe'])->name('table.unsubscribe');
+    Route::get('event/{event}/subscribe', [SubscribingController::class, 'eventSubscribe'])->name('event.subscribe');
+    Route::get('event/{event}/unsubscribe',
+        [SubscribingController::class, 'eventUnsubscribe'])->name('event.unsubscribe');
 
     /** Events routes */
     Route::get('event/{day}/create', [EventController::class, 'create'])->name('event.create');

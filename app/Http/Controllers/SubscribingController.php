@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Logic\UserLogic;
+use App\Models\Event;
 use App\Models\Table;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class SubscribingController extends Controller
 {
-    public function subscribe(Table $table): RedirectResponse
+    public function tableSubscribe(Table $table): RedirectResponse
     {
         if (app(UserLogic::class)->hasSubscribedToAnotherTableWithTheSameStartHour($table->day, $table)) {
             return redirect()->route('days.show',
@@ -35,7 +36,7 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function unSubscribe(Table $table): RedirectResponse
+    public function tableUnsubscribe(Table $table): RedirectResponse
     {
         $table->users()->detach(Auth::user());
 
@@ -44,6 +45,20 @@ class UserController extends Controller
         $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-unsubscription',
             discordNotificationData: $discordNotificationData);
         $discordNotification->handle();
+
+        return redirect()->back();
+    }
+
+    public function eventSubscribe(Event $event): RedirectResponse
+    {
+        $event->users()->attach(Auth::user());
+
+        return redirect()->back();
+    }
+
+    public function eventUnsubscribe(Event $event): RedirectResponse
+    {
+        $event->users()->detach(Auth::user());
 
         return redirect()->back();
     }

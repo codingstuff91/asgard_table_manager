@@ -9,7 +9,6 @@ use App\Models\Event;
 use App\Notifications\Discord\NotificationFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -82,20 +81,6 @@ class EventController extends Controller
         $discordNotification->handle();
 
         return to_route('days.show', $event->day_id);
-    }
-
-    public function subscribe(Event $event): RedirectResponse
-    {
-        $event->users()->attach(Auth::user());
-
-        return redirect()->back();
-    }
-
-    public function unSubscribe(Event $event): RedirectResponse
-    {
-        $event->users()->detach(Auth::user());
-
-        return redirect()->back();
     }
 
     public function destroy(Event $event): RedirectResponse
