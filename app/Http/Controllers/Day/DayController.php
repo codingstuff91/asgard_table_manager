@@ -10,7 +10,6 @@ use App\Models\Day;
 use App\Models\Event;
 use App\Models\Table;
 use App\Notifications\Discord\NotificationFactory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -23,9 +22,6 @@ class DayController extends Controller
         //
     }
 
-    /**
-     * @return View
-     */
     public function index(Request $request)
     {
         $days = Day::query()
@@ -37,17 +33,11 @@ class DayController extends Controller
         return view('day.index', compact('days'));
     }
 
-    /**
-     * @return View
-     */
     public function create(Request $request)
     {
         return view('day.create');
     }
 
-    /**
-     * @return View
-     */
     public function show(Day $day)
     {
         $tables = Table::with(['users', 'game.category'])
@@ -70,7 +60,7 @@ class DayController extends Controller
 
     public function store(storeDayRequest $request): RedirectResponse
     {
-        $day = Day::create($request->all());
+        Day::create($request->all());
 
         return redirect()->route('days.index');
     }
