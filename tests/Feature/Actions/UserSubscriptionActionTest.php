@@ -9,5 +9,5 @@ test('The action class does its job correctly', function () {
 
     app(UserSubscriptionAction::class)->execute($table);
 
-    expect($table->users->count())->toBeOne();
+    expect($table->users->count())->toBe(1);
 });

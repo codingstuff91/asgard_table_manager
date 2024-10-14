@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Mocks;
+namespace Tests\Mocks;
 
 use App\Contracts\MessageCreationStrategy;
 use App\Logic\TableLogic;
 use App\Models\Table;
 
-class CreateMessageAndThreadDummy implements MessageCreationStrategy
+class CreateMessageAndThreadFake implements MessageCreationStrategy
 {
     /**
      * This class is a dummy representation of the real strategy class

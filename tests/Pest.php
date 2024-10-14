@@ -4,7 +4,7 @@ use App\Models\User;
 use App\Notifications\Discord\Strategies\CreateMessageAndThread;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Feature\Mocks\CreateMessageAndThreadDummy;
+use Tests\Mocks\CreateMessageAndThreadFake;
 use Tests\TestCase;
 
 use function Pest\Laravel\actingAs;
@@ -21,21 +21,6 @@ use function Pest\Laravel\actingAs;
 */
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
-
-/*
-|--------------------------------------------------------------------------
-| Expectations
-|--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
-*/
-
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -67,7 +52,7 @@ function mockHttpClient(): void
 
 function mockCreateMessageAndThreadStrategy(): void
 {
-    $strategyDummy = app(CreateMessageAndThreadDummy::class);
+    $strategyFake = app(CreateMessageAndThreadFake::class);
 
-    app()->instance(CreateMessageAndThread::class, $strategyDummy);
+    app()->instance(CreateMessageAndThread::class, $strategyFake);
 }
