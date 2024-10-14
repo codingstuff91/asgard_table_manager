@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Day;
 
-use App\Actions\Day\DeleteDayTablesAction;
-use App\Actions\Day\DisableDayAction;
 use App\DataObjects\DiscordNotificationData;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\storeDayRequest;
-use App\Http\Requests\WarningCancelDayRequest;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Event;
 use App\Models\Table;
 use App\Notifications\Discord\NotificationFactory;
-use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class DayController extends Controller
 {
@@ -77,56 +73,5 @@ class DayController extends Controller
         $day = Day::create($request->all());
 
         return redirect()->route('days.index');
-    }
-
-    public function edit_warning(Day $day): View
-    {
-        return view('day.warning', compact('day'));
-    }
-
-    public function confirm_warning(Day $day, WarningCancelDayRequest $request): RedirectResponse
-    {
-        $day->update([
-            'explanation' => $request->explanation,
-        ]);
-
-        return to_route('days.index');
-    }
-
-    public function edit_cancel(Day $day): View
-    {
-        return view('day.cancel', compact('day'));
-    }
-
-    public function confirm_cancel(
-        Day $day,
-        WarningCancelDayRequest $request,
-    ): RedirectResponse {
-        try {
-            app(DisableDayAction::class)->execute($day, $request->explanation);
-
-            app(DeleteDayTablesAction::class)->execute($day);
-
-            $discordNotificationData = $this->discordNotificationData::make(
-                game: null,
-                table: null,
-                day: $day,
-                extra: ['explanation' => $request->explanation]
-            );
-
-            $discordNotification = ($this->notificationFactory)(entity: 'day', type: 'cancel-day',
-                discordNotificationData: $discordNotificationData);
-            $discordNotification->handle();
-        } catch (Exception $e) {
-            Log::error('Problem during day cancellation update: '.$e->getMessage());
-
-            return redirect()
-                ->route('days.show', $day)
-                ->with([
-                    'error' => 'Une erreur est survenue lors de l\'annulation de la session.',
-                ]);
-        }
-
-        return to_route('days.index');
     }
 }

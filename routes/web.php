@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DayController;
+use App\Http\Controllers\Day\CancelDayController;
+use App\Http\Controllers\Day\DayController;
+use App\Http\Controllers\Day\WarningDayController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
@@ -22,10 +24,10 @@ Route::middleware('auth')->group(function () {
 
     /** Days route */
     Route::resource('days', DayController::class);
-    Route::get('/days/{day}/warning', [DayController::class, 'edit_warning'])->name('days.warning');
-    Route::patch('/days/{day}/confirm_warning', [DayController::class, 'confirm_warning'])->name('days.confirm_warning');
-    Route::get('/days/{day}/cancel', [DayController::class, 'edit_cancel'])->name('days.cancel');
-    Route::patch('/days/{day}/confirm_cancel', [DayController::class, 'confirm_cancel'])->name('days.confirm_cancel');
+    Route::get('/days/{day}/justify_warning', [WarningDayController::class, 'justify'])->name('days.warning');
+    Route::patch('/days/{day}/confirm_warning', [WarningDayController::class, 'confirm'])->name('days.confirm_warning');
+    Route::get('/days/{day}/cancel', [CancelDayController::class, 'justify'])->name('days.cancel');
+    Route::patch('/days/{day}/confirm', [CancelDayController::class, 'confirm'])->name('days.confirm_cancel');
 
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');
