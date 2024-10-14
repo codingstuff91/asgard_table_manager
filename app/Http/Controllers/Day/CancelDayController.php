@@ -4,15 +4,24 @@ namespace App\Http\Controllers\Day;
 
 use App\Actions\Day\DeleteDayTablesAction;
 use App\Actions\Day\DisableDayAction;
+use App\DataObjects\DiscordNotificationData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WarningCancelDayRequest;
 use App\Models\Day;
+use App\Notifications\Discord\NotificationFactory;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
 class CancelDayController extends Controller
 {
+    public function __construct(
+        public NotificationFactory $notificationFactory,
+    ) {
+        //
+    }
+
     public function justify(Day $day): View
     {
         return view('day.cancel', compact('day'));
@@ -27,15 +36,19 @@ class CancelDayController extends Controller
 
             app(DeleteDayTablesAction::class)->execute($day);
 
-            $discordNotificationData = $this->discordNotificationData::make(
+            $discordNotificationData = DiscordNotificationData::make(
                 game: null,
                 table: null,
                 day: $day,
                 extra: ['explanation' => $request->explanation]
             );
 
-            $discordNotification = ($this->notificationFactory)(entity: 'day', type: 'cancel-day',
-                discordNotificationData: $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(
+                entity: 'day',
+                type: 'cancel-day',
+                discordNotificationData: $discordNotificationData
+            );
+
             $discordNotification->handle();
         } catch (Exception $e) {
             Log::error('Problem during day cancellation update: '.$e->getMessage());
