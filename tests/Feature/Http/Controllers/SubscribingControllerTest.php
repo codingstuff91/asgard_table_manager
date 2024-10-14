@@ -58,3 +58,23 @@ it('Can not subscribe a user twice or more for the same table', function () {
         ->toBeRedirect(route('days.show', $day))
         ->toHaveSession('error');
 });
+
+it('can subscribe a user to an event', function () {
+    login();
+    $event = createEvent();
+
+    get(route('event.subscribe', $event));
+
+    expect($event->users->count())->toBe(1);
+});
+
+it('can unsubscribe a user of an event', function () {
+    login();
+    $event = createEvent();
+
+    get(route('event.subscribe', $event));
+    expect($event->users->count())->toBe(1);
+
+    get(route('event.unsubscribe', $event));
+    expect($event->refresh()->users->count())->toBe(0);
+});

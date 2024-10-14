@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\DataObjects\DiscordNotificationData;
 use App\Logic\UserLogic;
 use App\Models\Event;
 use App\Models\Table;
+use App\Notifications\Discord\NotificationFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class SubscribingController extends Controller
 {
+    public function __construct(
+        public NotificationFactory $notificationFactory,
+    ) {
+        //
+    }
+
     public function tableSubscribe(Table $table): RedirectResponse
     {
         if (app(UserLogic::class)->hasSubscribedToAnotherTableWithTheSameStartHour($table->day, $table)) {
@@ -27,7 +35,7 @@ class SubscribingController extends Controller
 
         $table->users()->attach(Auth::user());
 
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+        $discordNotificationData = DiscordNotificationData::make($table->game, $table, $table->day);
 
         $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-subscription',
             discordNotificationData: $discordNotificationData);
@@ -40,7 +48,7 @@ class SubscribingController extends Controller
     {
         $table->users()->detach(Auth::user());
 
-        $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
+        $discordNotificationData = DiscordNotificationData::make($table->game, $table, $table->day);
 
         $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-unsubscription',
             discordNotificationData: $discordNotificationData);

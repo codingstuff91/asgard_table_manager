@@ -5,7 +5,6 @@ use Tests\RequestFactories\EventRequestFactory;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 use function Pest\Laravel\put;
 
@@ -103,26 +102,6 @@ it('can update an event successfully', function () {
     expect($response)->toBeRedirect(route('days.show', $event->day->id));
 
     assertDatabaseHas('events', $eventAttributes);
-});
-
-it('can subscribe a user to an event', function () {
-    login();
-    $event = createEvent();
-
-    get(route('event.subscribe', $event));
-
-    expect($event->users->count())->toBe(1);
-});
-
-it('can unsubscribe a user of an event', function () {
-    login();
-    $event = createEvent();
-
-    get(route('event.subscribe', $event));
-    expect($event->users->count())->toBe(1);
-
-    get(route('event.unsubscribe', $event));
-    expect($event->refresh()->users->count())->toBe(0);
 });
 
 it('deletes an event', function () {
