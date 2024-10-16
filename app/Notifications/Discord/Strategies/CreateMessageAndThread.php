@@ -87,7 +87,7 @@ class CreateMessageAndThread implements MessageCreationStrategy
 
     private function saveMessageIdOnTable(int $messageId, Table $table): void
     {
-        TableLogic::saveThreadId($messageId, $table);
+        TableLogic::saveMessageId($messageId, $table);
     }
 
     private function saveThreadIdOnTable(int $threadId, Table $table): string
