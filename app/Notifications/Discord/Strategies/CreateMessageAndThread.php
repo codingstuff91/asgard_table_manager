@@ -28,6 +28,8 @@ class CreateMessageAndThread implements MessageCreationStrategy
     {
         $messageId = $this->sendMessage($channelId, $embedMessage);
 
+        $this->saveMessageIdOnTable($messageId, $table);
+
         $threadId = $this->createThread($channelId, $messageId);
 
         return $this->saveThreadIdOnTable($threadId, $table);
@@ -81,6 +83,11 @@ class CreateMessageAndThread implements MessageCreationStrategy
         $responseData = json_decode($response->getBody(), true);
 
         return (int) $responseData['id'];
+    }
+
+    private function saveMessageIdOnTable(int $messageId, Table $table): void
+    {
+        TableLogic::saveMessageId($messageId, $table);
     }
 
     private function saveThreadIdOnTable(int $threadId, Table $table): string
