@@ -30,4 +30,11 @@ class TableLogic
 
         $table->save();
     }
+
+    public static function saveMessageId(int $messageId, Table $table): void
+    {
+        $table->discord_message_id = $messageId;
+
+        $table->save();
+    }
 }

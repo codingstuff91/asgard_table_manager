@@ -17,9 +17,17 @@ class CreateMessageAndThreadFake implements MessageCreationStrategy
      */
     public function handle(int $channelId, array $embedMessage, ?Table $table): string
     {
+        $messageId = $this->createMessage();
         $threadId = $this->createThread();
 
+        $this->saveMessageIdOnTable($messageId, $table);
+
         return $this->saveThreadIdOnTable($threadId, $table);
+    }
+
+    public function createMessage(): int
+    {
+        return 23456789;
     }
 
     public function createThread(): int
@@ -32,5 +40,10 @@ class CreateMessageAndThreadFake implements MessageCreationStrategy
         TableLogic::saveThreadId($threadId, $table);
 
         return 'Discord notification and thread created';
+    }
+
+    private function saveMessageIdOnTable(int $messageId, Table $table): void
+    {
+        TableLogic::saveMessageId($messageId, $table);
     }
 }
