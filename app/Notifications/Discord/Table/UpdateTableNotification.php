@@ -86,13 +86,13 @@ class UpdateTableNotification extends DiscordNotification
         );
     }
 
-    private function createUpdateMessage(): void
+    public function createUpdateMessage(): void
     {
         $this->message = [
             'content' => EmbedMessageContent::UPDATED->value,
             'embeds' => [
                 [
-                    'title' => '⚠️ Table de '.$this->discordNotificationData->table->game->name.' mise à jour par '.auth::user()->name,
+                    'title' => '⚠️ Table de '.$this->discordNotificationData->table->game->name.' prévue le '.$this->discordNotificationData->day->date->format('d/m/Y').' a été mise à jour',
                     'color' => EmbedColor::WARNING->value,
                 ],
             ],
