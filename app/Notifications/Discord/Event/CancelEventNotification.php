@@ -34,7 +34,7 @@ class CancelEventNotification extends DiscordNotification
     {
         $eventAttributes = $discordNotificationData->extra;
 
-        return 'L\'évènement '.$eventAttributes['name'].' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$eventAttributes['start_hour'].' est annulé.';
+        return 'L\'évènement '.$eventAttributes['name'].' prévue le '.$discordNotificationData->getDay().' à '.$eventAttributes['start_hour'].' est annulé.';
     }
 
     public function send(): void

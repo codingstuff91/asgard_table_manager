@@ -28,7 +28,7 @@ class CreateEventNotification extends DiscordNotification
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->getDay(),
                             'inline' => true,
                         ],
                         [
