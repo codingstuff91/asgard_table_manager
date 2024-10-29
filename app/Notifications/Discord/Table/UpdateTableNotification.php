@@ -16,7 +16,7 @@ class UpdateTableNotification extends DiscordNotification
     public function buildMessage(): self
     {
         $this->message = [
-            'content' => '@everyone '.EmbedMessageContent::UPDATED->value,
+            'content' => EmbedMessageContent::UPDATED->value,
             'embeds' => [
                 [
                     'author' => [
