@@ -38,12 +38,12 @@ class DiscordNotificationData
         return $this->game->name;
     }
 
-    public function getCategory()
+    public function getCategory(): string
     {
         return $this->game->category->name;
     }
 
-    public function getDay()
+    public function getDay(): string
     {
         return $this->day->date->format('d/m/Y');
     }
