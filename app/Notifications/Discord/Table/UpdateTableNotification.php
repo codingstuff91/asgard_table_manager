@@ -92,7 +92,7 @@ class UpdateTableNotification extends DiscordNotification
             'content' => EmbedMessageContent::UPDATED->value,
             'embeds' => [
                 [
-                    'title' => '⚠️ Table de '.$this->discordNotificationData->table->game->name.' prévue le '.$this->discordNotificationData->day->date->format('d/m/Y').' a été mise à jour',
+                    'title' => '⚠️ La table de '.$this->discordNotificationData->gameName().' du '.$this->discordNotificationData->getDay().' a été mise à jour',
                     'color' => EmbedColor::WARNING->value,
                 ],
             ],
