@@ -32,7 +32,7 @@ class CancelTableNotification extends DiscordNotification
 
     private static function setMessageTitle(DiscordNotificationData $discordNotificationData): string
     {
-        return 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée.';
+        return 'La Table de '.$discordNotificationData->gameName().' prévue le '.$discordNotificationData->getDay().' à '.$discordNotificationData->getStartHour().' est annulée.';
     }
 
     public function send(): void
