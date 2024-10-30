@@ -7,7 +7,9 @@ use App\DataObjects\DiscordNotificationData;
 use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
 use App\Notifications\Discord\DiscordNotification;
-use App\Notifications\Discord\Strategies\CreateMessageIntoThread;
+use App\Notifications\Discord\Strategies\CreateMessage;
+use App\Notifications\Discord\Strategies\UpdateMessage;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateTableNotification extends DiscordNotification
 {
@@ -17,16 +19,30 @@ class UpdateTableNotification extends DiscordNotification
             'content' => EmbedMessageContent::UPDATED->value,
             'embeds' => [
                 [
+                    'author' => [
+                        'name' => 'Organisateur : '.Auth::user()->name,
+                    ],
+                    'title' => 'Jeu proposé : '.$this->discordNotificationData->gameName(),
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
                         [
+                            'name' => 'Catégorie',
+                            'value' => $this->discordNotificationData->getCategory(),
+                            'inline' => false,
+                        ],
+                        [
+                            'name' => 'Date',
+                            'value' => $this->discordNotificationData->getDay(),
+                            'inline' => true,
+                        ],
+                        [
                             'name' => 'Heure',
-                            'value' => $this->discordNotificationData->table->start_hour,
+                            'value' => $this->discordNotificationData->getStartHour(),
                             'inline' => true,
                         ],
                         [
                             'name' => 'Description',
-                            'value' => $this->discordNotificationData->table->description,
+                            'value' => $this->discordNotificationData->getDescription() ?? 'Aucune description fournie',
                             'inline' => false,
                         ],
                         [
@@ -49,7 +65,18 @@ class UpdateTableNotification extends DiscordNotification
 
     public function send(): void
     {
-        $messageCreationStrategy = app(CreateMessageIntoThread::class);
+        $updateMessageStrategy = app(UpdateMessage::class);
+
+        app(SendDiscordNotificationAction::class)(
+            $updateMessageStrategy,
+            $this->channelId,
+            $this->message,
+            $this->discordNotificationData->table
+        );
+
+        $messageCreationStrategy = app(CreateMessage::class);
+
+        $this->createUpdateMessage();
 
         app(SendDiscordNotificationAction::class)(
             $messageCreationStrategy,
@@ -57,5 +84,18 @@ class UpdateTableNotification extends DiscordNotification
             $this->message,
             $this->discordNotificationData->table
         );
+    }
+
+    public function createUpdateMessage(): void
+    {
+        $this->message = [
+            'content' => EmbedMessageContent::UPDATED->value,
+            'embeds' => [
+                [
+                    'title' => '⚠️ La table de '.$this->discordNotificationData->gameName().' du '.$this->discordNotificationData->getDay().' a été mise à jour',
+                    'color' => EmbedColor::WARNING->value,
+                ],
+            ],
+        ];
     }
 }

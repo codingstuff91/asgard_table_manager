@@ -32,4 +32,29 @@ class DiscordNotificationData
             extra: $extra,
         );
     }
+
+    public function gameName(): string
+    {
+        return $this->game->name;
+    }
+
+    public function getCategory(): string
+    {
+        return $this->game->category->name;
+    }
+
+    public function getDay(): string
+    {
+        return $this->day->date->format('d/m/Y');
+    }
+
+    public function getStartHour(): string
+    {
+        return $this->table->start_hour;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->table->description;
+    }
 }

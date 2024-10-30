@@ -17,17 +17,17 @@ class UserSubscriptionNotification extends DiscordNotification
             'content' => EmbedMessageContent::SUBSCRIBED->value,
             'embeds' => [
                 [
-                    'title' => Auth::user()->name.' s\'est inscrit à la table de '.$this->discordNotificationData->game->name,
+                    'title' => Auth::user()->name.' s\'est inscrit à la table de '.$this->discordNotificationData->gameName(),
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->getDay(),
                             'inline' => true,
                         ],
                         [
                             'name' => 'Heure',
-                            'value' => $this->discordNotificationData->table->start_hour,
+                            'value' => $this->discordNotificationData->getStartHour(),
                             'inline' => true,
                         ],
                     ],

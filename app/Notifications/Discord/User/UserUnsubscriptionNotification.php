@@ -22,12 +22,12 @@ class UserUnsubscriptionNotification extends DiscordNotification
                     'fields' => [
                         [
                             'name' => 'Date',
-                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->getDay(),
                             'inline' => true,
                         ],
                         [
                             'name' => 'Heure',
-                            'value' => $this->discordNotificationData->table->start_hour,
+                            'value' => $this->discordNotificationData->getStartHour(),
                             'inline' => true,
                         ],
                     ],

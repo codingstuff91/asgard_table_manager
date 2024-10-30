@@ -21,27 +21,27 @@ class CreateTableNotification extends DiscordNotification
                     'author' => [
                         'name' => 'Organisateur : '.Auth::user()->name,
                     ],
-                    'title' => 'Jeu proposé : '.$this->discordNotificationData->game->name,
+                    'title' => 'Jeu proposé : '.$this->discordNotificationData->gameName(),
                     'color' => EmbedColor::CREATED->value,
                     'fields' => [
                         [
                             'name' => 'Catégorie',
-                            'value' => $this->discordNotificationData->game->category->name,
+                            'value' => $this->discordNotificationData->getCategory(),
                             'inline' => false,
                         ],
                         [
                             'name' => 'Date',
-                            'value' => $this->discordNotificationData->day->date->format('d/m/Y'),
+                            'value' => $this->discordNotificationData->getDay(),
                             'inline' => true,
                         ],
                         [
                             'name' => 'Heure',
-                            'value' => $this->discordNotificationData->table->start_hour,
+                            'value' => $this->discordNotificationData->getStartHour(),
                             'inline' => true,
                         ],
                         [
                             'name' => 'Description',
-                            'value' => $this->discordNotificationData->table->description ?? 'Aucune description fournie',
+                            'value' => $this->discordNotificationData->getDescription() ?? 'Aucune description fournie',
                             'inline' => false,
                         ],
                         [
