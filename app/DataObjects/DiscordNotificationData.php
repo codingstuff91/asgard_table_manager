@@ -57,4 +57,9 @@ class DiscordNotificationData
     {
         return $this->table->description;
     }
+
+    public function getMessageId(): int
+    {
+        return (int) $this->table->discord_message_id;
+    }
 }
