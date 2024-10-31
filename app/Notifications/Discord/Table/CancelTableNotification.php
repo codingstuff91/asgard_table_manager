@@ -8,6 +8,7 @@ use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
 use App\Notifications\Discord\DiscordNotification;
 use App\Notifications\Discord\Strategies\CreateMessage;
+use App\Services\DiscordService;
 use Illuminate\Support\Facades\Auth;
 
 class CancelTableNotification extends DiscordNotification
@@ -37,6 +38,9 @@ class CancelTableNotification extends DiscordNotification
 
     public function send(): void
     {
+        // Original created message deletion
+        app(DiscordService::class)->deleteMessage($this->channelId, $this->discordNotificationData->getMessageId());
+
         $messageCreationStrategy = app(CreateMessage::class);
 
         app(SendDiscordNotificationAction::class)(
