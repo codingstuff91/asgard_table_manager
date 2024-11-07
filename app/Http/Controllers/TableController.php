@@ -131,8 +131,12 @@ class TableController extends Controller
 
             $discordNotificationData = $this->discordNotificationData::make($table->game, $table, $table->day);
 
-            $discordNotification = ($this->notificationFactory)(entity: 'table', type: 'cancel-table',
-                discordNotificationData: $discordNotificationData);
+            $discordNotification = ($this->notificationFactory)(
+                entity: 'table',
+                type: 'cancel-table',
+                discordNotificationData: $discordNotificationData
+            );
+
             $discordNotification->handle();
 
         } catch (Exception $e) {
