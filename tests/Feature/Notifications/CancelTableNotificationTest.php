@@ -8,10 +8,10 @@ test('Call discord service method to delete main message after a table cancelati
     login();
     mockHttpClient();
 
+    $table = createTable();
+
     $service = Mockery::mock(DiscordService::class);
     $service->shouldReceive('deleteMessage');
-
-    $table = createTable();
 
     $response = delete(route('table.delete', $table));
 
