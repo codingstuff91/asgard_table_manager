@@ -8,6 +8,7 @@ use App\Enums\EmbedColor;
 use App\Enums\EmbedMessageContent;
 use App\Notifications\Discord\DiscordNotification;
 use App\Notifications\Discord\Strategies\CreateMessage;
+use App\Services\DiscordService;
 use Illuminate\Support\Facades\Auth;
 
 class CancelTableNotification extends DiscordNotification
@@ -32,11 +33,14 @@ class CancelTableNotification extends DiscordNotification
 
     private static function setMessageTitle(DiscordNotificationData $discordNotificationData): string
     {
-        return 'La Table de '.$discordNotificationData->game->name.' prévue le '.$discordNotificationData->day->date->format('d/m/Y').' à '.$discordNotificationData->table->start_hour.' est annulée.';
+        return 'La Table de '.$discordNotificationData->gameName().' prévue le '.$discordNotificationData->getDay().' à '.$discordNotificationData->getStartHour().' est annulée.';
     }
 
     public function send(): void
     {
+        // Original created message deletion
+        app(DiscordService::class)->deleteMessage($this->channelId, $this->discordNotificationData->getMessageId());
+
         $messageCreationStrategy = app(CreateMessage::class);
 
         app(SendDiscordNotificationAction::class)(
