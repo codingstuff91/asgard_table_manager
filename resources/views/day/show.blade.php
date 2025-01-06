@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header" class="flex flex-row justify-between">
         <h2 class="font-bold text-xl text-gray-800 text-center dark:text-gray-200 leading-tight lg:text-2xl">
-            Session du {{ $day->date->format('d/m/Y') }}
+            Session du {{ $day->fullDayName }} {{ $day->date->format('d/m/Y') }}
         </h2>
         @if($day->explanation !== null)
             <div class="mt-4 flex justify-center items-center gap-x-4 bg-red-500 rounded-lg text-white text-center">
