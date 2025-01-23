@@ -42,4 +42,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return true;
     }
+
+    public function associations(): BelongsToMany
+    {
+        return $this->belongsToMany(Association::class);
+    }
 }
