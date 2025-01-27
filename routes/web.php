@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssociationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Day\CancelDayController;
 use App\Http\Controllers\Day\DayController;
@@ -11,8 +12,15 @@ use App\Http\Controllers\SubscribingController;
 use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('guest')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    /** Associations routes */
+    Route::view('/associations/select', 'auth.choose-association')->name('association.choose');
+    Route::get('/associations/{association}/select',
+        [AssociationController::class, 'select'])->name('association.select');
 });
 
 Route::middleware('auth')->group(function () {
