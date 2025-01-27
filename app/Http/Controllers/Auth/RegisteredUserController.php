@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Repositories\AssociationRepository;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,11 +16,25 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    public function __construct(private AssociationRepository $associationRepository)
+    {
+    }
+
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request): View|RedirectResponse
     {
+        if (is_null($request->association)) {
+            return to_route('association.choose');
+        }
+
+        $association = $this->associationRepository->findBySlug($request->association);
+
+        if (is_null($association)) {
+            return to_route('association.choose');
+        }
+
         return view('auth.register');
     }
 
