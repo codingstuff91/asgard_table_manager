@@ -19,3 +19,9 @@ test('new users can register', function () {
     $this->assertAuthenticated();
     $response->assertRedirect(RouteServiceProvider::HOME);
 });
+
+test('Redirection to association choosing page when url parameter is null', function () {
+    $response = $this->get('/register');
+
+    $response->assertRedirect(route('association.choose'));
+});
