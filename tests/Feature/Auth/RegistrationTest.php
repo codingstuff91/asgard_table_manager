@@ -38,3 +38,9 @@ test('Redirection to association choosing page when url parameter is null', func
 
     $response->assertRedirect(route('association.choose'));
 });
+
+test('Redirection to association choosing page when try to register to a non existing association', function () {
+    $response = $this->get('/register?association=test');
+
+    $response->assertRedirect(route('association.choose'));
+});
