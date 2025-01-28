@@ -18,8 +18,8 @@ Route::middleware('guest')->group(function () {
     });
 
     /** Associations routes */
-    Route::view('/associations/select', 'auth.choose-association')->name('association.choose');
-    Route::get('/associations/{association}/select',
+    Route::get('/associations/select', [AssociationController::class, 'choose'])->name('association.choose');
+    Route::get('/associations/{association:slug}/register',
         [AssociationController::class, 'select'])->name('association.select');
 });
 

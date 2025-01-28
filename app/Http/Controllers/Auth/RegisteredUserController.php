@@ -25,6 +25,7 @@ class RegisteredUserController extends Controller
      */
     public function create(Request $request): View|RedirectResponse
     {
+
         if (is_null($request->association)) {
             return to_route('association.choose');
         }
