@@ -25,7 +25,6 @@ class RegisteredUserController extends Controller
      */
     public function create(Request $request): View|RedirectResponse
     {
-
         if (is_null($request->association)) {
             return to_route('association.choose');
         }
@@ -36,7 +35,7 @@ class RegisteredUserController extends Controller
             return to_route('association.choose');
         }
 
-        return view('auth.register');
+        return view('auth.register', compact('association'));
     }
 
     /**
@@ -57,6 +56,9 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // link user to an association
+        $user->associations()->attach($request->association_id);
 
         event(new Registered($user));
 
