@@ -44,3 +44,19 @@ test('Redirection to association choosing page when try to register to a non exi
 
     $response->assertRedirect(route('association.choose'));
 });
+
+test('A user can not choose an existing surname', function () {
+    $association = Association::factory()->create();
+
+    $user = User::factory()->create(['name' => 'johndoe']);
+
+    $response = $this->post('/register', [
+        'name' => $user->name,
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'association_id' => $association->id,
+    ]);
+
+    expect($response)->toHaveInvalid('name');
+});
