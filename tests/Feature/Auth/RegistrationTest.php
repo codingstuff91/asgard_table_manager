@@ -1,9 +1,12 @@
 <?php
 
+use App\Models\Association;
 use App\Providers\RouteServiceProvider;
 
-test('registration screen can be rendered', function () {
-    $response = $this->get('/register');
+test('registration screen can be rendered if an association slug is provided', function () {
+    $association = Association::factory()->create();
+
+    $response = $this->get("/register?association=$association->slug");
 
     $response->assertStatus(200);
 });
