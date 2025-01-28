@@ -17,8 +17,8 @@ class AssociationFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
-            'slug' => $this->faker->word,
+            'name' => 'ASGARD',
+            'slug' => 'asgard',
             'description' => $this->faker->text(30),
             'city' => $this->faker->city(),
             'department' => 91,
