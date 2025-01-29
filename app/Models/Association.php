@@ -10,6 +10,9 @@ class Association extends Model
 {
     use HasFactory;
 
+    /**
+     * @return BelongsToMany<\App\Models\User>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
