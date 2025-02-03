@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(GameSeeder::class);
 
+        $this->call(AssociationSeeder::class);
+
         $this->call(UserSeeder::class);
 
         Table::factory()
