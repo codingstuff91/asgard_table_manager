@@ -9,7 +9,7 @@ trait BaseStorage
         return static::STORAGE_KEY;
     }
 
-    public static function put($data): void
+    public static function put(mixed $data): void
     {
         session()->put(self::getStorageKey(), $data);
     }
