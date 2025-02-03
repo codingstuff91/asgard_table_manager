@@ -4,6 +4,13 @@
 
         <!-- Name -->
         <div>
+            <x-input-label for="name" :value="__('Association / Club')"/>
+            <input type="hidden" name="association_id" value="{{ $association->id }}">
+            <x-text-input class="block my-2 w-full" type="text" value="{{ $association->name }}" disabled/>
+        </div>
+
+        <!-- Name -->
+        <div>
             <x-input-label for="name" :value="__('Pseudo')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
