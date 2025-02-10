@@ -63,7 +63,10 @@ class DayController extends Controller
 
     public function store(storeDayRequest $request): RedirectResponse
     {
-        Day::create($request->all());
+        Day::create([
+            'date' => $request->date,
+            'association_id' => AssociationStorage::current()->id,
+        ]);
 
         return redirect()->route('days.index');
     }
