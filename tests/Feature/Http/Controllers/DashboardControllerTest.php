@@ -57,3 +57,24 @@ test('It shows the correct Tables count on index page', function () {
         return $tablesCount == 3;
     });
 });
+
+test('It shows the correct Tables count for a time slot on index page', function () {
+    $day = createDayForAssociation(AssociationStorage::current(), now());
+
+    // Create 2 tables for afternoon time slot
+    createTable($day, '13:00');
+    createTable($day, '14:30');
+
+    // Create one table on evening time slot
+    createTable($day, '20:00');
+
+    $response = get(route('dashboard'));
+
+    expect($response)->assertViewHas('afternoonTables', function ($tablesCount) {
+        return $tablesCount == 2;
+    })
+        ->and($response)->assertViewHas('eveningTables', function ($tablesCount) {
+            return $tablesCount == 1;
+        });
+
+});
