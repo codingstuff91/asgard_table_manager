@@ -18,6 +18,13 @@ function createDay(): Day
     return Day::factory()->create();
 }
 
+function createDayForAssociation(Association $association): Day
+{
+    return Day::factory()->create([
+        'association_id' => $association->id,
+    ]);
+}
+
 function createPastDay(): Day
 {
     return Day::factory()->create([

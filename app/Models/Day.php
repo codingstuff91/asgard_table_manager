@@ -17,6 +17,7 @@ class Day extends Model
         'date',
         'explanation',
         'can_create_table',
+        'association_id',
     ];
 
     protected $casts = [

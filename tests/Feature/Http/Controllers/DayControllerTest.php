@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Association;
-use App\Models\Day;
 use App\Storages\AssociationStorage;
 
 use function Pest\Laravel\assertDatabaseHas;
@@ -66,7 +65,7 @@ test('A day is created successfully', function () {
     assertDatabaseHas('days', [
         'date' => $date,
     ]);
-})->skip();
+});
 
 test('The past days are hidden from index page', function () {
     $pastDay = createPastDay();
@@ -195,12 +194,12 @@ test('The cancellation message is visible on the show page if exists', function 
 
 test('The action buttons are visible for admin users on days index page', function () {
     loginAdmin();
-    Day::factory()->create();
+    createDayForAssociation(AssociationStorage::current());
 
     get(route('days.index'))
         ->assertSee('img/cancel.png')
         ->assertSee('img/warning.png');
-})->skip();
+});
 
 test('The action buttons are hidden for non admin users on days index page', function () {
     get(route('days.index'))
