@@ -6,6 +6,8 @@ use App\Models\Day;
 use App\Models\Event;
 use App\Models\Game;
 use App\Models\Table;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 function createAssociation(): Association
@@ -18,11 +20,21 @@ function createDay(): Day
     return Day::factory()->create();
 }
 
-function createDayForAssociation(Association $association): Day
+function createDayForAssociation(Association $association, ?string $date = null): Day
 {
     return Day::factory()->create([
+        'date' => $date ?? now()->format('Y-m-d'),
         'association_id' => $association->id,
     ]);
+}
+
+function createUsersForAssociation(Association $association, int $usersCount = 1): Collection
+{
+    $users = User::factory($usersCount)->create();
+
+    $association->users()->attach($users);
+
+    return $users;
 }
 
 function createPastDay(): Day
