@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Association;
 use App\Models\Day;
+use App\Storages\AssociationStorage;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
@@ -10,6 +12,9 @@ use function Pest\Laravel\post;
 beforeEach(function () {
     mockHttpClient();
     login();
+
+    $association = Association::factory()->create();
+    AssociationStorage::put($association);
 });
 
 test('The index page is rendered correctly', function () {
