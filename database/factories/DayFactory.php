@@ -24,7 +24,7 @@ class DayFactory extends Factory
     {
         return [
             'date' => now(),
-            'association_id' => Association::first()->id,
+            'association_id' => Association::factory()->create()->id,
         ];
     }
 }

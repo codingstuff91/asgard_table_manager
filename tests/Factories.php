@@ -1,11 +1,17 @@
 <?php
 
+use App\Models\Association;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Event;
 use App\Models\Game;
 use App\Models\Table;
 use Illuminate\Support\Facades\Auth;
+
+function createAssociation(): Association
+{
+    return Association::factory()->create();
+}
 
 function createDay(): Day
 {
