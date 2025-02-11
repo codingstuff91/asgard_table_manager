@@ -31,6 +31,9 @@ class CategoryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(
+                Category::query()->where('association_id', AssociationStorage::current()->id)
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
