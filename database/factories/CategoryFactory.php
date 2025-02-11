@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Association;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
+            'association_id' => Association::factory()->create()->id,
             'name' => $this->faker->word,
             'color' => 'bg-green-500',
         ];

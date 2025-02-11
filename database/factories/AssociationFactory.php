@@ -18,7 +18,7 @@ class AssociationFactory extends Factory
     {
         return [
             'name' => 'ASGARD',
-            'slug' => 'asgard',
+            'slug' => $this->faker->slug(2),
             'description' => $this->faker->text(30),
             'city' => $this->faker->city(),
             'department' => 91,
