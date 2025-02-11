@@ -23,4 +23,9 @@ class Association extends Model
     {
         return $this->hasMany(Day::class);
     }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }
