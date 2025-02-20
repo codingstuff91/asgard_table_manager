@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\Day;
+use App\Models\Association;
+use App\Storages\AssociationStorage;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\get;
@@ -10,6 +11,9 @@ use function Pest\Laravel\post;
 beforeEach(function () {
     mockHttpClient();
     login();
+
+    $association = Association::factory()->create();
+    AssociationStorage::put($association);
 });
 
 test('The index page is rendered correctly', function () {
@@ -55,6 +59,7 @@ test('A day is created successfully', function () {
 
     post(route('days.store'), [
         'date' => $date,
+        'association_id' => AssociationStorage::current()->id,
     ]);
 
     assertDatabaseHas('days', [
@@ -189,7 +194,7 @@ test('The cancellation message is visible on the show page if exists', function 
 
 test('The action buttons are visible for admin users on days index page', function () {
     loginAdmin();
-    Day::factory()->create();
+    createDayForAssociation(AssociationStorage::current());
 
     get(route('days.index'))
         ->assertSee('img/cancel.png')
