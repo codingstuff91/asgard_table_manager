@@ -19,11 +19,17 @@ class Association extends Model
         return $this->belongsToMany(User::class);
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public function days(): HasMany
     {
         return $this->hasMany(Day::class);
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);

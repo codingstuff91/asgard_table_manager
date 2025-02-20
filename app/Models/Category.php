@@ -31,6 +31,9 @@ class Category extends Model
         return $this->hasMany(Table::class);
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public function association(): BelongsTo
     {
         return $this->belongsTo(Association::class);

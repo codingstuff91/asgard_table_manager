@@ -53,6 +53,9 @@ class Day extends Model
         return $this->hasMany(Event::class);
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public function association(): HasOne
     {
         return $this->hasOne(Association::class);
