@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'association_id' => Association::factory()->create()->id,
+            'association_id' => Association::first()->id ?? Association::factory()->create()->id,
             'name' => $this->faker->word,
             'color' => 'bg-green-500',
         ];
