@@ -23,7 +23,7 @@ Route::middleware('guest')->group(function () {
         [AssociationController::class, 'select'])->name('association.select');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'checkAssociation'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
