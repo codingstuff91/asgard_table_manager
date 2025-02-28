@@ -30,8 +30,8 @@ class Association extends Model
     /**
      * @phpstan-ignore-next-line
      */
-    public function categories(): BelongsToMany
+    public function categories(): HasMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->hasMany(Category::class);
     }
 }
