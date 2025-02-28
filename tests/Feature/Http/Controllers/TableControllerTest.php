@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\Association;
 use App\Models\Category;
 use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
+use App\Storages\AssociationStorage;
 use Illuminate\Support\Facades\Auth;
 use Tests\RequestFactories\TableRequestFactory;
 
@@ -18,7 +20,10 @@ beforeEach(function () {
 });
 
 it('Display all game categories in the create view form', function () {
-    $day = createDay();
+    $association = Association::factory()->create();
+    AssociationStorage::put($association);
+
+    $day = createDayForAssociation(AssociationStorage::current(), now());
     $category = Category::factory()->create();
 
     $response = get(route('table.create', $day));
