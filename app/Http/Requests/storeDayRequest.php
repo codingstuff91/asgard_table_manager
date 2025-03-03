@@ -25,7 +25,6 @@ class storeDayRequest extends FormRequest
     {
         return [
             'date' => 'required|date|unique:days,date',
-            'association_id' => 'required|exists:associations,id',
         ];
     }
 
