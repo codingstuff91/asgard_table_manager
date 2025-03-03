@@ -217,4 +217,14 @@ test('The create buttons are hidden for a cancelled day', function () {
     get(route('days.show', $day))
         ->assertDontSee('img/game-table.png')
         ->assertDontSee('img/calendar.png');
+
+});
+
+test('The user can not see the days of another association', function () {
+    $anotherAssociation = createAssociation();
+    $dayForAnotherAssociation = createDayForAssociation($anotherAssociation);
+
+    $response = get(route('days.index'));
+
+    expect($response)->assertDontSee("days/$dayForAnotherAssociation->id");
 });
