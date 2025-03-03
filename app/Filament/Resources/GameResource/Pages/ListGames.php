@@ -23,7 +23,10 @@ class ListGames extends ListRecords
 
     public function getTabs(): array
     {
-        $categories = Category::query()->where('association_id', AssociationStorage::current()->id)->get()->toArray();
+        $categories = Category::query()
+            ->where('association_id', AssociationStorage::current()->id)
+            ->get()
+            ->toArray();
 
         foreach ($categories as $category) {
             $types[$category['name']] = Tab::make()
