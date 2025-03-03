@@ -38,7 +38,9 @@ class DayController extends Controller
 
     public function create(Request $request): View
     {
-        return view('day.create');
+        $currentAssociation = AssociationStorage::current()->id;
+
+        return view('day.create', compact('currentAssociation'));
     }
 
     public function show(Day $day): View
