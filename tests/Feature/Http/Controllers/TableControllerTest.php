@@ -19,7 +19,7 @@ beforeEach(function () {
     login();
 });
 
-it('Display all game categories in the create view form', function () {
+it('Display the game categories of the current association in the create view form', function () {
     $association = Association::factory()->create();
     AssociationStorage::put($association);
 
@@ -31,6 +31,24 @@ it('Display all game categories in the create view form', function () {
     $response->assertOk();
 
     $response->assertSee($category->name);
+});
+
+it('Do not Display the game categories of another association in the create view form', function () {
+    $association = Association::factory()->create();
+    AssociationStorage::put($association);
+
+    $day = createDayForAssociation(AssociationStorage::current(), now());
+    $category = Category::factory()->create();
+
+    // Create another category for another Association
+    $anotherAssociation = Association::factory()->create();
+    $anotherCategory = Category::factory()->create([
+        'association_id' => $anotherAssociation->id,
+    ]);
+
+    $response = get(route('table.create', $day));
+    $response->assertSee($category->name);
+    $response->assertDontSee($anotherCategory->name);
 });
 
 it('Creates a new table', function () {
