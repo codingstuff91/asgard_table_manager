@@ -28,6 +28,8 @@ class ListGames extends ListRecords
             ->get()
             ->toArray();
 
+        $types = [];
+
         foreach ($categories as $category) {
             $types[$category['name']] = Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('category_id', $category['id']));

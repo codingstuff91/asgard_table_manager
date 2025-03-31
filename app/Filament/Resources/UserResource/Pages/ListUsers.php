@@ -26,6 +26,8 @@ class ListUsers extends ListRecords
             ->get()
             ->toArray();
 
+        $types = [];
+
         foreach ($associations as $association) {
             $types[$association['name']] = Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('association_id', $association['id']));
