@@ -6,6 +6,8 @@ Please also include relevant motivation and context.
 
 List any dependencies that are required for this change.
 
+## Motivation of these modifications
+
 ## Screenshots
 
 ## Type of change
@@ -15,8 +17,6 @@ List any dependencies that are required for this change.
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] Refactorization (Code improvement without changing code behavior)
 - [ ] This change requires a documentation update
-
-## Motivation ot this modifications
 
 # Unit or Feature tests ?
 
