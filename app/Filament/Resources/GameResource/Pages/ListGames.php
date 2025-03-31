@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\GameResource\Pages;
 
 use App\Filament\Resources\GameResource;
+use App\Models\Category;
+use App\Storages\AssociationStorage;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
@@ -21,16 +23,18 @@ class ListGames extends ListRecords
 
     public function getTabs(): array
     {
-        return [
-            'Tout types' => Tab::make(),
-            'Cartes' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('category_id', 1)),
-            'Plateau' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('category_id', 2)),
-            'Rôles' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('category_id', 3)),
-            'Wargame' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('category_id', 4)),
-        ];
+        $categories = Category::query()
+            ->where('association_id', AssociationStorage::current()->id)
+            ->get()
+            ->toArray();
+
+        $types = [];
+
+        foreach ($categories as $category) {
+            $types[$category['name']] = Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('category_id', $category['id']));
+        }
+
+        return $types;
     }
 }
