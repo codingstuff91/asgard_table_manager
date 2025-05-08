@@ -18,6 +18,10 @@ class CreateMessageIntoThread implements MessageCreationStrategy
     {
         $threadId = $table->discord_thread_id;
 
+        if (is_null($threadId)) {
+            throw (new \Exception("Thread_id is null for table {$table->id}"));
+        }
+
         $this->client->post(config('discord.api_url').$threadId.'/messages', [
             'headers' => [
                 'Authorization' => config('discord.bot_token'),
