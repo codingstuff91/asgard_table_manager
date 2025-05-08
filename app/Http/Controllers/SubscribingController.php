@@ -35,26 +35,39 @@ class SubscribingController extends Controller
 
         $table->users()->attach(Auth::user());
 
-        $discordNotificationData = DiscordNotificationData::make($table->game, $table, $table->day);
+        try {
+            $discordNotificationData = DiscordNotificationData::make($table->game, $table, $table->day);
 
-        $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-subscription',
-            discordNotificationData: $discordNotificationData);
-        $discordNotification->handle();
+            $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-subscription',
+                discordNotificationData: $discordNotificationData);
 
-        return redirect()->back();
+            $discordNotification->handle();
+
+            return redirect()->route('days.show', $table->day);
+        } catch (\Exception $e) {
+            report($e);
+
+            return redirect()->route('days.show', $table->day)->with(['error' => 'Disfonctionnement Notification']);
+        }
     }
 
     public function tableUnsubscribe(Table $table): RedirectResponse
     {
-        $table->users()->detach(Auth::user());
+        try {
+            $table->users()->detach(Auth::user());
 
-        $discordNotificationData = DiscordNotificationData::make($table->game, $table, $table->day);
+            $discordNotificationData = DiscordNotificationData::make($table->game, $table, $table->day);
 
-        $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-unsubscription',
-            discordNotificationData: $discordNotificationData);
-        $discordNotification->handle();
+            $discordNotification = ($this->notificationFactory)(entity: 'user', type: 'user-unsubscription',
+                discordNotificationData: $discordNotificationData);
+            $discordNotification->handle();
 
-        return redirect()->back();
+            return redirect()->back();
+        } catch (\Exception $e) {
+            report($e);
+
+            return redirect()->route('days.show', $table->day)->with(['error' => 'Disfonctionnement Notification']);
+        }
     }
 
     public function eventSubscribe(Event $event): RedirectResponse
