@@ -22,7 +22,10 @@ class EventController extends Controller
 
     public function create(Request $request, Day $day): View
     {
-        return view('event.create')->with(['day' => $day->id]);
+        return view('event.create')->with([
+            'day' => $day->id,
+            'isWorkshop' => (bool) $request->workshop,
+        ]);
     }
 
     public function store(EventStoreRequest $request, Day $day): RedirectResponse
@@ -31,6 +34,7 @@ class EventController extends Controller
             'day_id' => $day->id,
             'name' => $request->name,
             'description' => $request->description,
+            'workshop' => $request->is_workshop,
             'start_hour' => $request->start_hour,
         ]);
 
