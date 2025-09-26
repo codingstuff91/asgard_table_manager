@@ -1,7 +1,6 @@
 <div class="py-2 {{ $event->workshop ? 'bg-green-500' : 'bg-slate-400' }} rounded-t-lg">
         <div class="px-4 flex justify-between items-center">
             <h2 class="text-lg font-bold">{{ $event->name }}</h2>
-            <h2 class="text-lg font-bold">{{ $event->workshop }}</h2>
             <h2 class="text-lg font-bold">{{ $event->start_hour }}</h2>
         </div>
         <div class="px-4 flex justify-end items-center">
