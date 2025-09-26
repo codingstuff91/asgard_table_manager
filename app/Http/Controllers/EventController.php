@@ -34,7 +34,7 @@ class EventController extends Controller
             'day_id' => $day->id,
             'name' => $request->name,
             'description' => $request->description,
-            'workshop' => $request->is_workshop,
+            'workshop' => $request->workshop ?? false,
             'start_hour' => $request->start_hour,
         ]);
 

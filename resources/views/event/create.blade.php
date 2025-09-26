@@ -21,6 +21,13 @@
                         <x-input-label>Nom de l'évènement</x-input-label>
                     @endif
                     <x-text-input
+                        type="hidden"
+                        name="workshop"
+                        value="{{ $isWorkshop }}"
+                    >
+                    </x-text-input>
+
+                    <x-text-input
                         type="text"
                         class="w-full"
                         name="name"
