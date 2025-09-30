@@ -17,7 +17,7 @@
         "pestphp/pest-plugin-laravel": "2.2.*"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "3.9.*",
+        "barryvdh/laravel-debugbar": "3.16.*",
         "defstudio/pest-plugin-laravel-expectations": "2.1.*",
         "fakerphp/faker": "1.23.*",
         "larastan/larastan": "2.9.*",
