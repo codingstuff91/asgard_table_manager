@@ -13,7 +13,7 @@
         "laravel/framework": "10.32.*",
         "laravel/sanctum": "3.3.*",
         "laravel/tinker": "2.8.*",
-        "pestphp/pest": "2.24.*",
+        "pestphp/pest": "2.36.*",
         "pestphp/pest-plugin-laravel": "2.2.*"
     },
     "require-dev": {
@@ -23,9 +23,9 @@
         "larastan/larastan": "2.9.*",
         "laravel/pint": "1.13.*",
         "mockery/mockery": "1.6.*",
-        "nunomaduro/collision": "7.10.*",
+        "nunomaduro/collision": "7.11.*",
         "phpmetrics/phpmetrics": "2.8.*",
-        "phpunit/phpunit": "10.4.*",
+        "phpunit/phpunit": "10.5.*",
         "spatie/laravel-ignition": "2.3.*"
     },
     "autoload": {
