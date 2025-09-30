@@ -43,9 +43,9 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            if (app()->environment('production')) {
-                Bugsnag::notifyException($e);
-            }
+            //            if (app()->environment('production')) {
+            Bugsnag::notifyException($e);
+            //            }
         });
     }
 }

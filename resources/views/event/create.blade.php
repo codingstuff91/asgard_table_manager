@@ -1,7 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Création d'un nouvel évènement
+            @if($isWorkshop)
+                Création d'un atelier
+            @else
+                Création d'un évènement
+            @endif
         </h2>
     </x-slot>
 
@@ -11,7 +15,18 @@
                 <form action="{{ route('event.store', $day) }}" method="POST" class="flex flex-col justify-center items-center">
                     @csrf
 
-                    <x-input-label>Nom de l'évènement</x-input-label>
+                    @if($isWorkshop)
+                        <x-input-label>Nom de l'atelier</x-input-label>
+                    @else
+                        <x-input-label>Nom de l'évènement</x-input-label>
+                    @endif
+                    <x-text-input
+                        type="hidden"
+                        name="workshop"
+                        value="{{ $isWorkshop }}"
+                    >
+                    </x-text-input>
+
                     <x-text-input
                         type="text"
                         class="w-full"
