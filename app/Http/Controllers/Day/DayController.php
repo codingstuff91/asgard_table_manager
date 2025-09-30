@@ -46,17 +46,15 @@ class DayController extends Controller
             ->orderBy('start_hour', 'asc')
             ->get();
 
-        $tablesCountPerCategory = Category::withCount([
-            'tables' => function ($query) use ($day) {
-                $query->where('day_id', $day->id);
-            },
-        ])->get();
+        $tableCategories = Category::whereHas('tables', function ($query) use ($day) {
+            $query->where('day_id', $day->id);
+        })->get();
 
         $events = Event::with('users')
             ->where('day_id', $day->id)
             ->get();
 
-        return view('day.show', compact('tables', 'day', 'tablesCountPerCategory', 'events'));
+        return view('day.show', compact('tables', 'day', 'events', 'tableCategories'));
     }
 
     public function store(storeDayRequest $request): RedirectResponse

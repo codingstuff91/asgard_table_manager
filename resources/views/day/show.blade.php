@@ -33,11 +33,23 @@
                     <img
                         src="{{ asset('/img/calendar.png') }}"
                         class="w-8 h-8 mr-2"
-                        alt=""
+                        alt="calendar"
                     >
 
                     <a href="{{ route('event.create', $day->id) }}">
                         Créer un événement
+                    </a>
+                </x-secondary-button>
+
+                <x-secondary-button class="ml-0 sm:ml-2">
+                    <img
+                        src="{{ asset('/img/workshop.png') }}"
+                        class="w-8 h-8 mr-2"
+                        alt="workshop"
+                    >
+
+                    <a href="{{ route('event.create', [$day->id, 'workshop' => true]) }}">
+                        Créer un Atelier
                     </a>
                 </x-secondary-button>
             @endif
@@ -53,8 +65,8 @@
 
             <h2 class="my-4 text-center text-xl font-bold text-black dark:text-white">Filtres par catégories</h2>
 
-            <div class="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-4">
-            @foreach($tablesCountPerCategory as $table)
+            <div class="mt-4 flex justify-center gap-2 grid grid-cols-{{$tableCategories->count()}}">
+                @foreach($tableCategories as $table)
                 <x-table-count-category
                     :table="$table"
                     :id="$table->id"
@@ -65,7 +77,7 @@
         </div>
 
         @if($events->count() != 0)
-            <h2 class="my-2 text-black text-xl text-center font-bold dark:text-white">Evenements</h2>
+                <h2 class="my-2 text-black text-xl text-center font-bold dark:text-white">Evènements & Ateliers</h2>
             @foreach ($events as $event)
                 <x-event-card :event="$event"/>
             @endforeach
