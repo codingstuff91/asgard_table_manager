@@ -29,8 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/days/{day}/cancel', [CancelDayController::class, 'justify'])->name('days.cancel');
     Route::patch('/days/{day}/confirm', [CancelDayController::class, 'confirm'])->name('days.confirm_cancel');
 
-    Route::get('days/{date}/export', [DayController::class, 'export'])->name('days.export');
-
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');
     Route::get('games/search', [GameController::class, 'searchByCategory']);
@@ -41,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('table/{table}/edit', [TableController::class, 'edit'])->name('table.edit');
     Route::patch('table/{table}', [TableController::class, 'update'])->name('table.update');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
+    Route::get('table/week-export', [DayController::class, 'export'])->name('days.week-export');
 
     /** Subscribing routes */
     Route::get('table/{table}/subscribe', [SubscribingController::class, 'tableSubscribe'])->name('table.subscribe');

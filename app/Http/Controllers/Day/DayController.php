@@ -10,6 +10,7 @@ use App\Models\Day;
 use App\Models\Event;
 use App\Models\Table;
 use App\Notifications\Discord\NotificationFactory;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -64,12 +65,19 @@ class DayController extends Controller
         return redirect()->route('days.index');
     }
 
-    public function export(Request $request)
+    public function export()
     {
-        $day = Day::with('tables', 'tables.game', 'tables.organizer', 'tables.game.category')
-            ->where('date', 'LIKE', $request->date.'%')
-            ->firstOrFail();
+        $now = Carbon::now();
+        $startDayWeek = $now->startOfWeek()->format('Y-m-d');
+        $endDayWeek = $now->endOfWeek()->format('Y-m-d');
 
-        return view('day.export', compact('day'));
+        $days = Day::with('tables', 'tables.game', 'tables.organizer', 'tables.game.category')
+            ->where('date', '>=', $startDayWeek)
+            ->where('date', '<=', $endDayWeek)
+            ->get();
+
+        //        dd($day);
+
+        return view('day.export', compact('days', 'startDayWeek', 'endDayWeek'));
     }
 }
