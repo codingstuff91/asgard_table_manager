@@ -66,13 +66,10 @@ class DayController extends Controller
 
     public function export(Request $request)
     {
-        $day = Day::with('tables.game', 'tables.organizer', 'tables.game.category')
+        $day = Day::with('tables', 'tables.game', 'tables.organizer', 'tables.game.category')
             ->where('date', 'LIKE', $request->date.'%')
             ->firstOrFail();
 
-        $tables = $day->tables;
-        //        dd($tables);
-
-        return view('day.export', compact('day', 'tables'));
+        return view('day.export', compact('day'));
     }
 }
