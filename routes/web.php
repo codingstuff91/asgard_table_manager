@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('table/{table}/edit', [TableController::class, 'edit'])->name('table.edit');
     Route::patch('table/{table}', [TableController::class, 'update'])->name('table.update');
     Route::delete('table/{table}/delete/', [TableController::class, 'destroy'])->name('table.delete');
-    Route::get('table/week-export', [DayController::class, 'export'])->name('days.week-export');
+    Route::get('table/week-export', [TableController::class, 'export'])->name('table.week-export');
 
     /** Subscribing routes */
     Route::get('table/{table}/subscribe', [SubscribingController::class, 'tableSubscribe'])->name('table.subscribe');

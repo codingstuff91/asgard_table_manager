@@ -15,6 +15,7 @@ use App\Models\Game;
 use App\Models\Table;
 use App\Notifications\Discord\NotificationFactory;
 use App\Repositories\GameRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -150,5 +151,20 @@ class TableController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function export(): View
+    {
+        $now = Carbon::now();
+        $startDayWeek = $now->startOfWeek()->format('Y-m-d');
+        $endDayWeek = $now->endOfWeek()->format('Y-m-d');
+
+        $days = Day::with('tables', 'tables.game', 'tables.organizer', 'tables.game.category')
+            ->where('date', '>=', $startDayWeek)
+            ->where('date', '<=', $endDayWeek)
+            ->orderBy('date')
+            ->get();
+
+        return view('table.export', compact('days', 'startDayWeek', 'endDayWeek'));
     }
 }
