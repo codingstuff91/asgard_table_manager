@@ -63,4 +63,16 @@ class DayController extends Controller
 
         return redirect()->route('days.index');
     }
+
+    public function export(Request $request)
+    {
+        $day = Day::with('tables.game', 'tables.organizer', 'tables.game.category')
+            ->where('date', 'LIKE', $request->date.'%')
+            ->firstOrFail();
+
+        $tables = $day->tables;
+        //        dd($tables);
+
+        return view('day.export', compact('day', 'tables'));
+    }
 }

@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/days/{day}/cancel', [CancelDayController::class, 'justify'])->name('days.cancel');
     Route::patch('/days/{day}/confirm', [CancelDayController::class, 'confirm'])->name('days.confirm_cancel');
 
+    Route::get('days/{date}/export', [DayController::class, 'export'])->name('days.export');
+
     /** Games routes */
     Route::resource('games', GameController::class)->except('show', 'destroy');
     Route::get('games/search', [GameController::class, 'searchByCategory']);
