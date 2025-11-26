@@ -74,9 +74,8 @@ class DayController extends Controller
         $days = Day::with('tables', 'tables.game', 'tables.organizer', 'tables.game.category')
             ->where('date', '>=', $startDayWeek)
             ->where('date', '<=', $endDayWeek)
+            ->orderBy('date')
             ->get();
-
-        //        dd($day);
 
         return view('day.export', compact('days', 'startDayWeek', 'endDayWeek'));
     }
