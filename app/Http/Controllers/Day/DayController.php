@@ -10,6 +10,7 @@ use App\Models\Day;
 use App\Models\Event;
 use App\Models\Table;
 use App\Notifications\Discord\NotificationFactory;
+use App\Storages\AssociationStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -28,6 +29,7 @@ class DayController extends Controller
         $days = Day::query()
             ->withCount(['tables', 'events'])
             ->where('date', '>=', now()->format('Y-m-d'))
+            ->where('association_id', AssociationStorage::current()->id)
             ->orderBy('date', 'asc')
             ->get();
 
@@ -36,7 +38,9 @@ class DayController extends Controller
 
     public function create(Request $request): View
     {
-        return view('day.create');
+        $currentAssociation = AssociationStorage::current()->id;
+
+        return view('day.create', compact('currentAssociation'));
     }
 
     public function show(Day $day): View
@@ -59,7 +63,10 @@ class DayController extends Controller
 
     public function store(storeDayRequest $request): RedirectResponse
     {
-        Day::create($request->all());
+        Day::create([
+            'date' => $request->date,
+            'association_id' => AssociationStorage::current()->id,
+        ]);
 
         return redirect()->route('days.index');
     }

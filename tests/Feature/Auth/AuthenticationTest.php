@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Association;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Storages\AssociationStorage;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -30,4 +32,19 @@ test('users can not authenticate with invalid password', function () {
     ]);
 
     $this->assertGuest();
+});
+
+test('Store user association into session after user login', function () {
+    $user = User::factory()
+        ->has(Association::factory())
+        ->create();
+
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    expect(AssociationStorage::exists())->toBeTrue()
+        ->and(AssociationStorage::current())->toBeInstanceOf(Association::class)
+        ->and(AssociationStorage::current()->id)->toBe($user->associations->first()->id);
 });
