@@ -5,12 +5,16 @@ namespace App\Logic;
 use App\DataObjects\TableData;
 use App\Models\Day;
 use App\Models\Table;
+use Illuminate\Support\Facades\Auth;
 
 class TableLogic
 {
     public static function isAlreadyExists(TableData $tableAttributes): bool
     {
+        $user = Auth::user();
+
         $table = Table::query()
+            ->where('organizer_id', $user->id)
             ->where('game_id', $tableAttributes->game_id)
             ->where('day_id', $tableAttributes->day_id)
             ->where('start_hour', $tableAttributes->start_hour)

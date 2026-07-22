@@ -132,6 +132,45 @@ it('Can not create the same table twice', function () {
         ->toHaveSession('error');
 });
 
+
+it('Can create the same table as another user for the same game for the same day', function () {
+    login();
+    $day = createDay();
+    $game = createGameWithCategory();
+    mockHttpClient();
+
+    $tableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame($game)
+        ->withCategory($game->category)
+        ->withPlayersNumber(5)
+        ->withStartHour('21:00')
+        ->create();
+
+    // Create a new table
+    post(route('table.store', $day), $tableAttributes);
+    
+    login();
+
+    $sameTableAttributes = TableRequestFactory::new()
+        ->withOrganizer(Auth::user())
+        ->withDay($day)
+        ->withGame($game)
+        ->withCategory($game->category)
+        ->withPlayersNumber(5)
+        ->withStartHour('21:00')
+        ->create();
+
+    // Try to create the same table twice
+    $response = post(route('table.store', $day), $tableAttributes);
+
+    expect($response)
+        ->toBeRedirect(route('days.show', $day))
+        ->and(Table::count())->toBe(2);
+});
+
+
 it('Updates a table', function () {
     login();
     mockHttpClient();

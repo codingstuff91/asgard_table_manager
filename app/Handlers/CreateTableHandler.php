@@ -34,8 +34,8 @@ class CreateTableHandler
 
     private function checkIfTableExists(TableData $tableAttributes): void
     {
-        if (TableLogic::isAlreadyExists($tableAttributes)) {
-            throw new Exception('Vous ne pouvez pas créer 2 fois la même table');
+        if (TableLogic::isAlreadyExists($tableAttributes)) {            
+            throw new Exception('Vous ne pouvez pas créer 2 fois la même table, le même jour');
         }
     }
 
