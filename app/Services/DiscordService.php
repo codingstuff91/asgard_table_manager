@@ -12,7 +12,16 @@ class DiscordService
         //
     }
 
-    public function deleteMessage(int $channelId, int $messageId): void
+    public function getMessages()
+    {
+        $response = $this->client->get(config('discord.api_url').'882668631891247118/messages', [
+            'headers' => $this->getHeaders(),
+        ]);
+
+        return json_decode($response->getBody()->getContents());
+    }
+
+    public function deleteMessage(string $channelId, string $messageId): void
     {
         try {
             $this->client->delete(config('discord.api_url')."$channelId/messages/$messageId", [
