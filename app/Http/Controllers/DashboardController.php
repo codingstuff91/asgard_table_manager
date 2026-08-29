@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Table\CountTablesForTimeSlotAction;
-use App\Models\Day;
 use App\Models\Table;
-use App\Models\User;
+use App\Storages\AssociationStorage;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -18,14 +17,20 @@ class DashboardController extends Controller
 
     public function __invoke(): View
     {
-        $users = User::count();
-        $days = Day::count();
-        $tables = Table::count();
+        $currentAssociation = AssociationStorage::current();
 
-        $afternoonTables = ($this->countTablesForTimeSlotAction)(Table::all(), 13, 19);
+        $users = $currentAssociation->users->count();
+        $days = $currentAssociation->days->count();
 
-        $eveningTables = ($this->countTablesForTimeSlotAction)(Table::all(), 19, 23);
+        $tables = Table::query()->whereHas('day', function ($day) use ($currentAssociation) {
+            $day->where('association_id', $currentAssociation->id);
+        })->get();
 
-        return view('dashboard', compact('users', 'days', 'tables', 'afternoonTables', 'eveningTables'));
+        $tablesCount = $tables->count();
+
+        $afternoonTables = ($this->countTablesForTimeSlotAction)($tables, 13, 19);
+        $eveningTables = ($this->countTablesForTimeSlotAction)($tables, 19, 23);
+
+        return view('dashboard', compact('users', 'days', 'tablesCount', 'afternoonTables', 'eveningTables'));
     }
 }

@@ -11,7 +11,7 @@
             <div class="grid grid-cols-3 gap-2 rounded-lg mt-2 mx-auto lg:grid-cols-5 lg:gap-2">
                 <x-stats-card title="Utilisateurs" :data="$users" image="{{ asset('img/user.png') }}"/>
                 <x-stats-card title="Sessions" :data="$days" image="{{ asset('img/calendar.png') }}"/>
-                <x-stats-card title="Tables" :data="$tables" image="{{ asset('img/game-table.png') }}"/>
+                <x-stats-card title="Tables" :data="$tablesCount" image="{{ asset('img/game-table.png') }}"/>
             </div>
             <h3 class="mt-4 text-lg font-bold text-center dark:text-white">Nombre tables par période</h3>
             <div class="grid grid-cols-2 gap-2 rounded-lg mt-2 mx-auto lg:grid-cols-4 lg:gap-2">

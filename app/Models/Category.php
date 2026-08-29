@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
@@ -28,5 +29,13 @@ class Category extends Model
     public function tables(): HasMany
     {
         return $this->hasMany(Table::class);
+    }
+
+    /**
+     * @phpstan-ignore-next-line
+     */
+    public function association(): BelongsTo
+    {
+        return $this->belongsTo(Association::class);
     }
 }

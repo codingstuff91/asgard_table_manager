@@ -14,6 +14,7 @@ use App\Models\Day;
 use App\Models\Game;
 use App\Models\Table;
 use App\Notifications\Discord\NotificationFactory;
+use App\Repositories\CategoryRepository;
 use App\Repositories\GameRepository;
 use Carbon\Carbon;
 use Exception;
@@ -30,6 +31,7 @@ class TableController extends Controller
         public CreateTableHandler $createTableHandler,
         public UpdateTableHandler $updateTableHandler,
         public GameRepository $gameRepository,
+        public CategoryRepository $categoryRepository,
     ) {
         //
     }
@@ -40,7 +42,7 @@ class TableController extends Controller
             abort(403);
         }
 
-        $categories = Category::all();
+        $categories = $this->categoryRepository->allForCurrentAssociation();
 
         return view('table.create', compact('day', 'categories'));
     }

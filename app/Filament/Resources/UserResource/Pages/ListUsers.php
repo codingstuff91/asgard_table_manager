@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Models\Association;
 use Filament\Actions;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListUsers extends ListRecords
 {
@@ -15,5 +18,21 @@ class ListUsers extends ListRecords
         return [
             Actions\CreateAction::make()->label('Nouvel Utilisateur'),
         ];
+    }
+
+    public function getTabs(): array
+    {
+        $associations = Association::query()
+            ->get()
+            ->toArray();
+
+        $types = [];
+
+        foreach ($associations as $association) {
+            $types[$association['name']] = Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('association_id', $association['id']));
+        }
+
+        return $types;
     }
 }

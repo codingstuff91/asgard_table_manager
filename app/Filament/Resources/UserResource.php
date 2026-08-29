@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use App\Storages\AssociationStorage;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -38,20 +39,18 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(
+                User::query()->whereHas('associations', function ($query) {
+                    $query->where('association_id', AssociationStorage::current()->id);
+                })
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()->label('Nom'),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->label('Email vérifié le'),
                 Tables\Columns\IconColumn::make('admin')
                     ->boolean(),
-            ])
-            ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->label('Editer'),

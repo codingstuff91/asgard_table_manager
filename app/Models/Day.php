@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Day extends Model
 {
@@ -16,6 +17,7 @@ class Day extends Model
         'date',
         'explanation',
         'can_create_table',
+        'association_id',
     ];
 
     protected $casts = [
@@ -49,5 +51,13 @@ class Day extends Model
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    /**
+     * @phpstan-ignore-next-line
+     */
+    public function association(): HasOne
+    {
+        return $this->hasOne(Association::class);
     }
 }
